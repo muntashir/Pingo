@@ -1,0 +1,19 @@
+﻿<Window x:Class="Pingo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="388.754" Width="566.176">
+    <Grid>
+        <TextBox x:Name="txtInput"  TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,97,10" Height="53"/>
+        <Button x:Name="btnEnter" Margin="466,0,10,10" Content="Enter" Width="82" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click"/>
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,119,0,0" Height="60"/>
+        <Button Content="Refresh Selection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,49,0,0" Height="60"/>
+        <ListView x:Name="lsvOutput" HorizontalAlignment="Left" Height="280" Margin="10,10,0,0" VerticalAlignment="Top" Width="451">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,184,0,0" Height="60"/>
+    </Grid>
+</Window>
