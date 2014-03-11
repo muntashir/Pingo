@@ -46,13 +46,34 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
+            bool multiline = false;
+
             try
             {
+                foreach (char c in txtInput.Text)
+                {
+                    if (char.IsWhiteSpace(c))
+                    {
+                        multiline = true;
+                        break;
+                    }
+                }
+
                 if (txtInput.Text == "" || txtInput.Text == "Enter a hostname or IP")
                     throw new Exception("Invalid Input");
-                else
+                else if (multiline == false)
                 {
                     hosts.Add(new Host(txtInput.Text));
+                    UpdateOutput();
+                }
+                else
+                {
+                    String[] delim = {"\r\n", " ", "'"};
+                    String[] temp = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach(String s in temp)
+                        hosts.Add(new Host(s));
+
                     UpdateOutput();
                 }
             }
@@ -67,11 +88,20 @@ namespace Pingo
 
         private void UpdateOutput()
         {
-            lsBox.Items.Clear();
+            lsvOutput.Items.Clear();
 
             foreach (Host host in hosts)
             {
-                lsBox.Items.Add(host.ToString()[0] + "\t" + host.ToString()[1]);
+                ListViewItem li = new ListViewItem();
+
+                if (host.IsOnline())
+                    li.Background = new SolidColorBrush(Color.FromRgb(0,255,0));
+                else
+                    li.Background = new SolidColorBrush(Color.FromRgb(255,0,0));
+
+                li.Content = host.ToString()[0] + "\t" + host.ToString()[1];
+
+                lsvOutput.Items.Add(li);
             }
         }
 
@@ -83,11 +113,6 @@ namespace Pingo
             }
 
             UpdateOutput();
-        }
-
-        private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-
         }
 
         private void btnRefreshAll_Click(object sender, RoutedEventArgs e)
@@ -103,5 +128,51 @@ namespace Pingo
             dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
             dispatcherTimer.Start();
         }
+
+        private void RepeatButton_Click(object sender, RoutedEventArgs e)
+        {
+            txtInterval.Text = (dispatcherTimer.Interval.Minutes + 5).ToString();
+        }
+
+        private void btnMinus_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.Parse(txtInterval.Text) - 5 > 0)
+                txtInterval.Text = (dispatcherTimer.Interval.Minutes - 5).ToString();
+        }
+
+        private void btnRefreshSelected_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                hosts[lsvOutput.SelectedIndex].Ping();
+
+                UpdateOutput();
+            }
+            catch
+            {
+                MessageBox.Show("Nothing selected");
+            }
+        }
+
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                hosts.RemoveAt(lsvOutput.SelectedIndex);
+
+                UpdateOutput();
+            }
+            catch
+            {
+                MessageBox.Show("Nothing selected");
+            }
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            hosts.Clear();
+            lsvOutput.Items.Clear();
+        }
+
     }
 }
