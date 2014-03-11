@@ -1,19 +1,17 @@
 ﻿<Window x:Class="Pingo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="388.754" Width="566.176">
+        Title="Pingo" Height="427.789" Width="572.906" ResizeMode="NoResize" >
     <Grid>
-        <TextBox x:Name="txtInput"  TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,97,10" Height="53"/>
-        <Button x:Name="btnEnter" Margin="466,0,10,10" Content="Enter" Width="82" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,119,0,0" Height="60"/>
-        <Button Content="Refresh Selection" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,49,0,0" Height="60"/>
-        <ListView x:Name="lsvOutput" HorizontalAlignment="Left" Height="280" Margin="10,10,0,0" VerticalAlignment="Top" Width="451">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Content="Button" HorizontalAlignment="Left" VerticalAlignment="Top" Width="82" Margin="466,184,0,0" Height="60"/>
+        <TextBox x:Name="txtInput"  TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="53" HorizontalAlignment="Left" Width="451"/>
+        <Button x:Name="btnEnter" Margin="466,0,0,10" Content="Enter" Width="82" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" HorizontalAlignment="Left"/>
+        <Button x:Name="btnRefreshAll" Content="Refresh All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,212" Height="60" Click="btnRefreshAll_Click"/>
+        <Button Content="Refresh Selection" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,277" Height="60"/>
+        <Button Content="Export" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,147" Height="60"/>
+        <ListBox x:Name="lsBox" HorizontalAlignment="Left" Height="280" Margin="10,0,0,68" VerticalAlignment="Bottom" Width="451"/>
+        <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,0,0,353" VerticalAlignment="Bottom"/>
+        <ScrollBar HorizontalAlignment="Left" Margin="293,0,0,353" VerticalAlignment="Bottom" Height="26" ValueChanged="ScrollBar_ValueChanged"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="165,0,0,353" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="128" TextChanged="TextBox_TextChanged"/>
+        <Button x:Name="btnDelete" Content="Refresh Selection" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,82" Height="60"/>
     </Grid>
 </Window>
