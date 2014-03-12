@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Pingo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pingo" Height="427.789" Width="572.906" ResizeMode="NoResize" Icon="favicon.ico" >
+        Title="Pingo" Height="427.789" Width="572.906" ResizeMode="NoResize" Icon="Icon1.ico" >
     <Grid Background="#FFA4A4A4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="79*"/>
@@ -18,7 +18,7 @@
         <RepeatButton x:Name="btnMinus" Content="-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="168.408,0,0,355" Height="13" Click="btnMinus_Click" FontSize="14" Grid.Column="1"/>
         <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="168.408,0,0,369" Height="13" Click="RepeatButton_Click" FontSize="14" Grid.Column="1"/>
         <Button x:Name="btnClear" Content="Delete&#xD;&#xA;All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="229.408,0,0,132" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnClear_Click" Grid.Column="1" FontSize="14"/>
-        <ListView x:Name="lsvOutput" Height="271" Margin="10,0,106,77" VerticalAlignment="Bottom" Grid.ColumnSpan="2" FontSize="14" >
+        <ListView x:Name="lsvOutput" Height="271" Margin="10,0,106,77" VerticalAlignment="Bottom" Grid.ColumnSpan="2" FontSize="16" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Hostname" DisplayMemberBinding="{Binding Hostname}"/>
