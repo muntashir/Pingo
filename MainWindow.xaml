@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Pingo" Height="467.775" Width="572.906" ResizeMode="NoResize" Icon="Icon1.ico" >
-    <Grid Background="#FFA4A4A4">
+    <Grid Background="#FFC5C5C5">
         <ListView x:Name="lsvOutput" Height="271" Margin="10,0,106,77" VerticalAlignment="Bottom" Grid.ColumnSpan="2" FontSize="16" >
             <ListView.View>
                 <GridView>
@@ -34,6 +34,6 @@
         <RepeatButton x:Name="btnMinus" Content="-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="316,0,0,388" Height="13" Click="btnMinus_Click" FontSize="14"/>
         <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="316,0,0,402" Height="13" Click="RepeatButton_Click" FontSize="14"/>
         <Button x:Name="btnClear" Content="Delete&#xA;All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,131" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnClear_Click" FontSize="14"/>
-        <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" ValueChanged="ProgressBar1_ValueChanged"/>
+        <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" />
     </Grid>
 </Window>

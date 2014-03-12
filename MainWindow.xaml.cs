@@ -79,24 +79,26 @@ namespace Pingo
                 {
                     String[] delim = { "\r\n", " ", "'" };
                     String[] temp = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
-                    int i = 1;
 
                     if (isProcessRunning)
                     {
-                        MessageBox.Show("A process is already running.");
+                        MessageBox.Show("A process is already running");
                         return;
                     }
 
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
                         {
+                            double i = 1.0;
+
                             isProcessRunning = true;
+
                             foreach (String s in temp)
                             {
                                 ProgressBar1.Dispatcher.BeginInvoke(
                                     new Action(() =>
                             {
-                                ProgressBar1.Value = (i / temp.Count()) * 100;
+                                ProgressBar1.Value = (i / double.Parse(temp.Count().ToString())) * 100.0;
                             }));
 
                                 i++;
@@ -108,16 +110,13 @@ namespace Pingo
                             new Action(() =>
                             {
                                 ProgressBar1.Value = 0;
+                                UpdateOutput();
                             }));
 
                             isProcessRunning = false;
                         }));
 
                     backgroundThread.Start();
-
-                    backgroundThread.Join();
-
-                    UpdateOutput();
                 }
             }
             catch (Exception ex)
@@ -141,19 +140,49 @@ namespace Pingo
 
         private void Refresh()
         {
-            int i = 1;
-
-            foreach (Host host in hosts)
+            try
             {
-                ProgressBar1.Value = (i / hosts.Count()) * 100;
-                i++;
+                if (isProcessRunning)
+                {
+                    MessageBox.Show("A process is already running");
+                    return;
+                }
 
-                host.Ping();
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
+                    {
+                        isProcessRunning = true;
+
+                        double i = 1.0;
+
+                        foreach (Host host in hosts)
+                        {
+                            ProgressBar1.Dispatcher.BeginInvoke(
+                                new Action(() =>
+                                {
+                                    ProgressBar1.Value = (i / double.Parse(hosts.Count().ToString())) * 100.0;
+                                }));
+
+                            host.Ping();
+                            i++;
+                        }
+
+                        ProgressBar1.Dispatcher.BeginInvoke(
+                                                   new Action(() =>
+                                                   {
+                                                       ProgressBar1.Value = 0;
+                                                       UpdateOutput();
+                                                   }));
+
+                        isProcessRunning = false;
+                    }));
+
+                backgroundThread.Start();
             }
-
-            ProgressBar1.Value = 0;
-
-            UpdateOutput();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void btnRefreshAll_Click(object sender, RoutedEventArgs e)
@@ -213,12 +242,6 @@ namespace Pingo
         {
             hosts.Clear();
             data.Rows.Clear();
-        }
-
-        private void ProgressBar1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ProgressBar1.Value == 100)
-                UpdateOutput();
         }
 
     }
