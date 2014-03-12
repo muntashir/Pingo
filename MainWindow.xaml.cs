@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,7 @@ namespace Pingo
         List<Host> hosts;
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         DataTable data = new DataTable();
+        bool isProcessRunning = false;
 
         public MainWindow()
         {
@@ -37,7 +39,7 @@ namespace Pingo
             txtInput.SelectAll();
 
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0,10,0);
+            dispatcherTimer.Interval = new TimeSpan(0, 10, 0);
             dispatcherTimer.Start();
 
             data.Columns.Add("Hostname", typeof(string));
@@ -75,16 +77,50 @@ namespace Pingo
                 }
                 else
                 {
-                    String[] delim = {"\r\n", " ", "'"};
+                    String[] delim = { "\r\n", " ", "'" };
                     String[] temp = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+                    int i = 1;
 
-                    foreach(String s in temp)
-                        hosts.Add(new Host(s));
+                    if (isProcessRunning)
+                    {
+                        MessageBox.Show("A process is already running.");
+                        return;
+                    }
+
+                    Thread backgroundThread = new Thread(
+                        new ThreadStart(() =>
+                        {
+                            isProcessRunning = true;
+                            foreach (String s in temp)
+                            {
+                                ProgressBar1.Dispatcher.BeginInvoke(
+                                    new Action(() =>
+                            {
+                                ProgressBar1.Value = (i / temp.Count()) * 100;
+                            }));
+
+                                i++;
+
+                                hosts.Add(new Host(s));
+                            }
+
+                            ProgressBar1.Dispatcher.BeginInvoke(
+                            new Action(() =>
+                            {
+                                ProgressBar1.Value = 0;
+                            }));
+
+                            isProcessRunning = false;
+                        }));
+
+                    backgroundThread.Start();
+
+                    backgroundThread.Join();
 
                     UpdateOutput();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -99,27 +135,23 @@ namespace Pingo
 
             foreach (Host host in hosts)
             {
-                ListViewItem li = new ListViewItem { Content = host.ToString()[0] + host.ToString()[1] };
-
-                if (host.IsOnline())
-                    li.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
-                else
-                    li.Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-
                 data.Rows.Add(host.ToString()[0], host.ToString()[1]);
-  
-                //li.Content = host.ToString()[0] + "\t" + host.ToString()[1];
-
-               // lsvOutput.Items.Add(li);
             }
         }
 
         private void Refresh()
         {
+            int i = 1;
+
             foreach (Host host in hosts)
             {
+                ProgressBar1.Value = (i / hosts.Count()) * 100;
+                i++;
+
                 host.Ping();
             }
+
+            ProgressBar1.Value = 0;
 
             UpdateOutput();
         }
@@ -181,6 +213,12 @@ namespace Pingo
         {
             hosts.Clear();
             data.Rows.Clear();
+        }
+
+        private void ProgressBar1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (ProgressBar1.Value == 100)
+                UpdateOutput();
         }
 
     }
