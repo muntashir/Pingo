@@ -89,7 +89,7 @@ namespace Pingo
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
                         {
-                            double i = 1.0;
+                            double i = 0.0;
 
                             isProcessRunning = true;
 
