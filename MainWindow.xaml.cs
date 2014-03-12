@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace Pingo
     {
         List<Host> hosts;
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        DataTable data = new DataTable();
 
         public MainWindow()
         {
@@ -37,6 +39,11 @@ namespace Pingo
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0,10,0);
             dispatcherTimer.Start();
+
+            data.Columns.Add("Hostname", typeof(string));
+            data.Columns.Add("Status", typeof(string));
+
+            lsvOutput.ItemsSource = data.DefaultView;
         }
 
         private void dispatcherTimer_Tick(object sender, object e)
@@ -88,20 +95,22 @@ namespace Pingo
 
         private void UpdateOutput()
         {
-            lsvOutput.Items.Clear();
+            data.Rows.Clear();
 
             foreach (Host host in hosts)
             {
-                ListViewItem li = new ListViewItem();
+                ListViewItem li = new ListViewItem { Content = host.ToString()[0] + host.ToString()[1] };
 
                 if (host.IsOnline())
-                    li.Background = new SolidColorBrush(Color.FromRgb(0,255,0));
+                    li.Background = new SolidColorBrush(Color.FromRgb(0, 255, 0));
                 else
-                    li.Background = new SolidColorBrush(Color.FromRgb(255,0,0));
+                    li.Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
 
-                li.Content = host.ToString()[0] + "\t" + host.ToString()[1];
+                data.Rows.Add(host.ToString()[0], host.ToString()[1]);
+  
+                //li.Content = host.ToString()[0] + "\t" + host.ToString()[1];
 
-                lsvOutput.Items.Add(li);
+               // lsvOutput.Items.Add(li);
             }
         }
 
@@ -171,7 +180,7 @@ namespace Pingo
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             hosts.Clear();
-            lsvOutput.Items.Clear();
+            data.Rows.Clear();
         }
 
     }
