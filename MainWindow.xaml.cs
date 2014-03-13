@@ -230,9 +230,10 @@ namespace Pingo
             dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
         }
 
-        private void RepeatButton_Click(object sender, RoutedEventArgs e)
+        private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            txtInterval.Text = (dispatcherTimer.Interval.Minutes + 5).ToString();
+            if (int.Parse(txtInterval.Text) + 5 < 60)
+                txtInterval.Text = (dispatcherTimer.Interval.Minutes + 5).ToString();
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
@@ -282,18 +283,18 @@ namespace Pingo
                 dispatcherTimer.IsEnabled = false;
                 btnEnable.Content = "Enable Polling";
                 lblNextUpdate.Content = "Polling disabled";
+                nextUpdate.IsEnabled = false;
             }
             else
             {
                 dispatcherTimer.IsEnabled = true;
+                nextUpdate.IsEnabled = true;
                 btnEnable.Content = "Disable Polling";
             }
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            //File.Create("export.csv");
-
             try
             {
                 StreamWriter writer = new StreamWriter("export.csv");

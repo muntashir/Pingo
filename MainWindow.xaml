@@ -33,7 +33,7 @@
         <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="46" TextChanged="TextBox_TextChanged" IsReadOnly="True" FontSize="14"/>
         <Button x:Name="btnDelete" Content="Delete&#xA;Selected" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,187" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnDelete_Click" FontSize="14"/>
         <RepeatButton x:Name="btnMinus" Content="-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,388" Height="13" Click="btnMinus_Click" FontSize="14"/>
-        <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,402" Height="13" Click="RepeatButton_Click" FontSize="14"/>
+        <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,402" Height="13" Click="btnPlus_Click" FontSize="14"/>
         <Button x:Name="btnClear" Content="Delete&#xA;All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,131" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnClear_Click" FontSize="14"/>
         <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" />
         <Button x:Name="btnEnable" Content="Disable Polling" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="254,0,0,389" Height="26" Click="btnEnable_Click" FontSize="14"/>
