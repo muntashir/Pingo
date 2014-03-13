@@ -44,6 +44,7 @@ namespace Pingo
 
             data.Columns.Add("Hostname", typeof(string));
             data.Columns.Add("Status", typeof(string));
+            data.Columns.Add("Timestamp", typeof(string));
 
             lsvOutput.ItemsSource = data.DefaultView;
         }
@@ -134,7 +135,7 @@ namespace Pingo
 
             foreach (Host host in hosts)
             {
-                data.Rows.Add(host.ToString()[0], host.ToString()[1]);
+                data.Rows.Add(host.ToString()[0], host.ToString()[1], host.ToString()[2]);
             }
         }
 

@@ -10,9 +10,10 @@ namespace Pingo
     public class Host
     {
         protected string hostname;
-        Ping pingo;
-        PingReply pingoReply;
-        bool online;
+        protected Ping pingo;
+        protected PingReply pingoReply;
+        protected bool online;
+        protected DateTime timestamp;
 
         public Host(string hostname)
         {
@@ -30,6 +31,7 @@ namespace Pingo
             {
                 pingoReply = pingo.Send(hostname);
                 online = pingoReply.Status == IPStatus.Success;
+                timestamp = DateTime.Now;
             }
             catch (PingException)
             {
@@ -43,7 +45,7 @@ namespace Pingo
 
         public new String[] ToString()
         {
-            String[] array = {hostname, online ? "Online" : "Offline"};
+            String[] array = {hostname, online ? "Online" : "Offline", timestamp.ToShortDateString() + " " + timestamp.ToShortTimeString()};
 
             return array;
         }

@@ -8,6 +8,7 @@
                 <GridView>
                     <GridViewColumn Header="Hostname" DisplayMemberBinding="{Binding Hostname}"/>
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}"/>
+                    <GridViewColumn Header="Last updated" DisplayMemberBinding="{Binding Timestamp}"/>
                 </GridView>
             </ListView.View>
             <ListView.ItemContainerStyle>
