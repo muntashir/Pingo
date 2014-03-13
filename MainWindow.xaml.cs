@@ -92,6 +92,11 @@ namespace Pingo
                         {
                             double i = 0.0;
 
+                            this.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                this.Title = "Pingo - Working";
+                            }));
+
                             isProcessRunning = true;
 
                             foreach (String s in temp)
@@ -115,6 +120,10 @@ namespace Pingo
                             }));
 
                             isProcessRunning = false;
+                            this.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                this.Title = "Pingo - Idle";
+                            }));
                         }));
 
                     backgroundThread.Start();
@@ -153,6 +162,10 @@ namespace Pingo
                     new ThreadStart(() =>
                     {
                         isProcessRunning = true;
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            this.Title = "Pingo - Working";
+                        }));
 
                         double i = 1.0;
 
@@ -176,6 +189,10 @@ namespace Pingo
                                                    }));
 
                         isProcessRunning = false;
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            this.Title = "Pingo - Idle";
+                        }));
                     }));
 
                 backgroundThread.Start();
@@ -195,9 +212,7 @@ namespace Pingo
         {
             int minutes = int.Parse(txtInterval.Text);
 
-            dispatcherTimer.Stop();
             dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
-            dispatcherTimer.Start();
         }
 
         private void RepeatButton_Click(object sender, RoutedEventArgs e)
@@ -243,6 +258,20 @@ namespace Pingo
         {
             hosts.Clear();
             data.Rows.Clear();
+        }
+
+        private void btnEnable_Click(object sender, RoutedEventArgs e)
+        {
+            if (dispatcherTimer.IsEnabled)
+            {
+                dispatcherTimer.Stop();
+                btnEnable.Content = "Enable Polling";
+            }
+            else
+            {
+                dispatcherTimer.Start();
+                btnEnable.Content = "Disable Polling";
+            }
         }
 
     }

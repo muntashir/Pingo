@@ -45,7 +45,7 @@ namespace Pingo
 
         public new String[] ToString()
         {
-            String[] array = {hostname, online ? "Online" : "Offline", timestamp.ToShortDateString() + " " + timestamp.ToShortTimeString()};
+            String[] array = { hostname, online ? "Online" : "Offline", timestamp.ToShortTimeString() + " " + timestamp.ToLongDateString() };
 
             return array;
         }
