@@ -28,14 +28,15 @@
         <Button x:Name="btnEnter" Margin="466,0,0,9" Content="Enter" Width="82" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" HorizontalAlignment="Left" FontSize="14"/>
         <Button x:Name="btnRefreshAll" Content="Refresh&#xA; All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,242" Height="50" Click="btnRefreshAll_Click" FontSize="14"/>
         <Button x:Name="btnRefreshSelected" Content="Refresh&#xA; Selection" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,297" Height="50" Click="btnRefreshSelected_Click" FontSize="14"/>
-        <Button x:Name="btnExport" Content="Export" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,76" Height="50" FontSize="14"/>
+        <Button x:Name="btnExport" Content="Export" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,76" Height="50" FontSize="14" Click="btnExport_Click"/>
         <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,0,0,386" VerticalAlignment="Bottom" FontSize="14"/>
-        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="128" TextChanged="TextBox_TextChanged" IsReadOnly="True" FontSize="14"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="46" TextChanged="TextBox_TextChanged" IsReadOnly="True" FontSize="14"/>
         <Button x:Name="btnDelete" Content="Delete&#xA;Selected" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,187" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnDelete_Click" FontSize="14"/>
-        <RepeatButton x:Name="btnMinus" Content="-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="316,0,0,388" Height="13" Click="btnMinus_Click" FontSize="14"/>
-        <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="316,0,0,402" Height="13" Click="RepeatButton_Click" FontSize="14"/>
+        <RepeatButton x:Name="btnMinus" Content="-" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,388" Height="13" Click="btnMinus_Click" FontSize="14"/>
+        <RepeatButton x:Name="btnPlus" Content="+" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,402" Height="13" Click="RepeatButton_Click" FontSize="14"/>
         <Button x:Name="btnClear" Content="Delete&#xA;All" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,131" Height="50" RenderTransformOrigin="0.567,-0.226" Click="btnClear_Click" FontSize="14"/>
         <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" />
-        <Button x:Name="btnEnable" Content="Disable Polling" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="336,0,0,389" Height="26" Click="btnEnable_Click"/>
+        <Button x:Name="btnEnable" Content="Disable Polling" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="254,0,0,389" Height="26" Click="btnEnable_Click" FontSize="14"/>
+        <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.864,0.952" Margin="384,0,0,387" FontSize="14"/>
     </Grid>
 </Window>

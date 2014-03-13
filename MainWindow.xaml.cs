@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -26,8 +28,10 @@ namespace Pingo
     {
         List<Host> hosts;
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        DispatcherTimer nextUpdate = new DispatcherTimer();
         DataTable data = new DataTable();
         bool isProcessRunning = false;
+        TimeSpan timeElapsed = new TimeSpan(0, 0, 0);
 
         public MainWindow()
         {
@@ -42,6 +46,10 @@ namespace Pingo
             dispatcherTimer.Interval = new TimeSpan(0, 10, 0);
             dispatcherTimer.Start();
 
+            nextUpdate.Tick += new EventHandler(nextUpdate_Tick);
+            nextUpdate.Interval = new TimeSpan(0, 0, 1);
+            nextUpdate.Start();
+
             data.Columns.Add("Hostname", typeof(string));
             data.Columns.Add("Status", typeof(string));
             data.Columns.Add("Timestamp", typeof(string));
@@ -49,9 +57,16 @@ namespace Pingo
             lsvOutput.ItemsSource = data.DefaultView;
         }
 
+        private void nextUpdate_Tick(object sender, object e)
+        {
+            lblNextUpdate.Content = "Next update in " + (dispatcherTimer.Interval - timeElapsed);
+            timeElapsed = timeElapsed.Add(new TimeSpan(0, 0, 1));
+        }
+
         private void dispatcherTimer_Tick(object sender, object e)
         {
             Refresh();
+            timeElapsed = new TimeSpan(0, 0, 0);
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -264,13 +279,39 @@ namespace Pingo
         {
             if (dispatcherTimer.IsEnabled)
             {
-                dispatcherTimer.Stop();
+                dispatcherTimer.IsEnabled = false;
                 btnEnable.Content = "Enable Polling";
+                lblNextUpdate.Content = "Polling disabled";
             }
             else
             {
-                dispatcherTimer.Start();
+                dispatcherTimer.IsEnabled = true;
                 btnEnable.Content = "Disable Polling";
+            }
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            //File.Create("export.csv");
+
+            try
+            {
+                StreamWriter writer = new StreamWriter("export.csv");
+
+                writer.WriteLine("Hostname,Status,Last updated");
+
+                foreach (Host host in hosts)
+                {
+                    writer.WriteLine(host.ToString()[0] + "," + host.ToString()[1] + "," + host.ToString()[2]);
+                }
+
+                writer.Close();
+
+                Process.Start("export.csv");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
