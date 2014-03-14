@@ -242,7 +242,7 @@ namespace Pingo
                 txtInterval.Text = (timers.dispatcherTimer.Interval.Minutes - 5).ToString();
         }
 
-        private void btnRefreshSelected_Click(object sender, RoutedEventArgs e)
+        private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -282,7 +282,7 @@ namespace Pingo
             }
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -304,12 +304,12 @@ namespace Pingo
             hostList.data.Rows.Clear();
         }
 
-        private void btnEnable_Click(object sender, RoutedEventArgs e)
+        private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
             if (timers.dispatcherTimer.IsEnabled)
             {
                 timers.dispatcherTimer.IsEnabled = false;
-                btnEnable.Content = "Enable Polling";
+                btnTogglePolling.Content = "Enable Polling";
                 lblNextUpdate.Content = "Polling disabled";
                 timers.nextUpdate.IsEnabled = false;
             }
@@ -317,7 +317,7 @@ namespace Pingo
             {
                 timers.dispatcherTimer.IsEnabled = true;
                 timers.nextUpdate.IsEnabled = true;
-                btnEnable.Content = "Disable Polling";
+                btnTogglePolling.Content = "Disable Polling";
                 timers.timeElapsed = new TimeSpan(0, 0, 0);
             }
         }
