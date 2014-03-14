@@ -244,6 +244,8 @@ namespace Pingo
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
+            int index = lsvOutput.SelectedIndex;
+
             try
             {
                 Thread backgroundThread = new Thread(
@@ -258,10 +260,8 @@ namespace Pingo
                             TaskbarItemInfo.ProgressValue = 1;
                         }));
 
-                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            hostList.hosts[lsvOutput.SelectedIndex].Ping();
-                        }));
+                        if (index >= 0)
+                            hostList.hosts[index].Ping();
 
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
