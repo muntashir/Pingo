@@ -9,43 +9,62 @@ namespace Pingo
 {
     public class Host
     {
+        public enum PingStatus { Online, Offline, Error }
+
         protected string hostname;
-        protected Ping pingo;
-        protected PingReply pingoReply;
-        protected bool online;
+        protected Ping pingSend;
+        protected PingReply pingReply;
+        protected PingStatus status;
         protected DateTime timestamp;
 
         public Host(string hostname)
         {
             this.hostname = hostname;
-            pingo = new Ping();           
+            pingSend = new Ping();           
 
             Ping();
         }
 
         public void Ping()
         {
-            online = false;
+            status = PingStatus.Offline;
+            timestamp = DateTime.Now;
 
             try
             {
-                pingoReply = pingo.Send(hostname);
-                online = pingoReply.Status == IPStatus.Success;
-                timestamp = DateTime.Now;
+                pingReply = pingSend.Send(hostname, 2500);
+                if (pingReply.Status == IPStatus.Success)
+                    status = PingStatus.Online;
             }
             catch (PingException)
             {
+                status = PingStatus.Error;
             }
         }
 
-        public bool IsOnline()
+        public PingStatus IsOnline()
         {
-            return online;
+            return status;
         }
 
         public new String[] ToString()
         {
-            String[] array = { hostname, online ? "Online" : "Offline", timestamp.ToShortTimeString() + " " + timestamp.ToShortDateString() };
+            string strStatus = null;
+
+            switch (status)
+            {
+                case PingStatus.Online:
+                    strStatus = "Online";
+                    break;
+                case PingStatus.Offline:
+                    strStatus = "Offline";
+                    break;
+                case PingStatus.Error:
+                    strStatus = "Error";
+                    break;
+            }
+
+            String[] array = { hostname, strStatus, timestamp.ToShortTimeString() + " " + timestamp.ToShortDateString() };
 
             return array;
         }

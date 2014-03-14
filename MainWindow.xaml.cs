@@ -26,47 +26,21 @@ namespace Pingo
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Host> hosts;
-        DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        DispatcherTimer nextUpdate = new DispatcherTimer();
-        DataTable data = new DataTable();
         bool isProcessRunning = false;
-        TimeSpan timeElapsed = new TimeSpan(0, 0, 0);
+
+        HostList hostList = new HostList();
+        Timers timers = new Timers();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            hosts = new List<Host>();
+            timers = new Timers(this);
 
             txtInput.Focus();
             txtInput.SelectAll();
 
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 10, 0);
-            dispatcherTimer.Start();
-
-            nextUpdate.Tick += new EventHandler(nextUpdate_Tick);
-            nextUpdate.Interval = new TimeSpan(0, 0, 1);
-            nextUpdate.Start();
-
-            data.Columns.Add("Hostname", typeof(string));
-            data.Columns.Add("Status", typeof(string));
-            data.Columns.Add("Timestamp", typeof(string));
-
-            lsvOutput.ItemsSource = data.DefaultView;
-        }
-
-        private void nextUpdate_Tick(object sender, object e)
-        {
-            lblNextUpdate.Content = "Next update in " + (dispatcherTimer.Interval - timeElapsed);
-            timeElapsed = timeElapsed.Add(new TimeSpan(0, 0, 1));
-        }
-
-        private void dispatcherTimer_Tick(object sender, object e)
-        {
-            Refresh();
-            timeElapsed = new TimeSpan(0, 0, 0);
+            lsvOutput.ItemsSource = hostList.data.DefaultView;
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -88,13 +62,39 @@ namespace Pingo
                     throw new Exception("Invalid Input");
                 else if (multiline == false)
                 {
-                    hosts.Add(new Host(txtInput.Text));
-                    UpdateOutput();
+                    String host = txtInput.Text;
+
+                    Thread backgroundThread = new Thread(
+                        new ThreadStart(() =>
+                            {
+                                isProcessRunning = true;
+
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    this.Title = "Pingo - Working";
+                                    ProgressBar1.Value = 100;
+                                    TaskbarItemInfo.ProgressValue = 1;
+                                }));
+
+                                hostList.hosts.Add(new Host(host));
+
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    hostList.UpdateData();
+                                    this.Title = "Pingo - Idle";
+                                    ProgressBar1.Value = 0;
+                                    TaskbarItemInfo.ProgressValue = 0;
+                                }));
+
+                                isProcessRunning = false;
+                            }));
+
+                    backgroundThread.Start();
                 }
                 else
                 {
                     String[] delim = { "\r\n", " ", "'" };
-                    String[] temp = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+                    String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
 
                     if (isProcessRunning)
                     {
@@ -114,24 +114,26 @@ namespace Pingo
 
                             isProcessRunning = true;
 
-                            foreach (String s in temp)
+                            foreach (String line in multiLineHost)
                             {
                                 ProgressBar1.Dispatcher.BeginInvoke(
                                     new Action(() =>
-                            {
-                                ProgressBar1.Value = (i / double.Parse(temp.Count().ToString())) * 100.0;
-                            }));
+                                    {
+                                        ProgressBar1.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                        TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
+                                    }));
 
                                 i++;
 
-                                hosts.Add(new Host(s));
+                                hostList.hosts.Add(new Host(line));
                             }
 
                             ProgressBar1.Dispatcher.BeginInvoke(
                             new Action(() =>
                             {
                                 ProgressBar1.Value = 0;
-                                UpdateOutput();
+                                TaskbarItemInfo.ProgressValue = 0;
+                                hostList.UpdateData();
                             }));
 
                             isProcessRunning = false;
@@ -153,17 +155,7 @@ namespace Pingo
             txtInput.SelectAll();
         }
 
-        private void UpdateOutput()
-        {
-            data.Rows.Clear();
-
-            foreach (Host host in hosts)
-            {
-                data.Rows.Add(host.ToString()[0], host.ToString()[1], host.ToString()[2]);
-            }
-        }
-
-        private void Refresh()
+        public void Refresh()
         {
             try
             {
@@ -172,6 +164,10 @@ namespace Pingo
                     MessageBox.Show("A process is already running");
                     return;
                 }
+
+                timers.timeElapsed = new TimeSpan(0, 0, 0);
+                timers.dispatcherTimer.IsEnabled = false;
+                timers.dispatcherTimer.IsEnabled = true;
 
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
@@ -184,12 +180,13 @@ namespace Pingo
 
                         double i = 1.0;
 
-                        foreach (Host host in hosts)
+                        foreach (Host host in hostList.hosts)
                         {
                             ProgressBar1.Dispatcher.BeginInvoke(
                                 new Action(() =>
                                 {
-                                    ProgressBar1.Value = (i / double.Parse(hosts.Count().ToString())) * 100.0;
+                                    ProgressBar1.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
                                 }));
 
                             host.Ping();
@@ -200,7 +197,8 @@ namespace Pingo
                                                    new Action(() =>
                                                    {
                                                        ProgressBar1.Value = 0;
-                                                       UpdateOutput();
+                                                       TaskbarItemInfo.ProgressValue = 0;
+                                                       hostList.UpdateData();
                                                    }));
 
                         isProcessRunning = false;
@@ -227,28 +225,56 @@ namespace Pingo
         {
             int minutes = int.Parse(txtInterval.Text);
 
-            dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
+            timers.dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
+
+            timers.timeElapsed = new TimeSpan(0, 0, 0);
         }
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
             if (int.Parse(txtInterval.Text) + 5 < 60)
-                txtInterval.Text = (dispatcherTimer.Interval.Minutes + 5).ToString();
+                txtInterval.Text = (timers.dispatcherTimer.Interval.Minutes + 5).ToString();
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
             if (int.Parse(txtInterval.Text) - 5 > 0)
-                txtInterval.Text = (dispatcherTimer.Interval.Minutes - 5).ToString();
+                txtInterval.Text = (timers.dispatcherTimer.Interval.Minutes - 5).ToString();
         }
 
         private void btnRefreshSelected_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                hosts[lsvOutput.SelectedIndex].Ping();
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
+                    {
+                        isProcessRunning = true;
 
-                UpdateOutput();
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            this.Title = "Pingo - Working";
+                            ProgressBar1.Value = 100;
+                            TaskbarItemInfo.ProgressValue = 1;
+                        }));
+
+                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            hostList.hosts[lsvOutput.SelectedIndex].Ping();
+                        }));
+
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            hostList.UpdateData();
+                            this.Title = "Pingo - Idle";
+                            ProgressBar1.Value = 0;
+                            TaskbarItemInfo.ProgressValue = 0;
+                        }));
+
+                        isProcessRunning = false;
+                    }));
+
+                backgroundThread.Start();
             }
             catch
             {
@@ -260,60 +286,45 @@ namespace Pingo
         {
             try
             {
-                hosts.RemoveAt(lsvOutput.SelectedIndex);
-
-                UpdateOutput();
-            }
-            catch
-            {
-                MessageBox.Show("Nothing selected");
-            }
-        }
-
-        private void btnClear_Click(object sender, RoutedEventArgs e)
-        {
-            hosts.Clear();
-            data.Rows.Clear();
-        }
-
-        private void btnEnable_Click(object sender, RoutedEventArgs e)
-        {
-            if (dispatcherTimer.IsEnabled)
-            {
-                dispatcherTimer.IsEnabled = false;
-                btnEnable.Content = "Enable Polling";
-                lblNextUpdate.Content = "Polling disabled";
-                nextUpdate.IsEnabled = false;
-            }
-            else
-            {
-                dispatcherTimer.IsEnabled = true;
-                nextUpdate.IsEnabled = true;
-                btnEnable.Content = "Disable Polling";
-            }
-        }
-
-        private void btnExport_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                StreamWriter writer = new StreamWriter("export.csv");
-
-                writer.WriteLine("Hostname,Status,Last updated");
-
-                foreach (Host host in hosts)
+                while (lsvOutput.SelectedItems.Count > 0)
                 {
-                    writer.WriteLine(host.ToString()[0] + "," + host.ToString()[1] + "," + host.ToString()[2]);
+                    hostList.hosts.RemoveAt(lsvOutput.SelectedIndex);
+                    hostList.UpdateData();
                 }
-
-                writer.Close();
-
-                Process.Start("export.csv");
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            hostList.hosts.Clear();
+            hostList.data.Rows.Clear();
+        }
+
+        private void btnEnable_Click(object sender, RoutedEventArgs e)
+        {
+            if (timers.dispatcherTimer.IsEnabled)
+            {
+                timers.dispatcherTimer.IsEnabled = false;
+                btnEnable.Content = "Enable Polling";
+                lblNextUpdate.Content = "Polling disabled";
+                timers.nextUpdate.IsEnabled = false;
+            }
+            else
+            {
+                timers.dispatcherTimer.IsEnabled = true;
+                timers.nextUpdate.IsEnabled = true;
+                btnEnable.Content = "Disable Polling";
+                timers.timeElapsed = new TimeSpan(0, 0, 0);
+            }
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            hostList.Export();
         }
 
     }
