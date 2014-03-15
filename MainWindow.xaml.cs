@@ -1,23 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
+using System.Windows.Shell;
 
 namespace Pingo
 {
@@ -73,6 +59,7 @@ namespace Pingo
                                 {
                                     this.Title = "Pingo - Working";
                                     ProgressBar1.Value = 100;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                     TaskbarItemInfo.ProgressValue = 1;
                                 }));
 
@@ -83,6 +70,7 @@ namespace Pingo
                                     hostList.UpdateData();
                                     this.Title = "Pingo - Idle";
                                     ProgressBar1.Value = 0;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                     TaskbarItemInfo.ProgressValue = 0;
                                 }));
 
@@ -120,6 +108,7 @@ namespace Pingo
                                     new Action(() =>
                                     {
                                         ProgressBar1.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                         TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
                                     }));
 
@@ -132,6 +121,7 @@ namespace Pingo
                             new Action(() =>
                             {
                                 ProgressBar1.Value = 0;
+                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                 TaskbarItemInfo.ProgressValue = 0;
                                 hostList.UpdateData();
                             }));
@@ -155,19 +145,26 @@ namespace Pingo
             txtInput.SelectAll();
         }
 
-        public void Refresh()
+        public void RefreshAll()
         {
             try
             {
+                //Thread safety
                 if (isProcessRunning)
                 {
                     MessageBox.Show("A process is already running");
                     return;
                 }
 
+                //Set time elapsed to 0
                 timers.timeElapsed = new TimeSpan(0, 0, 0);
-                timers.dispatcherTimer.IsEnabled = false;
-                timers.dispatcherTimer.IsEnabled = true;
+
+                //Restart updateTimer
+                if (timers.updateTimer.IsEnabled)
+                {
+                    timers.updateTimer.IsEnabled = false;
+                    timers.updateTimer.IsEnabled = true;
+                }
 
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
@@ -186,6 +183,7 @@ namespace Pingo
                                 new Action(() =>
                                 {
                                     ProgressBar1.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                     TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
                                 }));
 
@@ -197,6 +195,7 @@ namespace Pingo
                                                    new Action(() =>
                                                    {
                                                        ProgressBar1.Value = 0;
+                                                       TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                                        TaskbarItemInfo.ProgressValue = 0;
                                                        hostList.UpdateData();
                                                    }));
@@ -218,14 +217,14 @@ namespace Pingo
 
         private void btnRefreshAll_Click(object sender, RoutedEventArgs e)
         {
-            Refresh();
+            RefreshAll();
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             int minutes = int.Parse(txtInterval.Text);
 
-            timers.dispatcherTimer.Interval = new TimeSpan(0, minutes, 0);
+            timers.updateTimer.Interval = new TimeSpan(0, minutes, 0);
 
             timers.timeElapsed = new TimeSpan(0, 0, 0);
         }
@@ -233,13 +232,13 @@ namespace Pingo
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
             if (int.Parse(txtInterval.Text) + 5 < 60)
-                txtInterval.Text = (timers.dispatcherTimer.Interval.Minutes + 5).ToString();
+                txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
             if (int.Parse(txtInterval.Text) - 5 > 0)
-                txtInterval.Text = (timers.dispatcherTimer.Interval.Minutes - 5).ToString();
+                txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
         }
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
@@ -257,6 +256,7 @@ namespace Pingo
                         {
                             this.Title = "Pingo - Working";
                             ProgressBar1.Value = 100;
+                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                             TaskbarItemInfo.ProgressValue = 1;
                         }));
 
@@ -268,6 +268,7 @@ namespace Pingo
                             hostList.UpdateData();
                             this.Title = "Pingo - Idle";
                             ProgressBar1.Value = 0;
+                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                             TaskbarItemInfo.ProgressValue = 0;
                         }));
 
@@ -284,6 +285,13 @@ namespace Pingo
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
+
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             try
             {
                 while (lsvOutput.SelectedItems.Count > 0)
@@ -300,23 +308,29 @@ namespace Pingo
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             hostList.hosts.Clear();
             hostList.data.Rows.Clear();
         }
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            if (timers.dispatcherTimer.IsEnabled)
+            if (timers.updateTimer.IsEnabled)
             {
-                timers.dispatcherTimer.IsEnabled = false;
+                timers.updateTimer.IsEnabled = false;
                 btnTogglePolling.Content = "Enable Polling";
                 lblNextUpdate.Content = "Polling disabled";
-                timers.nextUpdate.IsEnabled = false;
+                timers.timeToNextUpdateTimer.IsEnabled = false;
             }
             else
             {
-                timers.dispatcherTimer.IsEnabled = true;
-                timers.nextUpdate.IsEnabled = true;
+                timers.updateTimer.IsEnabled = true;
+                timers.timeToNextUpdateTimer.IsEnabled = true;
                 btnTogglePolling.Content = "Disable Polling";
                 timers.timeElapsed = new TimeSpan(0, 0, 0);
             }
@@ -324,6 +338,12 @@ namespace Pingo
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             hostList.Export();
         }
 
