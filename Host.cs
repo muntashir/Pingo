@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pingo
 {
@@ -32,7 +28,7 @@ namespace Pingo
 
             try
             {
-                pingReply = pingSend.Send(hostname, 2500);
+                pingReply = pingSend.Send(hostname, 3000);
                 if (pingReply.Status == IPStatus.Success)
                     status = PingStatus.Online;
             }
