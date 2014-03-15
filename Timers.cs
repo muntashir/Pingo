@@ -3,7 +3,7 @@ using System.Windows.Threading;
 
 namespace Pingo
 {
-    class Timers
+    public class Timers
     {
         //Timer for automatic refreshes
         public DispatcherTimer updateTimer = new DispatcherTimer();
@@ -15,7 +15,7 @@ namespace Pingo
         public TimeSpan timeElapsed = new TimeSpan(0, 0, 0);
 
         //MainWindow object for access to controls
-        public MainWindow mainWindow;
+        protected MainWindow mainWindow;
 
         //Empty contructor to avoid null error
         public Timers()

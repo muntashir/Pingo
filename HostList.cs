@@ -7,14 +7,13 @@ using System.Windows;
 
 namespace Pingo
 {
-    class HostList
+    public class HostList
     {
         //DataTable source for ListView
         public DataTable data = new DataTable();
 
         //List to store all hosts
         public List<Host> hosts;
-
 
         //Constructor
         public HostList()

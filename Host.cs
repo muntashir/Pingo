@@ -6,7 +6,7 @@ namespace Pingo
     public class Host
     {
         //Stores status of the ping
-        public enum PingStatus { Online, Offline, Error }
+        protected enum PingStatus { Online, Offline, Error }
         protected PingStatus status;
 
         //Used to ping
@@ -16,7 +16,6 @@ namespace Pingo
         //Stores info about the host
         protected string hostname;
         protected DateTime timestamp;
-
 
         //Constructor
         public Host(string hostname)
@@ -51,12 +50,6 @@ namespace Pingo
                 //Could be error if DNS could not resolve host
                 status = PingStatus.Error;
             }
-        }
-
-        //Returns status of host
-        public PingStatus getStatus()
-        {
-            return status;
         }
 
         //Returns string array of hostname, status, and timestamp

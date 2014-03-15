@@ -13,11 +13,11 @@ namespace Pingo
     public partial class MainWindow : Window
     {
         //Flag for background thread
-        bool isProcessRunning = false;
+        protected bool isProcessRunning = false;
 
         //Objects
-        HostList hostList = new HostList();
-        Timers timers = new Timers();
+        protected HostList hostList = new HostList();
+        protected Timers timers = new Timers();
 
         public MainWindow()
         {
