@@ -5,22 +5,33 @@ namespace Pingo
 {
     public class Host
     {
+        //Stores status of the ping
         public enum PingStatus { Online, Offline, Error }
+        protected PingStatus status;
 
-        protected string hostname;
+        //Used to ping
         protected Ping pingSend;
         protected PingReply pingReply;
-        protected PingStatus status;
+
+        //Stores info about the host
+        protected string hostname;
         protected DateTime timestamp;
 
+
+        //Constructor
         public Host(string hostname)
         {
+            //Sets hostname
             this.hostname = hostname;
+
+            //Initializes pingSend
             pingSend = new Ping();           
 
+            //Pings host
             Ping();
         }
 
+        //Gets status of the host with a ping
         public void Ping()
         {
             status = PingStatus.Offline;
@@ -28,25 +39,33 @@ namespace Pingo
 
             try
             {
+                //Send a ping with 3000 ms timeout
                 pingReply = pingSend.Send(hostname, 3000);
+
+                //Sets status to sucess if ping is successful
                 if (pingReply.Status == IPStatus.Success)
                     status = PingStatus.Online;
             }
             catch (PingException)
             {
+                //Could be error if DNS could not resolve host
                 status = PingStatus.Error;
             }
         }
 
-        public PingStatus IsOnline()
+        //Returns status of host
+        public PingStatus getStatus()
         {
             return status;
         }
 
+        //Returns string array of hostname, status, and timestamp
         public new String[] ToString()
         {
+            //Stores string representation of status
             string strStatus = null;
 
+            //Converts PingStatus to string
             switch (status)
             {
                 case PingStatus.Online:

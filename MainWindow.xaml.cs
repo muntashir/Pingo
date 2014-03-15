@@ -12,8 +12,10 @@ namespace Pingo
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Flag for background thread
         bool isProcessRunning = false;
 
+        //Objects
         HostList hostList = new HostList();
         Timers timers = new Timers();
 
@@ -26,15 +28,18 @@ namespace Pingo
             txtInput.Focus();
             txtInput.SelectAll();
 
+            //Set ListView source
             lsvOutput.ItemsSource = hostList.data.DefaultView;
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
+            //Flag to store if multiple lines are entered
             bool multiline = false;
 
             try
             {
+                //Checks if for multiple lines with multiple hosts
                 foreach (char c in txtInput.Text)
                 {
                     if (char.IsWhiteSpace(c))
@@ -55,6 +60,7 @@ namespace Pingo
                             {
                                 isProcessRunning = true;
 
+                                //Updates progress bars and sets window title
                                 this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
                                     this.Title = "Pingo - Working";
@@ -221,27 +227,31 @@ namespace Pingo
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //Get new polling interval from txtInterval
             int minutes = int.Parse(txtInterval.Text);
 
+            //Reset time elapsed and change updateTimer
             timers.updateTimer.Interval = new TimeSpan(0, minutes, 0);
-
             timers.timeElapsed = new TimeSpan(0, 0, 0);
         }
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
+            //Add 5 minutes to the polling interval
             if (int.Parse(txtInterval.Text) + 5 < 60)
                 txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
+            //Subtract 5 minutes from the polling interval
             if (int.Parse(txtInterval.Text) - 5 > 0)
                 txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
         }
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
+            //Get index of selected item
             int index = lsvOutput.SelectedIndex;
 
             try
@@ -284,7 +294,7 @@ namespace Pingo
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
-
+            //Prevent multiple threads accessing data
             if (isProcessRunning)
             {
                 MessageBox.Show("A process is already running");
@@ -319,6 +329,7 @@ namespace Pingo
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
+            //Turns polling on/off
             if (timers.updateTimer.IsEnabled)
             {
                 timers.updateTimer.IsEnabled = false;

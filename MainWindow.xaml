@@ -63,7 +63,7 @@
         <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,388" Height="13" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,402" Height="13" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         
-        <ProgressBar x:Name="ProgressBar1" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" FontSize="14" />
+        <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" FontSize="14" />
         
     </Grid>
     
