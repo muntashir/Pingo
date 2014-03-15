@@ -149,6 +149,7 @@ namespace Pingo
         {
             try
             {
+                //Thread safety
                 if (isProcessRunning)
                 {
                     MessageBox.Show("A process is already running");
