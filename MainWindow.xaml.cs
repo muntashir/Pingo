@@ -58,7 +58,7 @@ namespace Pingo
                                 this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
                                     this.Title = "Pingo - Working";
-                                    ProgressBar1.Value = 100;
+                                    progressBar.Value = 100;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                     TaskbarItemInfo.ProgressValue = 1;
                                 }));
@@ -69,7 +69,7 @@ namespace Pingo
                                 {
                                     hostList.UpdateData();
                                     this.Title = "Pingo - Idle";
-                                    ProgressBar1.Value = 0;
+                                    progressBar.Value = 0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                     TaskbarItemInfo.ProgressValue = 0;
                                 }));
@@ -104,10 +104,10 @@ namespace Pingo
 
                             foreach (String line in multiLineHost)
                             {
-                                ProgressBar1.Dispatcher.BeginInvoke(
+                                progressBar.Dispatcher.BeginInvoke(
                                     new Action(() =>
                                     {
-                                        ProgressBar1.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                        progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
                                         TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                         TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
                                     }));
@@ -117,10 +117,10 @@ namespace Pingo
                                 hostList.hosts.Add(new Host(line));
                             }
 
-                            ProgressBar1.Dispatcher.BeginInvoke(
+                            progressBar.Dispatcher.BeginInvoke(
                             new Action(() =>
                             {
-                                ProgressBar1.Value = 0;
+                                progressBar.Value = 0;
                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                 TaskbarItemInfo.ProgressValue = 0;
                                 hostList.UpdateData();
@@ -149,7 +149,6 @@ namespace Pingo
         {
             try
             {
-                //Thread safety
                 if (isProcessRunning)
                 {
                     MessageBox.Show("A process is already running");
@@ -179,10 +178,10 @@ namespace Pingo
 
                         foreach (Host host in hostList.hosts)
                         {
-                            ProgressBar1.Dispatcher.BeginInvoke(
+                            progressBar.Dispatcher.BeginInvoke(
                                 new Action(() =>
                                 {
-                                    ProgressBar1.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                     TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
                                 }));
@@ -191,10 +190,10 @@ namespace Pingo
                             i++;
                         }
 
-                        ProgressBar1.Dispatcher.BeginInvoke(
+                        progressBar.Dispatcher.BeginInvoke(
                                                    new Action(() =>
                                                    {
-                                                       ProgressBar1.Value = 0;
+                                                       progressBar.Value = 0;
                                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                                        TaskbarItemInfo.ProgressValue = 0;
                                                        hostList.UpdateData();
@@ -255,7 +254,7 @@ namespace Pingo
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Working";
-                            ProgressBar1.Value = 100;
+                            progressBar.Value = 100;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                             TaskbarItemInfo.ProgressValue = 1;
                         }));
@@ -267,7 +266,7 @@ namespace Pingo
                         {
                             hostList.UpdateData();
                             this.Title = "Pingo - Idle";
-                            ProgressBar1.Value = 0;
+                            progressBar.Value = 0;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                             TaskbarItemInfo.ProgressValue = 0;
                         }));
