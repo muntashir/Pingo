@@ -149,7 +149,6 @@ namespace Pingo
         {
             try
             {
-                //Prevent multiple threads
                 if (isProcessRunning)
                 {
                     MessageBox.Show("A process is already running");
