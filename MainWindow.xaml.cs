@@ -22,7 +22,10 @@ namespace Pingo
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             timers = new Timers(this);
 
             txtInput.Focus();
@@ -34,6 +37,11 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
+            bool wasTimerEnabled = false;
+
+            if (timers.updateTimer.IsEnabled == true)
+                wasTimerEnabled = true;
+
             //Flag to store if multiple lines are entered
             bool multiline = false;
 
@@ -81,8 +89,10 @@ namespace Pingo
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                     TaskbarItemInfo.ProgressValue = 0;
 
-
-                                    timers.EnableTimers();
+                                    if (wasTimerEnabled)
+                                        timers.EnableTimers();
+                                    else
+                                        lblNextUpdate.Content = "Polling disabled";
                                 }));
 
                                 isProcessRunning = false;
@@ -145,7 +155,10 @@ namespace Pingo
                             {
                                 this.Title = "Pingo - Idle";
 
-                                timers.EnableTimers();
+                                if (wasTimerEnabled)
+                                    timers.EnableTimers();
+                                else 
+                                    lblNextUpdate.Content = "Polling disabled";
                             }));
                         }));
 
@@ -163,6 +176,11 @@ namespace Pingo
 
         public void RefreshAll()
         {
+            bool wasTimerEnabled = false;
+
+            if (timers.updateTimer.IsEnabled == true)
+                wasTimerEnabled = true;
+
             try
             {
                 if (isProcessRunning)
@@ -172,11 +190,6 @@ namespace Pingo
                 }
 
                 timers.ResetTimeElapsed();
-
-                if (timers.updateTimer.IsEnabled)
-                {
-                    timers.RestartTimers();
-                }
 
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
@@ -219,7 +232,10 @@ namespace Pingo
                         {
                             this.Title = "Pingo - Idle";
 
-                            timers.EnableTimers();
+                            if (wasTimerEnabled)
+                                timers.EnableTimers();
+                            else
+                                lblNextUpdate.Content = "Polling disabled";
                         }));
                     }));
 
@@ -236,7 +252,7 @@ namespace Pingo
             RefreshAll();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void txtInterval_TextChanged(object sender, TextChangedEventArgs e)
         {
             //Get new polling interval from txtInterval
             int minutes = int.Parse(txtInterval.Text);
@@ -244,6 +260,10 @@ namespace Pingo
             //Reset time elapsed and change updateTimer
             timers.SetUpdateInterval(minutes);
             timers.ResetTimeElapsed();
+
+            //Avoid null error when window is first loaded
+            if (lblNextUpdate != null)
+                timers.RestartTimers();
         }
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)

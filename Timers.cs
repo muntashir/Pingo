@@ -25,6 +25,9 @@ namespace Pingo
         //Main constructor
         public Timers(MainWindow mainWindow)
         {
+            //Stores mainWindow object for access to window controls
+            this.mainWindow = mainWindow;
+
             //Initialize updateTimer and start it
             updateTimer.Tick += new EventHandler(updateTimer_Tick);
             updateTimer.Interval = new TimeSpan(0, 10, 0);
@@ -34,9 +37,7 @@ namespace Pingo
             timeToNextUpdateTimer.Tick += new EventHandler(timeToNextUpdateTimer_Tick);
             timeToNextUpdateTimer.Interval = new TimeSpan(0, 0, 1);
             timeToNextUpdateTimer.Start();
-
-            //Stores mainWindow object for access to window controls
-            this.mainWindow = mainWindow;
+            timeToNextUpdateTimer_Tick(null, new object());
         }
 
         //Updates time to next update textbox
@@ -65,6 +66,8 @@ namespace Pingo
         {
             updateTimer.IsEnabled = true;
             timeToNextUpdateTimer.IsEnabled = true;
+
+            timeToNextUpdateTimer_Tick(null, new object());
         }
 
         public void SetUpdateInterval(int min)
@@ -79,10 +82,8 @@ namespace Pingo
 
         public void RestartTimers()
         {
-            updateTimer.IsEnabled = false;
-            timeToNextUpdateTimer.IsEnabled = false;
-            updateTimer.IsEnabled = true;
-            timeToNextUpdateTimer.IsEnabled = true;
+            DisableTimers();
+            EnableTimers();
         }
     }
 }

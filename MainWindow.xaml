@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Pingo.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pingo - Idle" Height="468" Width="573" ResizeMode="NoResize" Icon="Icon1.ico" >
+        Title="Pingo - Idle" Height="468" Width="573" ResizeMode="NoResize" Icon="Icon1.ico" Loaded="MainWindow_Loaded">
     
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressValue="0" ProgressState="Normal"></TaskbarItemInfo>
@@ -56,7 +56,7 @@
         </Button>
 
         <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,0,0,386" VerticalAlignment="Bottom" FontSize="14"/>
-        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="46" TextChanged="TextBox_TextChanged" IsReadOnly="True" FontSize="14"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="46" TextChanged="txtInterval_TextChanged" IsReadOnly="True" FontSize="14"/>
         <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="254,0,0,389" Height="26" Click="btnTogglePolling_Click" FontSize="14"/>
         <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.864,0.952" Margin="384,0,0,387" FontSize="14"/>     
         
