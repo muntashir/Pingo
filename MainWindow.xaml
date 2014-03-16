@@ -10,9 +10,14 @@
 
     <Grid Background="#FFF7F7F7">
 
-        <Rectangle Fill="#FFE6E6E6" Height="43" Margin="-9,0,0,0" VerticalAlignment="Top"/>
+        <Rectangle Fill="#FFE6E6E6" Height="34" Margin="-9,0,0,0" VerticalAlignment="Top"/>
 
         <ListView x:Name="lsvOutput" Margin="10,128,104,77" FontSize="14" SelectionMode="Single" Background="Gray" Foreground="White" BorderThickness="0">
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="BorderBrush" Value="#FFF7F7F7" />
+                </Style>
+            </ListView.Resources>
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Hostname" DisplayMemberBinding="{Binding Hostname}"/>
@@ -58,24 +63,18 @@
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
         </Button>
 
-        <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,48,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
-        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Margin="188,48,0,0" TextWrapping="Wrap" Text="10" Width="46" TextChanged="txtInterval_TextChanged" IsReadOnly="True" BorderBrush="{x:Null}" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White" Cursor="Arrow"/>
-        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,48,0,0" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White"/>
-        <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,47,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
+        <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Margin="178,47,0,0" TextWrapping="Wrap" Text="10" Width="30" TextChanged="txtInterval_TextChanged" IsReadOnly="True" BorderBrush="{x:Null}" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Cursor="Arrow"/>
+        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White"/>
+        <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="234,62,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top"/>
-        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="234,48,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top"/>
+        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}"/>
+        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="208,49,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}"/>
 
-        <ProgressBar x:Name="progressBar" Margin="10,84,104,0" FontSize="14" Height="28" VerticalAlignment="Top" Background="Gray" BorderBrush="{x:Null}">
-            <ProgressBar.Foreground>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFC10000" Offset="1"/>
-                    <GradientStop Color="#FFF00000"/>
-                </LinearGradientBrush>
-            </ProgressBar.Foreground>
-        </ProgressBar>
-        <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="24" FontWeight="Bold"/>
-        <Button x:Name="btnExit" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnExit_Click" FontSize="16" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top"/>
+        <ProgressBar x:Name="progressBar" Margin="10,84,104,0" FontSize="14" Height="28" VerticalAlignment="Top" Background="Gray" BorderBrush="{x:Null}" Foreground="#FF23FF00"/>
+        <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+        <Button x:Name="btnExit" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top"/>
+        <Button x:Name="btnMinimize" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0"/>
 
     </Grid>
 

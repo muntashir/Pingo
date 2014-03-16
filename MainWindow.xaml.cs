@@ -409,5 +409,10 @@ namespace Pingo
         {
             DragMove();
         }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
     }
 }
