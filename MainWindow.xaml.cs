@@ -107,7 +107,6 @@ namespace Pingo
 
                     if (isProcessRunning)
                     {
-                        MessageBox.Show("A process is already running");
                         return;
                     }
 
@@ -185,7 +184,6 @@ namespace Pingo
             {
                 if (isProcessRunning)
                 {
-                    MessageBox.Show("A process is already running");
                     return;
                 }
 
@@ -270,7 +268,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -283,7 +280,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -296,7 +292,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -316,9 +311,6 @@ namespace Pingo
                             progressBar.Value = 100;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                             TaskbarItemInfo.ProgressValue = 1;
-
-
-                            timers.DisableTimers();
                         }));
 
                         if (index >= 0)
@@ -331,8 +323,6 @@ namespace Pingo
                             progressBar.Value = 0;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                             TaskbarItemInfo.ProgressValue = 0;
-
-                            timers.EnableTimers();
                         }));
 
                         isProcessRunning = false;
@@ -351,7 +341,6 @@ namespace Pingo
             //Prevent multiple threads accessing data
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -373,7 +362,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -385,7 +373,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
@@ -407,7 +394,6 @@ namespace Pingo
         {
             if (isProcessRunning)
             {
-                MessageBox.Show("A process is already running");
                 return;
             }
 
