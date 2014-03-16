@@ -31,7 +31,7 @@ namespace Pingo
             updateTimer.Start();
 
             //Initialize timeToNextUpdateTimer and start it
-            timeToNextUpdateTimer.Tick += new EventHandler(nextUpdate_Tick);
+            timeToNextUpdateTimer.Tick += new EventHandler(timeToNextUpdateTimer_Tick);
             timeToNextUpdateTimer.Interval = new TimeSpan(0, 0, 1);
             timeToNextUpdateTimer.Start();
 
@@ -40,7 +40,7 @@ namespace Pingo
         }
 
         //Updates time to next update textbox
-        private void nextUpdate_Tick(object sender, object e)
+        private void timeToNextUpdateTimer_Tick(object sender, object e)
         {
             mainWindow.lblNextUpdate.Content = "Next update in " + (updateTimer.Interval - timeElapsed);
             timeElapsed = timeElapsed.Add(new TimeSpan(0, 0, 1));
@@ -50,7 +50,39 @@ namespace Pingo
         private void updateTimer_Tick(object sender, object e)
         {
             mainWindow.RefreshAll();
+            ResetTimeElapsed();
+        }
+
+        public void DisableTimers()
+        {
+            ResetTimeElapsed();
+            updateTimer.IsEnabled = false;
+            timeToNextUpdateTimer.IsEnabled = false;
+            mainWindow.lblNextUpdate.Content = "Update in progress";
+        }
+
+        public void EnableTimers()
+        {
+            updateTimer.IsEnabled = true;
+            timeToNextUpdateTimer.IsEnabled = true;
+        }
+
+        public void SetUpdateInterval(int min)
+        {
+            updateTimer.Interval = new TimeSpan(0, min, 0);
+        }
+
+        public void ResetTimeElapsed()
+        {
             timeElapsed = new TimeSpan(0, 0, 0);
+        }
+
+        public void RestartTimers()
+        {
+            updateTimer.IsEnabled = false;
+            timeToNextUpdateTimer.IsEnabled = false;
+            updateTimer.IsEnabled = true;
+            timeToNextUpdateTimer.IsEnabled = true;
         }
     }
 }

@@ -67,6 +67,8 @@ namespace Pingo
                                     progressBar.Value = 100;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                     TaskbarItemInfo.ProgressValue = 1;
+
+                                    timers.DisableTimers();
                                 }));
 
                                 hostList.hosts.Add(new Host(host));
@@ -78,6 +80,9 @@ namespace Pingo
                                     progressBar.Value = 0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                     TaskbarItemInfo.ProgressValue = 0;
+
+
+                                    timers.EnableTimers();
                                 }));
 
                                 isProcessRunning = false;
@@ -104,6 +109,8 @@ namespace Pingo
                             this.Dispatcher.BeginInvoke(new Action(() =>
                             {
                                 this.Title = "Pingo - Working";
+
+                                timers.DisableTimers();
                             }));
 
                             isProcessRunning = true;
@@ -129,6 +136,7 @@ namespace Pingo
                                 progressBar.Value = 0;
                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                 TaskbarItemInfo.ProgressValue = 0;
+
                                 hostList.UpdateData();
                             }));
 
@@ -136,6 +144,8 @@ namespace Pingo
                             this.Dispatcher.BeginInvoke(new Action(() =>
                             {
                                 this.Title = "Pingo - Idle";
+
+                                timers.EnableTimers();
                             }));
                         }));
 
@@ -161,14 +171,11 @@ namespace Pingo
                     return;
                 }
 
-                //Set time elapsed to 0
-                timers.timeElapsed = new TimeSpan(0, 0, 0);
+                timers.ResetTimeElapsed();
 
-                //Restart updateTimer
                 if (timers.updateTimer.IsEnabled)
                 {
-                    timers.updateTimer.IsEnabled = false;
-                    timers.updateTimer.IsEnabled = true;
+                    timers.RestartTimers();
                 }
 
                 Thread backgroundThread = new Thread(
@@ -178,6 +185,8 @@ namespace Pingo
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Working";
+
+                            timers.DisableTimers();
                         }));
 
                         double i = 1.0;
@@ -209,6 +218,8 @@ namespace Pingo
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Idle";
+
+                            timers.EnableTimers();
                         }));
                     }));
 
@@ -231,12 +242,18 @@ namespace Pingo
             int minutes = int.Parse(txtInterval.Text);
 
             //Reset time elapsed and change updateTimer
-            timers.updateTimer.Interval = new TimeSpan(0, minutes, 0);
-            timers.timeElapsed = new TimeSpan(0, 0, 0);
+            timers.SetUpdateInterval(minutes);
+            timers.ResetTimeElapsed();
         }
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             //Add 5 minutes to the polling interval
             if (int.Parse(txtInterval.Text) + 5 < 60)
                 txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
@@ -244,6 +261,12 @@ namespace Pingo
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             //Subtract 5 minutes from the polling interval
             if (int.Parse(txtInterval.Text) - 5 > 0)
                 txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
@@ -251,6 +274,12 @@ namespace Pingo
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             //Get index of selected item
             int index = lsvOutput.SelectedIndex;
 
@@ -267,6 +296,9 @@ namespace Pingo
                             progressBar.Value = 100;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                             TaskbarItemInfo.ProgressValue = 1;
+
+
+                            timers.DisableTimers();
                         }));
 
                         if (index >= 0)
@@ -279,6 +311,8 @@ namespace Pingo
                             progressBar.Value = 0;
                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                             TaskbarItemInfo.ProgressValue = 0;
+
+                            timers.EnableTimers();
                         }));
 
                         isProcessRunning = false;
@@ -329,20 +363,23 @@ namespace Pingo
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
+            if (isProcessRunning)
+            {
+                MessageBox.Show("A process is already running");
+                return;
+            }
+
             //Turns polling on/off
             if (timers.updateTimer.IsEnabled)
             {
-                timers.updateTimer.IsEnabled = false;
+                timers.DisableTimers();
                 btnTogglePolling.Content = "Enable Polling";
                 lblNextUpdate.Content = "Polling disabled";
-                timers.timeToNextUpdateTimer.IsEnabled = false;
             }
             else
             {
-                timers.updateTimer.IsEnabled = true;
-                timers.timeToNextUpdateTimer.IsEnabled = true;
+                timers.EnableTimers();
                 btnTogglePolling.Content = "Disable Polling";
-                timers.timeElapsed = new TimeSpan(0, 0, 0);
             }
         }
 
