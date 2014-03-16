@@ -1,15 +1,16 @@
-﻿<Window x:Class="Pingo.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pingo - Idle" Height="468" Width="573" ResizeMode="NoResize" Icon="Icon1.ico" Loaded="MainWindow_Loaded">
-    
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Pingo.MainWindow"
+        Title="Pingo - Idle" MinHeight="589.15" MinWidth="661" Height="589.15" Width="661" Icon="Icon1.ico" Loaded="MainWindow_Loaded">
+
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo ProgressValue="0" ProgressState="Normal"></TaskbarItemInfo>
+        <TaskbarItemInfo ProgressValue="0" ProgressState="Normal"/>
     </Window.TaskbarItemInfo>
-    
+
     <Grid Background="#FFC5C5C5">
-        
-        <ListView x:Name="lsvOutput" Height="271" Margin="10,0,0,77" VerticalAlignment="Bottom" FontSize="14" SelectionMode="Single" HorizontalAlignment="Left" Width="451">
+
+        <ListView x:Name="lsvOutput" Margin="10,89,104,77" FontSize="14" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Hostname" DisplayMemberBinding="{Binding Hostname}"/>
@@ -33,38 +34,38 @@
                 </Style>
             </ListView.ItemContainerStyle>
         </ListView>
-        
-        <TextBox x:Name="txtInput"  TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="53" AcceptsReturn="True" FontSize="14" HorizontalAlignment="Left" Width="451"/>
-        
-        <Button x:Name="btnEnter" Margin="466,0,0,9" Width="82" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" HorizontalAlignment="Left" FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Enter</TextBlock>
+
+        <TextBox x:Name="txtInput"  TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14"/>
+
+        <Button x:Name="btnEnter" Margin="0,0,11,9" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
         </Button>
-        <Button x:Name="btnRefreshAll" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,242" Height="50" Click="btnRefreshAll_Click" FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Refresh All</TextBlock>
+        <Button x:Name="btnRefreshAll" VerticalAlignment="Bottom" Margin="0,0,11,242" Height="50" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh All"/></TextBlock>
         </Button>
-        <Button x:Name="btnRefreshSelected" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,297" Height="50" Click="btnRefreshSelection_Click" FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Refresh Selection</TextBlock>
+        <Button x:Name="btnRefreshSelected" VerticalAlignment="Bottom" Margin="0,0,11,297" Height="50" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh Selection"/></TextBlock>
         </Button>
-        <Button x:Name="btnExport"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,76" Height="50" FontSize="14" Click="btnExport_Click">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Export to CSV</TextBlock>
+        <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,11,76" Height="50" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Export to CSV"/></TextBlock>
         </Button>
-        <Button x:Name="btnDeleteSelected" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,187" Height="50" Click="btnDeleteSelection_Click" FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Delete Selection</TextBlock>
+        <Button x:Name="btnDeleteSelected" VerticalAlignment="Bottom" Margin="0,0,11,187" Height="50" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
         </Button>
-        <Button x:Name="btnDeleteAll" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="82" Margin="466,0,0,131" Height="50" Click="btnClear_Click" FontSize="14">
-            <TextBlock TextWrapping="Wrap" TextAlignment="Center">Delete All</TextBlock>
+        <Button x:Name="btnDeleteAll" VerticalAlignment="Bottom" Margin="0,0,11,131" Height="50" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="82">
+            <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
         </Button>
 
-        <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,0,0,386" VerticalAlignment="Bottom" FontSize="14"/>
-        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Height="26" Margin="188,0,0,389" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="46" TextChanged="txtInterval_TextChanged" IsReadOnly="True" FontSize="14"/>
-        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="125" Margin="254,0,0,389" Height="26" Click="btnTogglePolling_Click" FontSize="14"/>
-        <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.864,0.952" Margin="384,0,0,387" FontSize="14"/>     
-        
-        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,388" Height="13" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="15" Margin="234,0,0,402" Height="13" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        
-        <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="28" Margin="10,0,0,355" VerticalAlignment="Bottom" Width="538" FontSize="14" />
-        
+        <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,18,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Margin="188,18,0,0" TextWrapping="Wrap" Text="10" Width="46" TextChanged="txtInterval_TextChanged" IsReadOnly="True" FontSize="14" Height="26" VerticalAlignment="Top"/>
+        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,18,0,0" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top"/>
+        <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,17,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
+
+        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="234,32,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top"/>
+        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="234,18,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top"/>
+
+        <ProgressBar x:Name="progressBar" Margin="10,54,104,0" FontSize="14" Height="28" VerticalAlignment="Top" />
+
     </Grid>
-    
+
 </Window>
