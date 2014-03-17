@@ -49,38 +49,38 @@
 
         <TextBox x:Name="txtInput" CaretBrush="White" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="Gray" Foreground="White" Cursor="UpArrow"/>
 
-        <Button x:Name="btnEnter" Margin="0,0,11,10" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Button x:Name="btnEnter" Margin="0,0,11,10" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
         </Button>
-        <Button x:Name="btnRefreshAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,243" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White">
+        <Button x:Name="btnRefreshAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,243" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White" Focusable="False">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh All"/></TextBlock>
         </Button>
-        <Button x:Name="btnRefreshSelected" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,300" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White">
+        <Button x:Name="btnRefreshSelected" Focusable="False" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,300" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh Selection"/></TextBlock>
         </Button>
-        <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,11,77" Height="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White">
+        <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,11,77" Height="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Export to CSV"/></TextBlock>
         </Button>
-        <Button x:Name="btnDeleteSelected" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,188" Height="50" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White">
+        <Button x:Name="btnDeleteSelected" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,188" Height="50" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
         </Button>
-        <Button x:Name="btnDeleteAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,132" Height="50" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White">
+        <Button x:Name="btnDeleteAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,132" Height="50" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
             <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
         </Button>
 
         <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
         <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Margin="178,47,0,0" TextWrapping="Wrap" Text="10" Width="30" TextChanged="txtInterval_TextChanged" IsReadOnly="True" BorderBrush="{x:Null}" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Cursor="Arrow"/>
-        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White"/>
+        <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White" Focusable="False"/>
         <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}"/>
-        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="208,49,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}"/>
+        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
+        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="208,49,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
 
         <ProgressBar x:Name="progressBar" Margin="10,84,104,0" FontSize="14" Height="28" VerticalAlignment="Top" Background="Gray" BorderBrush="{x:Null}" Foreground="#FF23FF00"/>
         <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-        <Button x:Name="btnExit" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
-        <Button x:Name="btnMinimize" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,68,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
-        <Button x:Name="btnMaximize" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+        <Button x:Name="btnExit" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False"/>
+        <Button x:Name="btnMinimize" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,68,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False"/>
+        <Button x:Name="btnMaximize" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False"/>
 
     </Grid>
 
