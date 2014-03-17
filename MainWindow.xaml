@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic" mc:Ignorable="d" x:Class="Pingo.MainWindow"
-        Title="Pingo - Idle" MinHeight="391" MinWidth="650" Height="432" Width="647" Icon="icon.ico" Loaded="MainWindow_Loaded" WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" BorderThickness="3">
+        Title="Pingo - Idle" MinHeight="435" MinWidth="650" Height="435" Width="647" Icon="icon.ico" Loaded="MainWindow_Loaded" WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" BorderThickness="3">
 
     <Window.Resources>
         <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
@@ -44,7 +44,7 @@
 
         <Grid Background="#FFF7F7F7">
 
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" SelectionMode="Single" Background="Gray" Foreground="White" BorderThickness="0">
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" SelectionMode="Single" Background="#FFE6E6E6" Foreground="Black" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="BorderBrush" Value="#FFF7F7F7" />
@@ -79,30 +79,30 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBox x:Name="txtInput" CaretBrush="White" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="Gray" Foreground="White" Cursor="UpArrow"/>
+            <TextBox x:Name="txtInput" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFE6E6E6" Foreground="Black" />
 
-            <Button x:Name="btnEnter" Margin="0,0,11,10" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False">
+            <Button x:Name="btnEnter" Margin="0,0,11,10" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="53" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="82" Background="#FFE6E6E6" Foreground="Black" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
             </Button>
-            <Button x:Name="btnRefreshAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,243" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White" Focusable="False">
+            <Button x:Name="btnRefreshAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,243" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="#FFE6E6E6" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh All"/></TextBlock>
             </Button>
-            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,300" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="Gray" Foreground="White">
+            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Margin="0,0,11,300" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Height="50" VerticalAlignment="Bottom" Background="#FFE6E6E6" Foreground="Black">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh Selection"/></TextBlock>
             </Button>
-            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,11,77" Height="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
+            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,11,77" Height="50" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="82" Background="#FFE6E6E6" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Export to CSV"/></TextBlock>
             </Button>
-            <Button x:Name="btnDeleteSelected" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,188" Height="50" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
+            <Button x:Name="btnDeleteSelected" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,188" Height="50" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="#FFE6E6E6" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
             </Button>
-            <Button x:Name="btnDeleteAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,132" Height="50" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="Gray" Foreground="White" Focusable="False">
+            <Button x:Name="btnDeleteAll" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" VerticalAlignment="Bottom" Margin="0,0,11,132" Height="50" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="82" Background="#FFE6E6E6" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
             </Button>
 
             <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
             <TextBox x:Name="txtInterval" HorizontalAlignment="Left" Margin="178,47,0,0" TextWrapping="Wrap" Text="10" Width="30" TextChanged="txtInterval_TextChanged" IsReadOnly="True" BorderBrush="{x:Null}" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Cursor="Arrow"/>
-            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White" Focusable="False"/>
+            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="#FFE6E6E6" Foreground="Black" Focusable="False"/>
             <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
             <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
