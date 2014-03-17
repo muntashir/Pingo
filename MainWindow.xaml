@@ -10,7 +10,7 @@
 
     <Grid Background="#FFF7F7F7">
 
-        <Rectangle Fill="#FFE6E6E6" Height="34" Margin="-9,0,0,0" VerticalAlignment="Top"/>
+        <Rectangle Fill="#FFE6E6E6" Height="34" VerticalAlignment="Top"/>
 
         <ListView x:Name="lsvOutput" Margin="10,128,104,77" FontSize="14" SelectionMode="Single" Background="Gray" Foreground="White" BorderThickness="0">
             <ListView.Resources>
@@ -73,13 +73,14 @@
         <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="254,47,0,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Gray" Foreground="White"/>
         <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="384,45,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}"/>
-        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="208,49,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}"/>
+        <RepeatButton x:Name="btnMinus" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="208,61,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}"/>
+        <RepeatButton x:Name="btnPlus" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="208,49,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}"/>
 
         <ProgressBar x:Name="progressBar" Margin="10,84,104,0" FontSize="14" Height="28" VerticalAlignment="Top" Background="Gray" BorderBrush="{x:Null}" Foreground="#FF23FF00"/>
         <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
         <Button x:Name="btnExit" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
-        <Button x:Name="btnMinimize" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+        <Button x:Name="btnMinimize" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,68,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
+        <Button x:Name="btnMaximize" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" FontWeight="Bold" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"/>
 
     </Grid>
 

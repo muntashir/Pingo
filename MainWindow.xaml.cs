@@ -22,6 +22,9 @@ namespace Pingo
         public MainWindow()
         {
             InitializeComponent();
+
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 9;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 9;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -413,6 +416,23 @@ namespace Pingo
         private void btnMinimize_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            switch (WindowState)
+            {
+                case WindowState.Normal:
+                    {
+                        WindowState = WindowState.Maximized;
+                        break;
+                    }
+                case WindowState.Maximized:
+                    {
+                        WindowState = WindowState.Normal;
+                        break;
+                    }
+            }
         }
     }
 }
