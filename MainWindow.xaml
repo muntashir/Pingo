@@ -145,7 +145,7 @@
 
             <Rectangle Fill="#FFF7F7F7" HorizontalAlignment="Right" Width="93"/>
 
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" SelectionMode="Single" Background="#FFF7F7F7" Foreground="Black" BorderThickness="0">
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="#FFF7F7F7" Foreground="Black" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="BorderBrush" Value="#FFF7F7F7" />

@@ -434,5 +434,10 @@ namespace Pingo
                     }
             }
         }
+
+        private void lsvOutput_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
+        }
     }
 }
