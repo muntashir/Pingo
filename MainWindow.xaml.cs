@@ -159,7 +159,7 @@ namespace Pingo
 
                                 if (wasTimerEnabled)
                                     timers.EnableTimers();
-                                else 
+                                else
                                     lblNextUpdate.Content = "Polling disabled";
                             }));
                         }));
@@ -169,7 +169,7 @@ namespace Pingo
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             txtInput.Focus();
@@ -244,7 +244,7 @@ namespace Pingo
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -335,7 +335,7 @@ namespace Pingo
             }
             catch
             {
-                MessageBox.Show("Nothing selected");
+                MessageBox.Show("Nothing selected", null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -355,9 +355,9 @@ namespace Pingo
                     hostList.UpdateData();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
