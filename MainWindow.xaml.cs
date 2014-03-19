@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shell;
@@ -127,7 +128,7 @@ namespace Pingo
 
                             isProcessRunning = true;
 
-                            foreach (String line in multiLineHost)
+                            Parallel.ForEach(multiLineHost, line =>
                             {
                                 progressBar.Dispatcher.BeginInvoke(
                                     new Action(() =>
@@ -140,7 +141,7 @@ namespace Pingo
                                 i++;
 
                                 hostList.hosts.Add(new Host(line));
-                            }
+                            });
 
                             progressBar.Dispatcher.BeginInvoke(
                             new Action(() =>
@@ -205,19 +206,22 @@ namespace Pingo
 
                         double i = 1.0;
 
-                        foreach (Host host in hostList.hosts)
+                        Parallel.ForEach(hostList.hosts, host =>
                         {
-                            progressBar.Dispatcher.BeginInvoke(
-                                new Action(() =>
-                                {
-                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
-                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
-                                }));
+                            {
+                                progressBar.Dispatcher.BeginInvoke(
+                                    new Action(() =>
+                                    {
+                                        progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                        TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                    }));
 
-                            host.Ping();
-                            i++;
-                        }
+                                i++;
+
+                                host.Ping();
+                            }
+                        });
 
                         progressBar.Dispatcher.BeginInvoke(
                                                    new Action(() =>
@@ -437,7 +441,8 @@ namespace Pingo
 
         private void lsvOutput_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
+            if (lsvOutput.SelectedItems.Count > 0)
+                Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
         }
     }
 }

@@ -130,6 +130,25 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <ControlTemplate x:Key="ListViewControlTemplate1" TargetType="{x:Type ListView}">
+            <Themes:ClassicBorderDecorator x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="Sunken" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ScrollViewer Padding="{TemplateBinding Padding}" Style="{DynamicResource}">
+                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                </ScrollViewer>
+            </Themes:ClassicBorderDecorator>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsGrouping" Value="True"/>
+                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="False"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Window.Resources>
 
     <Window.TaskbarItemInfo>
@@ -211,9 +230,9 @@
 
             <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="#FFF7F7F7" BorderBrush="#FFF7F7F7" Foreground="#FF23FF00" Style="{DynamicResource ProgressBarStyle1}"/>
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Focusable="False"/>
-            <Button x:Name="btnMinimize" Style="{DynamicResource ButtonStyle1}" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,68,0" Focusable="False"/>
-            <Button x:Name="btnMaximize" Style="{DynamicResource ButtonStyle1}" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="34" Height="27" VerticalAlignment="Top" Margin="0,0,34,0" Focusable="False"/>
+            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Focusable="False"/>
+            <Button x:Name="btnMinimize" Style="{DynamicResource ButtonStyle1}" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Margin="0,0,62,0" Focusable="False"/>
+            <Button x:Name="btnMaximize" Style="{DynamicResource ButtonStyle1}" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Margin="0,0,31,0" Focusable="False"/>
 
         </Grid>
     </Border>
