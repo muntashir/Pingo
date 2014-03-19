@@ -163,50 +163,55 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <LinearGradientBrush x:Key="ListItemHoverFill"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-            <GradientStop Color="#FFF1FBFF"
-        		Offset="0"/>
-            <GradientStop Color="#FFD5F1FE"
-        		Offset="1"/>
-        </LinearGradientBrush>
-        <Style x:Key="ListViewItemFocusVisual">
-            <Setter Property="Control.Template">
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3" />
+        <SolidColorBrush x:Key="ListBox.MouseOver.Background" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ListBox.MouseOver.Border" Color="#FF7EB4EA" />
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9" />
+
+        <Style x:Key="{x:Type ListBox}" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle StrokeThickness="1"
-        					RadiusX="2"
-        					RadiusY="2"
-        					Stroke="#8E6EA6F5"/>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true"
+                            Padding="1">
+                            <ScrollViewer Padding="{TemplateBinding Padding}"
+                                      Focusable="false">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource ListBox.Disabled.Background}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource ListBox.Disabled.Border}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true" />
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <LinearGradientBrush x:Key="ListItemSelectedInactiveFill"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-            <GradientStop Color="#FFEEEDED"
-        		Offset="0"/>
-            <GradientStop Color="#FFDDDDDD"
-        		Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="ListItemSelectedFill"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-            <GradientStop Color="#FFD9F4FF"
-        		Offset="0"/>
-            <GradientStop Color="#FF9BDDFB"
-        		Offset="1"/>
-        </LinearGradientBrush>
-        <LinearGradientBrush x:Key="ListItemSelectedHoverFill"
-                         StartPoint="0,0"
-                         EndPoint="0,1">
-            <GradientStop Color="#FFEAF9FF"
-        		Offset="0"/>
-            <GradientStop Color="#FFC9EDFD"
-        		Offset="1"/>
-        </LinearGradientBrush>
     </Window.Resources>
 
     <Window.TaskbarItemInfo>
@@ -228,9 +233,11 @@
                         <Setter Property="BorderBrush" Value="#FFF7F7F7" />
                     </Style>
                     <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Margin"
+                Value="0,0,0,1"/>
+                        <Setter Property="Padding"
+                Value="0,0,0,0"/>
+                        <Setter Property="BorderThickness" Value="1"/>
                     </Style>
                 </ListView.Resources>
                 <ListView.View>
@@ -241,123 +248,23 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
-                    <Style
-           TargetType="{x:Type ListViewItem}">
-                        <Setter Property="FocusVisualStyle"
-                Value="{StaticResource ListViewItemFocusVisual}"/>
-                        <Setter Property="Background"
-                Value="Transparent"/>
-                        <Setter Property="BorderBrush"
-                Value="Transparent"/>
-                        <Setter Property="BorderThickness"
-                Value="0"/>
-                        <Setter Property="Margin"
-                Value="0,0,0,1"/>
-                        <Setter Property="Padding"
-                Value="0,0,0,0"/>
-                        <Setter Property="VerticalContentAlignment"
-                Value="Center"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="2"
-                            SnapsToDevicePixels="true">
-                                        <Border Name="InnerBorder"
-                                CornerRadius="1"
-                                BorderThickness="1">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition MaxHeight="11"/>
-                                                    <RowDefinition/>
-                                                </Grid.RowDefinitions>
-                                                <Rectangle Name="UpperHighlight"
-                                           Visibility="Collapsed"
-                                           Fill="#75FFFFFF"/>
-                                                <GridViewRowPresenter Grid.RowSpan="2"
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                            </Grid>
-                                        </Border>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver"
-                                 Value="true">
-                                            <Setter Property="Background"
-                                    Value="{StaticResource ListItemHoverFill}"/>
-                                            <Setter Property="BorderBrush"
-                                    Value="#FFCCF0FF"/>
-                                            <Setter TargetName="UpperHighlight"
-                                    Property="Visibility"
-                                    Value="Visible"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected"
-                                 Value="true">
-                                            <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedFill}"/>
-                                            <Setter Property="BorderBrush"
-                                    Value="#FF98DDFB"/>
-                                            <Setter TargetName="InnerBorder"
-                                    Property="BorderBrush"
-                                    Value="#80FFFFFF"/>
-                                            <Setter TargetName="UpperHighlight"
-                                    Property="Visibility"
-                                    Value="Visible"/>
-                                            <Setter TargetName="UpperHighlight"
-                                    Property="Fill"
-                                    Value="#40FFFFFF"/>
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected"
-                                           Value="true"/>
-                                                <Condition Property="Selector.IsSelectionActive"
-                                           Value="false"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedInactiveFill}"/>
-                                            <Setter Property="BorderBrush"
-                                    Value="#FFCFCFCF"/>
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected"
-                                           Value="true"/>
-                                                <Condition Property="IsMouseOver"
-                                           Value="true"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background"
-                                    Value="{StaticResource ListItemSelectedHoverFill}"/>
-                                            <Setter Property="BorderBrush"
-                                    Value="#FF98DDFB"/>
-                                        </MultiTrigger>
-                                        <Trigger Property="IsEnabled"
-                                 Value="false">
-                                            <Setter Property="Foreground"
-                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
+                    <Style>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Status}" Value="Online">
-                                <Setter Property="Background" Value="#FF00FD2E"/>
+                                <Setter Property="ListView.Background" Value="#FF00FD2E"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                <Setter Property="Background" Value="#FFFF2525"/>
+                                <Setter Property="ListView.Background" Value="#FFFF2525"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Status}" Value="Error">
-                                <Setter Property="Background" Value="#FF8B8989"/>
+                                <Setter Property="ListView.Background" Value="#FF8B8989"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBox x:Name="txtInput" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFF7F7F7" Foreground="Black" />
+            <TextBox x:Name="txtInput" SelectionBrush="#FFC1C1C1" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFF7F7F7" Foreground="Black" />
 
             <Button x:Name="btnEnter" VerticalAlignment="Bottom" RenderTransformOrigin="0.007,0.578" Height="63" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="93" Background="#FFF7F7F7" Foreground="Black" Style="{DynamicResource ButtonStyleEnter}" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
@@ -388,9 +295,9 @@
 
             <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="#FFF7F7F7" BorderBrush="#FFF7F7F7" Foreground="#FF23FF00" Style="{DynamicResource ProgressBarStyle1}"/>
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Focusable="False"/>
-            <Button x:Name="btnMinimize" Style="{DynamicResource ButtonStyle1}" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Margin="0,0,62,0" Focusable="False"/>
-            <Button x:Name="btnMaximize" Style="{DynamicResource ButtonStyle1}" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="31" Height="25" VerticalAlignment="Top" Margin="0,0,31,0" Focusable="False"/>
+            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" Content="X" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="34" VerticalAlignment="Top" Focusable="False"/>
+            <Button x:Name="btnMinimize" Style="{DynamicResource ButtonStyle1}" Content="_" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="31" Height="34" VerticalAlignment="Top" Margin="0,0,62,0" Focusable="False"/>
+            <Button x:Name="btnMaximize" Style="{DynamicResource ButtonStyle1}" Content="□" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="31" Height="34" VerticalAlignment="Top" Margin="0,0,31,0" Focusable="False"/>
 
         </Grid>
     </Border>

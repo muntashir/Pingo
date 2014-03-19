@@ -4,6 +4,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFC1C1C1"/>
             <ResourceDictionary.MergedDictionaries>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
