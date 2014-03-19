@@ -273,7 +273,7 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
+            if (isProcessRunning || timers.updateTimer.IsEnabled == false)
             {
                 return;
             }
@@ -285,7 +285,7 @@ namespace Pingo
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
+            if (isProcessRunning || timers.updateTimer.IsEnabled == false)
             {
                 return;
             }
