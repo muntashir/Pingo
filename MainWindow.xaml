@@ -340,7 +340,7 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBox x:Name="txtInput" SelectionBrush="#FFC1C1C1" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFF7F7F7" Foreground="Black" />
+            <TextBox x:Name="txtInput" SelectionBrush="#FFC1C1C1" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFF7F7F7" Foreground="Black" FontFamily="Segoe UI"/>
 
             <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="61" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="91" Background="#FFF7F7F7" Foreground="Black" Style="{DynamicResource ButtonStyleEnter}" Focusable="False" Margin="0,0,2,2">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>

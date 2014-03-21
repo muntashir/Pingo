@@ -341,9 +341,9 @@ namespace Pingo
 
                 backgroundThread.Start();
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Nothing selected", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
