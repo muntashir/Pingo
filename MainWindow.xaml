@@ -81,14 +81,6 @@
                             <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFE6E6E6"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFE6E6E6"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFC1C1C1"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFC1C1C1"/>
-                            </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
@@ -374,20 +366,20 @@
             <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{DynamicResource ButtonStyle1}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Focusable="False"/>
             <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="372,43,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-            <RepeatButton x:Name="btnMinus" Style="{StaticResource RepeatButtonStyle1}" FontFamily="Marlett" FontSize="8" Content="6" HorizontalAlignment="Left" Width="15" Margin="212,57,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
-            <RepeatButton x:Name="btnPlus" Style="{StaticResource RepeatButtonStyle1}" FontFamily="Marlett" FontSize="8" Content="5" HorizontalAlignment="Left" Width="15" Margin="212,46,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="13" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
+            <RepeatButton x:Name="btnMinus" Style="{StaticResource RepeatButtonStyle1}" Content="&#xE011;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,52,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
+            <RepeatButton x:Name="btnPlus" Style="{StaticResource RepeatButtonStyle1}" Content="&#xE010;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,42,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
 
             <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="#FFF7F7F7" BorderBrush="#FFF7F7F7" Foreground="#FF23FF00" Style="{DynamicResource ProgressBarStyle1}"/>
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" WindowChrome.IsHitTestVisibleInChrome="True" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Focusable="False" Margin="0,2,2,0" FontFamily="Segoe UI Symbol">
+            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" WindowChrome.IsHitTestVisibleInChrome="True" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Focusable="False" Margin="0,2,2,0">
                 <TextBlock Text="&#xE10A;" FontFamily="Segoe UI Symbol"/>
             </Button>
-            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,62,0" Focusable="False" FontFamily="Segoe UI Symbol">
-                <TextBlock Text="&#xE147;" FontFamily="Segoe UI Symbol"/>
+            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,62,0" Focusable="False">
+                <Rectangle Fill="Black" Margin="0,8,0,0" Height="3" Width="10" RenderOptions.EdgeMode="Aliased"/>
             </Button>
             <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,32,0" Focusable="False">
                 <TextBlock>
-                	<Path Width="14" Height="12" Stretch="Fill" Fill="#FF000000" Data="F1 M 18,23L 58,23L 58,53L 18,53L 18,23 Z M 54,31L 22,31L 22,49L 54,49L 54,31 Z "/>
+                	<Path Width="12" Height="10" Stretch="Fill" Fill="#FF000000" Data="F1 M 18,23L 58,23L 58,53L 18,53L 18,23 Z M 54,31L 22,31L 22,49L 54,49L 54,31 Z "/>
                 </TextBlock>
             </Button>
 
