@@ -84,7 +84,7 @@ namespace Pingo
                                     timers.DisableTimers();
                                 }));
 
-                                hostList.hosts.Add(new Host(host));
+                                hostList.AddHost(host);
 
                                 this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
@@ -144,7 +144,7 @@ namespace Pingo
                                 i++;
 
                                 //hostList.hosts.Insert((int)i, new Host(line));
-                                hostList.hosts.Add(new Host(line));
+                                hostList.AddHost(line);
                             });
 
                             progressBar.Dispatcher.BeginInvoke(

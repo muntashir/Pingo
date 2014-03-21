@@ -9,6 +9,9 @@ namespace Pingo
 {
     public class HostList
     {
+        private Object addLock = new Object();
+        private Object updateLock = new Object();
+
         //DataTable source for ListView
         public DataTable data = new DataTable();
 
@@ -59,13 +62,25 @@ namespace Pingo
         //Updates DataTable with contents of hosts
         public void UpdateData()
         {
-            //Clear old rows of DataTable
-            data.Rows.Clear();
-
-            //Create new rows with contents of hosts
-            foreach (Host host in hosts)
+            lock (updateLock)
             {
-                data.Rows.Add(host.ToString()[0], host.ToString()[1], host.ToString()[2]);
+                //Clear old rows of DataTable
+                data.Rows.Clear();
+
+                //Create new rows with contents of hosts
+                foreach (Host host in hosts)
+                {
+                    data.Rows.Add(host.ToString()[0], host.ToString()[1], host.ToString()[2]);
+                }
+            }
+        }
+
+        //Threadsafe function to add host
+        public void AddHost(String hostname)
+        {
+            lock (addLock)
+            {
+                hosts.Add(new Host(hostname));
             }
         }
     }
