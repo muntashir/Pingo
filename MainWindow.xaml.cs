@@ -110,7 +110,7 @@ namespace Pingo
                     String[] delim = { "\r\n", " ", "'" };
                     String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
 
-                    hostList.hosts = new List<Host>(multiLineHost.Count());
+                    //hostList.hosts = new List<Host>(multiLineHost.Count());
 
                     if (isProcessRunning)
                     {
