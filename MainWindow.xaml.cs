@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -109,6 +110,8 @@ namespace Pingo
                     String[] delim = { "\r\n", " ", "'" };
                     String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
 
+                    hostList.hosts = new List<Host>(multiLineHost.Count());
+
                     if (isProcessRunning)
                     {
                         return;
@@ -140,6 +143,7 @@ namespace Pingo
 
                                 i++;
 
+                                //hostList.hosts.Insert((int)i, new Host(line));
                                 hostList.hosts.Add(new Host(line));
                             });
 
