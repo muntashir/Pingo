@@ -537,10 +537,11 @@
             <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="#FFF7F7F7" BorderBrush="#FFF7F7F7" Foreground="#FF23FF00" Style="{DynamicResource ProgressBarStyle1}"/>
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
             <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" WindowChrome.IsHitTestVisibleInChrome="True" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Focusable="False" Margin="0,2,2,0">
-                <TextBlock Text="&#xE10A;" FontFamily="Segoe UI Symbol"/>
+                <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Fill" SnapsToDevicePixels="True"
+                          Stroke="Black" StrokeThickness="2.5" Width="12" Height="12" />
             </Button>
             <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,62,0" Focusable="False">
-                <Rectangle Fill="Black" Margin="0,8,0,0" Height="3" Width="10" RenderOptions.EdgeMode="Aliased"/>
+                <Rectangle SnapsToDevicePixels="True" Fill="Black" Margin="0,8,0,0" Height="3" Width="10" RenderOptions.EdgeMode="Aliased"/>
             </Button>
             <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,32,0" Focusable="False">
                 <TextBlock>
