@@ -5,6 +5,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFC1C1C1"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
             <ResourceDictionary.MergedDictionaries>
                <!-- <ResourceDictionary Source="/PresentationFramework.Aero,Version=4.0.0.0,Culture=neutral,PublicKeyToken=31bf3856ad364e35,processorArchitecture=MSIL;component/themes/Aero.NormalColor.xaml" /> -->
             </ResourceDictionary.MergedDictionaries>

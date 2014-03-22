@@ -9,7 +9,6 @@ namespace Pingo
 {
     public class HostList
     {
-        private Object addLock = new Object();
         private Object updateLock = new Object();
 
         //DataTable source for ListView
@@ -75,13 +74,9 @@ namespace Pingo
             }
         }
 
-        //Threadsafe function to add host
         public void AddHost(String hostname)
         {
-            lock (addLock)
-            {
                 hosts.Add(new Host(hostname));
-            }
         }
     }
 }
