@@ -5,6 +5,36 @@
         Title="Pingo - Idle" MinHeight="429" MinWidth="650" Height="429" Width="650" Icon="icon.ico" Loaded="MainWindow_Loaded" WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" BorderThickness="2">
 
     <Window.Resources>
+        <SolidColorBrush x:Key="GridViewColumnHeaderHoverBackground" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="GridViewColumnHeaderPressBackground" Color="#FFC1C1C1"/>
+        <SolidColorBrush x:Key="GridViewColumnHeaderBorderBackground" />
+        <Style x:Key="GridViewColumnHeaderGripper"
+           TargetType="{x:Type Thumb}">
+            <Setter Property="Canvas.Right"
+                Value="-9"/>
+            <Setter Property="Width"
+                Value="18"/>
+            <Setter Property="Height"
+                Value="{Binding Path=ActualHeight,RelativeSource={RelativeSource TemplatedParent}}"/>
+            <Setter Property="Padding"
+                Value="0"/>
+            <Setter Property="Background" Value="{StaticResource GridViewColumnHeaderBorderBackground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Padding="{TemplateBinding Padding}"
+                            Background="Transparent">
+                            <Rectangle HorizontalAlignment="Center"
+                                   Width="1"
+                                   Fill="{TemplateBinding Background}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <SolidColorBrush x:Key="GridViewColumnHeaderBackground" />
+
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -200,8 +230,98 @@
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="BorderBrush" Value="#FFF7F7F7" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="Background" Value="#FFF7F7F7" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                    <Grid SnapsToDevicePixels="true">
+                                        <Border Name="HeaderBorder"
+                                BorderThickness="0,1,0,1"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition MaxHeight="7"/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Border Grid.RowSpan="2"
+                                        Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter Name="HeaderContent"
+                                                      Margin="0,0,0,1"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      RecognizesAccessKey="True"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                        <Border Name="HeaderHoverBorder"
+                                BorderThickness="1,0,1,1"
+                                Margin="1,1,0,0"/>
+                                        <Border Name="HeaderPressBorder"
+                                BorderThickness="1,1,1,0"
+                                Margin="1,0,0,1"/>
+                                        <Canvas>
+                                            <Thumb x:Name="PART_HeaderGripper"
+                                   Style="{StaticResource GridViewColumnHeaderGripper}"/>
+                                        </Canvas>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                 Value="true">
+                                            <Setter TargetName="HeaderBorder"
+                                    Property="Background"
+                                    Value="{StaticResource GridViewColumnHeaderHoverBackground}"/>
+                                            <Setter TargetName="HeaderHoverBorder"
+                                    Property="BorderBrush"
+                                    Value="Transparent"/>
+                                            <Setter TargetName="PART_HeaderGripper"
+                                    Property="Background"
+                                    Value="Transparent"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed"
+                                 Value="true">
+                                            <Setter TargetName="HeaderBorder"
+                                    Property="Background"
+                                    Value="{StaticResource GridViewColumnHeaderPressBackground}"/>
+                                            <Setter TargetName="HeaderHoverBorder"
+                                    Property="BorderBrush"
+                                    Value="Transparent"/>
+                                            <Setter TargetName="HeaderPressBorder"
+                                    Property="BorderBrush"
+                                    Value="Transparent"/>
+                                            <Setter TargetName="PART_HeaderGripper"
+                                    Property="Visibility"
+                                    Value="Hidden"/>
+                                            <Setter TargetName="HeaderContent"
+                                    Property="Margin"
+                                    Value="1,1,0,0"/>
+                                        </Trigger>
+                                        <Trigger Property="Height"
+                                 Value="Auto">
+                                            <Setter Property="MinHeight"
+                                    Value="20"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource gray2}" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource gray3}" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="Foreground" Value="{StaticResource gray2}" />
@@ -295,7 +415,7 @@
                             </GridViewColumnHeader>
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Status}">
-                            <GridViewColumnHeader Height="26">Status  
+                            <GridViewColumnHeader Height="26">Status
                                 <GridViewColumnHeader.ContextMenu>
                                     <ContextMenu
                                         Name="SortStatus">
