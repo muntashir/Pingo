@@ -103,6 +103,7 @@ namespace Pingo
                                 isProcessRunning = false;
                             }));
 
+                    backgroundThread.IsBackground = true;
                     backgroundThread.Start();
                 }
                 else
@@ -119,7 +120,7 @@ namespace Pingo
 
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
-                        {
+                        {                       
                             double i = 0.0;
 
                             this.Dispatcher.BeginInvoke(new Action(() =>
@@ -131,7 +132,12 @@ namespace Pingo
 
                             isProcessRunning = true;
 
-                            Parallel.ForEach(multiLineHost, line =>
+                            foreach (string line in multiLineHost)
+                            {
+                                hostList.AddHost(line);
+                            }
+
+                            Parallel.ForEach(hostList.hosts, host =>
                             {
                                 progressBar.Dispatcher.BeginInvoke(
                                     new Action(() =>
@@ -143,8 +149,7 @@ namespace Pingo
 
                                 i++;
 
-                                //hostList.hosts.Insert((int)i, new Host(line));
-                                hostList.AddHost(line);
+                                host.Ping();
                             });
 
                             progressBar.Dispatcher.BeginInvoke(
@@ -169,6 +174,7 @@ namespace Pingo
                             }));
                         }));
 
+                    backgroundThread.IsBackground = true;
                     backgroundThread.Start();
                 }
             }
@@ -248,6 +254,7 @@ namespace Pingo
                         }));
                     }));
 
+                backgroundThread.IsBackground = true;
                 backgroundThread.Start();
             }
             catch (Exception ex)
@@ -339,6 +346,7 @@ namespace Pingo
                         isProcessRunning = false;
                     }));
 
+                backgroundThread.IsBackground = true;
                 backgroundThread.Start();
             }
             catch (Exception ex)

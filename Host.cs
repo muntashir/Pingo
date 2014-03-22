@@ -25,9 +25,6 @@ namespace Pingo
 
             //Initializes pingSend
             pingSend = new Ping();           
-
-            //Pings host
-            Ping();
         }
 
         //Gets status of the host with a ping
