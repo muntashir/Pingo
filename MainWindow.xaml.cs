@@ -85,6 +85,7 @@ namespace Pingo
                                 }));
 
                                 hostList.AddHost(host);
+                                hostList.hosts[hostList.hosts.Count() - 1].Ping();
 
                                 this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
@@ -120,7 +121,7 @@ namespace Pingo
 
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
-                        {                       
+                        {
                             double i = 0.0;
 
                             this.Dispatcher.BeginInvoke(new Action(() =>
@@ -131,6 +132,7 @@ namespace Pingo
                             }));
 
                             isProcessRunning = true;
+                            int count = hostList.hosts.Count();
 
                             foreach (string line in multiLineHost)
                             {
@@ -149,7 +151,8 @@ namespace Pingo
 
                                 i++;
 
-                                host.Ping();
+                                if (i > count)
+                                    host.Ping();
                             });
 
                             progressBar.Dispatcher.BeginInvoke(
