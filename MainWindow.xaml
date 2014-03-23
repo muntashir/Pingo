@@ -312,16 +312,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource gray2}" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="{StaticResource gray3}" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                            </Trigger>
-                        </Style.Triggers>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="Foreground" Value="{StaticResource gray2}" />
@@ -548,7 +538,6 @@
                 	<Path Width="12" Height="10" Stretch="Fill" Fill="#FF000000" Data="F1 M 18,23L 58,23L 58,53L 18,53L 18,23 Z M 54,31L 22,31L 22,49L 54,49L 54,31 Z "/>
                 </TextBlock>
             </Button>
-
         </Grid>
     </Border>
 </Window>

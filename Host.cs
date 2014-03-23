@@ -5,6 +5,8 @@ namespace Pingo
 {
     public class Host
     {
+        object pingLock = new object();
+
         //Stores status of the ping
         protected enum PingStatus { Online, Offline, Error }
         protected PingStatus status;
@@ -30,22 +32,25 @@ namespace Pingo
         //Gets status of the host with a ping
         public void Ping()
         {
-            status = PingStatus.Offline;
-            timestamp = DateTime.Now;
-
-            try
+            lock (pingLock)
             {
-                //Send a ping with 3000 ms timeout
-                pingReply = pingSend.Send(hostname, 3000);
+                status = PingStatus.Offline;
+                timestamp = DateTime.Now;
 
-                //Sets status to sucess if ping is successful
-                if (pingReply.Status == IPStatus.Success)
-                    status = PingStatus.Online;
-            }
-            catch (PingException)
-            {
-                //Could be error if DNS could not resolve host
-                status = PingStatus.Error;
+                try
+                {
+                    //Send a ping with 3000 ms timeout
+                    pingReply = pingSend.Send(hostname, 3000);
+
+                    //Sets status to sucess if ping is successful
+                    if (pingReply.Status == IPStatus.Success)
+                        status = PingStatus.Online;
+                }
+                catch (PingException)
+                {
+                    //Could be error if DNS could not resolve host
+                    status = PingStatus.Error;
+                }
             }
         }
 
