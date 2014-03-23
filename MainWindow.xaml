@@ -5,9 +5,29 @@
         Title="Pingo - Idle" MinHeight="429" MinWidth="650" Height="429" Width="650" Icon="icon.ico" Loaded="MainWindow_Loaded" WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" BorderThickness="2">
 
     <Window.Resources>
+        <!-- Theme colours -->
+        <SolidColorBrush x:Key="AccentGray" Color="#FFF7F7F7" />
+        <SolidColorBrush x:Key="MouseOverGray" Color="#FFE6E6E6" />
+        <SolidColorBrush x:Key="PressedGray" Color="#FFC1C1C1" />
+        <SolidColorBrush x:Key="PingoRed" Color="#FFFF2525" />
+        <SolidColorBrush x:Key="PingoGreen" Color="#FF00FD2E" />
+
+        <!-- GridView colours -->
         <SolidColorBrush x:Key="GridViewColumnHeaderHoverBackground" Color="#FFE6E6E6"/>
         <SolidColorBrush x:Key="GridViewColumnHeaderPressBackground" Color="#FFC1C1C1"/>
         <SolidColorBrush x:Key="GridViewColumnHeaderBorderBackground" />
+        <SolidColorBrush x:Key="GridViewColumnHeaderBackground" />
+
+        <!-- ListBoxItem colours -->
+        <SolidColorBrush x:Key="Item.Static.Background" />
+        <SolidColorBrush x:Key="Item.Static.Border" />
+        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#FFE6E6E6" />
+        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#FFE6E6E6" />
+        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#FFC1C1C1" />
+        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FFC1C1C1" />
+        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA" />
+        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA" />
+
         <Style x:Key="GridViewColumnHeaderGripper"
            TargetType="{x:Type Thumb}">
             <Setter Property="Canvas.Right"
@@ -33,8 +53,6 @@
             </Setter>
         </Style>
 
-        <SolidColorBrush x:Key="GridViewColumnHeaderBackground" />
-
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
                 <Setter.Value>
@@ -44,25 +62,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <SolidColorBrush x:Key="Item.Static.Background" Color="#FFFCFCFC" />
-        <SolidColorBrush x:Key="Item.Static.Border" Color="#FFFCFCFC" />
-        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#FFE6E6E6" />
-        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#FFE6E6E6" />
-        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#FFC1C1C1" />
-        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FFC1C1C1" />
-        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA" />
-        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA" />
-        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+
+        <Style x:Key="FlatProgressBarStyle" TargetType="{x:Type ProgressBar}">
             <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="#00000000"/>
-            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ProgressBar}">
                         <Themes:ClassicBorderDecorator x:Name="TemplateRoot" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" BorderStyle="ThinPressed" Background="{TemplateBinding Background}">
                             <DockPanel x:Name="PART_Track" LastChildFill="False" Margin="0,0,2,2">
-                                <Rectangle x:Name="PART_Indicator" Width="192" Fill="#FF00FD2E" RenderTransformOrigin="0.5,0.5"/>
+                                <Rectangle x:Name="PART_Indicator" Width="192" Fill="{StaticResource PingoGreen}" RenderTransformOrigin="0.5,0.5"/>
                             </DockPanel>
                         </Themes:ClassicBorderDecorator>
                         <ControlTemplate.Triggers>
@@ -78,7 +87,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+
+        <Style x:Key="FlatButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
             <Setter Property="Padding" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -96,12 +106,12 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFE6E6E6"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFE6E6E6"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource MouseOverGray}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource MouseOverGray}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFC1C1C1"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFC1C1C1"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PressedGray}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PressedGray}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -111,7 +121,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="RepeatButtonStyle1" TargetType="{x:Type RepeatButton}">
+
+        <Style x:Key="FlatRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
             <Setter Property="Padding" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -136,7 +147,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ButtonStyleExit" TargetType="{x:Type Button}">
+
+        <Style x:Key="ExitButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
             <Setter Property="Padding" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -154,8 +166,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFFF2525"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFFF2525"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoRed}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoRed}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="BorderBrush" TargetName="Bd" Value="#FFD30000"/>
@@ -169,7 +181,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="ButtonStyleEnter" TargetType="{x:Type Button}">
+
+        <Style x:Key="EnterButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
             <Setter Property="Padding" Value="2"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -187,8 +200,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FF00FD2E"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FF00FD2E"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoGreen}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoGreen}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="BorderBrush" TargetName="Bd" Value="#FF00BF23"/>
@@ -202,36 +215,37 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <SolidColorBrush x:Key="gray1" Color="#FFF7F7F7" />
-        <SolidColorBrush x:Key="gray2" Color="#FFE6E6E6" />
-        <SolidColorBrush x:Key="gray3" Color="#FFC1C1C1" />
     </Window.Resources>
 
+    <!-- Windows 7/8 taskbar progress -->
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressValue="0" ProgressState="None"/>
     </Window.TaskbarItemInfo>
 
-    <WindowChrome.WindowChrome >
-        <WindowChrome CaptionHeight="34"
-                            GlassFrameThickness="0,0,0,5"
-                            ResizeBorderThickness="5"/>
+    <!-- Workaround for borderless window -->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="34" GlassFrameThickness="0,0,0,5" ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>
 
     <Border>
+
+        <!-- DropShadow -->
         <Border.Effect>
-            <DropShadowEffect BlurRadius="5" Color="Black" Opacity="0.8" ShadowDepth="0.5" />
+            <DropShadowEffect BlurRadius="3" Color="Black" Opacity="0.7" ShadowDepth="0.9" />
         </Border.Effect>
 
         <Grid Background="White">
 
-            <Rectangle Fill="#FFF7F7F7" HorizontalAlignment="Right" Width="93"/>
+            <!-- SideBar -->
+            <Rectangle Fill="{StaticResource AccentGray}" HorizontalAlignment="Right" Width="93"/>
 
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="#FFF7F7F7" Foreground="Black" BorderThickness="0">
+            <!-- Output ListView -->
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="{StaticResource AccentGray}" Foreground="Black" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left" />
                         <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="Background" Value="#FFF7F7F7" />
+                        <Setter Property="Background" Value="{StaticResource AccentGray}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
@@ -314,8 +328,8 @@
                         </Setter>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="Foreground" Value="{StaticResource gray2}" />
-                        <Setter Property="Background" Value="{StaticResource gray1}" />
+                        <Setter Property="Foreground" Value="{StaticResource MouseOverGray}" />
+                        <Setter Property="Background" Value="{StaticResource AccentGray}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ScrollBar}">
@@ -342,7 +356,7 @@
                                             <Setter Value="#FFD6D6D6" TargetName="Thumb" Property="Background" />
                                         </Trigger>
                                         <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
-                                            <Setter Value="{StaticResource gray3}" TargetName="Thumb" Property="Background" />
+                                            <Setter Value="{StaticResource PressedGray}" TargetName="Thumb" Property="Background" />
                                         </Trigger>
                                         <Trigger Property="Name" Value="PART_VerticalScrollBar">
                                             <Setter Property="Margin" Value="0,26,0,0"/>
@@ -482,10 +496,10 @@
                         </Setter>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Status}" Value="Online">
-                                <Setter Property="ListView.Background" Value="#FF00FD2E"/>
+                                <Setter Property="ListView.Background" Value="{StaticResource PingoGreen}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                <Setter Property="ListView.Background" Value="#FFFF2525"/>
+                                <Setter Property="ListView.Background" Value="{StaticResource PingoRed}"/>
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Status}" Value="Error">
                                 <Setter Property="ListView.Background" Value="#FF8B8989"/>
@@ -495,45 +509,59 @@
                 </ListView.ItemContainerStyle>
             </ListView>
 
-            <TextBox x:Name="txtInput" SelectionBrush="#FFC1C1C1" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="#FFF7F7F7" Foreground="Black" FontFamily="Segoe UI"/>
+            <!-- Input TextBox -->
+            <TextBox x:Name="txtInput" SelectionBrush="{StaticResource PressedGray}" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="{StaticResource AccentGray}" Foreground="Black" FontFamily="Segoe UI"/>
 
-            <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="61" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="91" Background="#FFF7F7F7" Foreground="Black" Style="{DynamicResource ButtonStyleEnter}" Focusable="False" Margin="0,0,2,2">
+            <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="61" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="91" Background="{StaticResource AccentGray}" Foreground="Black" Style="{DynamicResource EnterButtonStyle}" Focusable="False" Margin="0,0,2,2">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
             </Button>
-            <Button x:Name="btnRefreshAll" Style="{DynamicResource ButtonStyle1}" Margin="0,0,2,236" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Height="55" VerticalAlignment="Bottom" Background="#FFF7F7F7" Foreground="Black" Focusable="False">
+
+            <Button x:Name="btnRefreshAll" Style="{DynamicResource FlatButtonStyle}" Margin="0,0,2,236" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentGray}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh All"/></TextBlock>
             </Button>
-            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{DynamicResource ButtonStyle1}" Margin="0,0,2,291" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Height="55" VerticalAlignment="Bottom" Background="#FFF7F7F7" Foreground="Black">
+
+            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{DynamicResource FlatButtonStyle}" Margin="0,0,2,291" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentGray}" Foreground="Black">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh Selection"/></TextBlock>
             </Button>
-            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,2,77" Height="53" Style="{DynamicResource ButtonStyle1}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="91" Background="#FFF7F7F7" Foreground="Black" Focusable="False">
+
+            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,2,77" Height="53" Style="{DynamicResource FlatButtonStyle}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="91" Background="{StaticResource AccentGray}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Export to CSV"/></TextBlock>
             </Button>
-            <Button x:Name="btnDeleteSelected" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Bottom" Margin="0,0,2,184" Height="52" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Background="#FFF7F7F7" Foreground="Black" Focusable="False">
+
+            <Button x:Name="btnDeleteSelected" Style="{DynamicResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,2,184" Height="52" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Background="{StaticResource AccentGray}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
             </Button>
-            <Button x:Name="btnDeleteAll" Style="{DynamicResource ButtonStyle1}" VerticalAlignment="Bottom" Margin="0,0,2,130" Height="54" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Background="#FFF7F7F7" Foreground="Black" Focusable="False">
+
+            <Button x:Name="btnDeleteAll" Style="{DynamicResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,2,130" Height="54" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="91" Background="{StaticResource AccentGray}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
             </Button>
 
             <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,43,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
             <TextBox x:Name="txtInterval" Focusable="False" HorizontalAlignment="Left" BorderThickness="0" Margin="190,47,0,0" TextWrapping="Wrap" Text="10" Width="30" TextChanged="txtInterval_TextChanged" IsReadOnly="True" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Cursor="Arrow"/>
-            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{DynamicResource ButtonStyle1}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Focusable="False"/>
+            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{DynamicResource FlatButtonStyle}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="{x:Null}" Foreground="Black" Focusable="False"/>
             <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="372,43,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-            <RepeatButton x:Name="btnMinus" Style="{StaticResource RepeatButtonStyle1}" Content="&#xE011;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,52,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
-            <RepeatButton x:Name="btnPlus" Style="{StaticResource RepeatButtonStyle1}" Content="&#xE010;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,42,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
+            <!-- Interval buttons -->
+            <RepeatButton x:Name="btnMinus" Style="{StaticResource FlatRepeatButtonStyle}" Content="&#xE011;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,52,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
+            <RepeatButton x:Name="btnPlus" Style="{StaticResource FlatRepeatButtonStyle}" Content="&#xE010;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,42,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="{x:Null}" Background="{x:Null}" Focusable="False"/>
 
-            <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="#FFF7F7F7" BorderBrush="#FFF7F7F7" Foreground="#FF23FF00" Style="{DynamicResource ProgressBarStyle1}"/>
+            <!-- ProgressBar/Titlebar -->
+            <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="{StaticResource AccentGray}" BorderBrush="{StaticResource AccentGray}" Foreground="#FF23FF00" Style="{DynamicResource FlatProgressBarStyle}"/>
+
+            <!-- Title -->
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Button x:Name="btnExit" Style="{DynamicResource ButtonStyleExit}" WindowChrome.IsHitTestVisibleInChrome="True" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Focusable="False" Margin="0,2,2,0">
+
+            <!-- Window buttons -->
+            <Button x:Name="btnExit" Style="{DynamicResource ExitButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnExit_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Focusable="False" Margin="0,2,2,0">
                 <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Fill" SnapsToDevicePixels="True"
                           Stroke="Black" StrokeThickness="2.5" Width="12" Height="12" />
             </Button>
-            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,62,0" Focusable="False">
+
+            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource FlatButtonStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,62,0" Focusable="False">
                 <Rectangle SnapsToDevicePixels="True" Fill="Black" Margin="0,8,0,0" Height="3" Width="10" RenderOptions.EdgeMode="Aliased"/>
             </Button>
-            <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource ButtonStyle1}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,32,0" Focusable="False">
+
+            <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{DynamicResource FlatButtonStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Top" Margin="0,2,32,0" Focusable="False">
                 <TextBlock>
                 	<Path Width="12" Height="10" Stretch="Fill" Fill="#FF000000" Data="F1 M 18,23L 58,23L 58,53L 18,53L 18,23 Z M 54,31L 22,31L 22,49L 54,49L 54,31 Z "/>
                 </TextBlock>
