@@ -6,9 +6,9 @@
 
     <Window.Resources>
         <!-- Theme colors -->
-        <SolidColorBrush x:Key="AccentColor" Color="#FFF7F9EE" />
-        <SolidColorBrush x:Key="MouseOverColor" Color="#FFE6FF77" />
-        <SolidColorBrush x:Key="PressedColor" Color="#FFD6FB32" />
+        <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
+        <SolidColorBrush x:Key="MouseOverColor" Color="#FF2EF6FF" />
+        <SolidColorBrush x:Key="PressedColor" Color="#FF00CDD6" />
         <SolidColorBrush x:Key="PingoRed" Color="#FFFF2525" />
         <SolidColorBrush x:Key="PingoGreen" Color="#FF00FD2E" />
 
@@ -232,8 +232,8 @@
         <!-- DropShadow -->
         <Border.Effect>
             <DropShadowEffect BlurRadius="3" Color="Black" Opacity="0.7" ShadowDepth="0.9" />
-        </Border.Effect>       
-        
+        </Border.Effect>
+
         <Grid Background="White">
 
             <!-- SideBar -->
@@ -482,27 +482,27 @@
             <!-- Input TextBox -->
             <TextBox x:Name="txtInput" SelectionBrush="{StaticResource PressedColor}" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="{StaticResource AccentColor}" Foreground="Black" FontFamily="Segoe UI"/>
 
-            <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="63" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="92" Background="{StaticResource AccentColor}" Foreground="Black" Style="{StaticResource EnterButtonStyle}" Focusable="False" Margin="0,0,0,0">
+            <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="63" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Style="{StaticResource EnterButtonStyle}" Focusable="False" Margin="0,0,0,0">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnRefreshAll" Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,236" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="92" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
+            <Button x:Name="btnRefreshAll" Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,236" Click="btnRefreshAll_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh All"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,291" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="92" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentColor}" Foreground="Black">
+            <Button x:Name="btnRefreshSelected" Focusable="False" Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,291" Click="btnRefreshSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Height="55" VerticalAlignment="Bottom" Background="{StaticResource AccentColor}" Foreground="Black">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Refresh Selection"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,0,77" Height="53" Style="{StaticResource FlatButtonStyle}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="92" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
+            <Button x:Name="btnExport" VerticalAlignment="Bottom" Margin="0,0,0,77" Height="53" Style="{StaticResource FlatButtonStyle}" FontSize="14" Click="btnExport_Click" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Export to CSV"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnDeleteSelected" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,184" Height="52" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="92" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
+            <Button x:Name="btnDeleteSelected" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,184" Height="52" Click="btnDeleteSelection_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnDeleteAll" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,130" Height="54" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="92" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
+            <Button x:Name="btnDeleteAll" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,130" Height="54" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
             </Button>
 
@@ -526,11 +526,11 @@
                 <Path Data="M0,0 L1,1 M0,1 L1,0" Stretch="Fill" SnapsToDevicePixels="True" Stroke="Black" StrokeThickness="2.5" Width="12" Height="12" />
             </Button>
 
-            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource FlatButtonStyle}" Background="Transparent" BorderBrush="Transparent" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="34" VerticalAlignment="Top" Margin="0,0,62,0" Focusable="False">
+            <Button x:Name="btnMinimize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource FlatButtonStyle}" Background="Transparent" BorderBrush="Transparent" Click="btnMinimize_Click" FontSize="14" HorizontalAlignment="Right" Width="30" Height="34" VerticalAlignment="Top" Margin="0,0,63,0" Focusable="False">
                 <Rectangle SnapsToDevicePixels="True" Fill="Black" Margin="0,8,0,0" Height="3" Width="10" RenderOptions.EdgeMode="Aliased"/>
             </Button>
 
-            <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource FlatButtonStyle}" Background="Transparent" BorderBrush="Transparent" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="30" Height="34" VerticalAlignment="Top" Margin="0,0,32,0" Focusable="False">
+            <Button x:Name="btnMaximize" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource FlatButtonStyle}" Background="Transparent" BorderBrush="Transparent" Click="btnMaximize_Click"  FontSize="14" HorizontalAlignment="Right" Width="31" Height="34" VerticalAlignment="Top" Margin="0,0,32,0" Focusable="False">
                 <TextBlock>
                 	<Path Width="12" Height="10" Stretch="Fill" Fill="#FF000000" Data="F1 M 18,23L 58,23L 58,53L 18,53L 18,23 Z M 54,31L 22,31L 22,49L 54,49L 54,31 Z "/>
                 </TextBlock>
