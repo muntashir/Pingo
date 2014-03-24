@@ -30,7 +30,10 @@ namespace Pingo
         //Gets status of the host with a ping
         public void Ping()
         {
+                //Default status offline
                 status = PingStatus.Offline;
+
+                //Set timestamp to current time
                 timestamp = DateTime.Now;
 
                 try
@@ -69,9 +72,9 @@ namespace Pingo
                     break;
             }
 
-            String[] array = { hostname, strStatus, timestamp.ToShortTimeString() + " " + timestamp.ToShortDateString() };
-
-            return array;
+            //Returns string array of hostname, status, and timestamp of ping
+            String[] output = { hostname, strStatus, timestamp.ToShortTimeString() + " " + timestamp.ToShortDateString() };
+            return output;
         }
     }
 }
