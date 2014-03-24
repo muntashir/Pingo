@@ -240,7 +240,7 @@
             <Rectangle Fill="{StaticResource AccentColor}" HorizontalAlignment="Right" Width="93"/>
 
             <!-- Output ListView -->
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0">
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" Grid.IsSharedSizeScope="True" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0">
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -259,6 +259,11 @@
                                                     <RowDefinition MaxHeight="7"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col0"/>
+                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col1"/>
+                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col2"/>
+                                                </Grid.ColumnDefinitions>
                                                 <Border Grid.RowSpan="2"
                                         Padding="{TemplateBinding Padding}">
                                                     <ContentPresenter Name="HeaderContent"
@@ -407,39 +412,9 @@
                 </ListView.Resources>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Hostname}">
-                            <GridViewColumnHeader Height="26">Hostname
-                                <GridViewColumnHeader.ContextMenu>
-                                    <ContextMenu
-                                        Name="SortHostname">
-                                        <MenuItem Header="Ascending" />
-                                        <MenuItem Header="Descending" />
-                                    </ContextMenu>
-                                </GridViewColumnHeader.ContextMenu>
-                            </GridViewColumnHeader>
-                        </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Status}">
-                            <GridViewColumnHeader Height="26">Status
-                                <GridViewColumnHeader.ContextMenu>
-                                    <ContextMenu
-                                        Name="SortStatus">
-                                        <MenuItem Header="Ascending" />
-                                        <MenuItem Header="Descending" />
-                                    </ContextMenu>
-                                </GridViewColumnHeader.ContextMenu>
-                            </GridViewColumnHeader>
-                        </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Timestamp}">
-                            <GridViewColumnHeader Height="26">Last updated
-                                <GridViewColumnHeader.ContextMenu>
-                                    <ContextMenu
-                                        Name="SortTimestamp">
-                                        <MenuItem Header="Ascending" />
-                                        <MenuItem Header="Descending" />
-                                    </ContextMenu>
-                                </GridViewColumnHeader.ContextMenu>
-                            </GridViewColumnHeader>
-                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Hostname}" Header="   Hostname" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="   Status" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Timestamp}" Header="   Last Updated" />
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
