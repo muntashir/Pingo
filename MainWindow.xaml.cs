@@ -25,8 +25,8 @@ namespace Pingo
         {
             InitializeComponent();
 
-            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 9;
-            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 9;
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 7;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 7;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

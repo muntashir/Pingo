@@ -222,9 +222,9 @@
         <TaskbarItemInfo ProgressValue="0" ProgressState="None"/>
     </Window.TaskbarItemInfo>
 
-    <!-- Workaround for borderless window -->
+    <!-- Custom WindowChrome for borderless window -->
     <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="34" GlassFrameThickness="0,0,0,5" ResizeBorderThickness="5"/>
+        <WindowChrome CaptionHeight="34" GlassFrameThickness="0" ResizeBorderThickness="7"/>
     </WindowChrome.WindowChrome>
 
     <Border>
