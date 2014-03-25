@@ -66,6 +66,11 @@ namespace Pingo
                     throw new Exception("Invalid Input");
                 else if (multiline == false)
                 {
+                    if (isProcessRunning)
+                    {
+                        return;
+                    }
+
                     String host = txtInput.Text;
 
                     Thread backgroundThread = new Thread(
@@ -245,7 +250,6 @@ namespace Pingo
                                                        hostList.UpdateData();
                                                    }));
 
-                        isProcessRunning = false;
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Idle";
@@ -255,6 +259,8 @@ namespace Pingo
                             else
                                 lblNextUpdate.Content = "Polling disabled";
                         }));
+
+                        isProcessRunning = false;
                     }));
 
                 backgroundThread.IsBackground = true;
