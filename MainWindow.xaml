@@ -7,8 +7,8 @@
     <Window.Resources>
         <!-- Theme colors -->
         <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
-        <SolidColorBrush x:Key="MouseOverColor" Color="#FF2EF6FF" />
-        <SolidColorBrush x:Key="PressedColor" Color="#FF00CDD6" />
+        <SolidColorBrush x:Key="MouseOverColor" Color="#FF4DF7FF" />
+        <SolidColorBrush x:Key="PressedColor" Color="#FF04F3FD" />
         <SolidColorBrush x:Key="PingoRed" Color="#FFFF3737" />
         <SolidColorBrush x:Key="PingoMouseOverRed" Color="#FFE20000" />
         <SolidColorBrush x:Key="PingoPressedRed" Color="#FF910000" />
@@ -335,7 +335,7 @@
                         </Setter>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="Foreground" Value="#FF61F8FF" />
+                        <Setter Property="Foreground" Value="#FF84F9FF" />
                         <Setter Property="Background" Value="{StaticResource AccentColor}" />
                         <Setter Property="Template">
                             <Setter.Value>
