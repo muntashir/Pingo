@@ -154,10 +154,11 @@ namespace Pingo
                                         TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
                                     }));
 
-                                i++;
-
-                                if (i > count)
+                                if (i > count || host.ToString()[2] == "12:00 AM 0001-01-01")
+                                {
+                                    i++;
                                     host.Ping();
+                                }
                             });
 
                             progressBar.Dispatcher.BeginInvoke(
