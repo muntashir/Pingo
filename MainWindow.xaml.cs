@@ -457,7 +457,10 @@ namespace Pingo
         private void lsvOutput_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (lsvOutput.SelectedItems.Count > 0)
+            {
                 Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
+                MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

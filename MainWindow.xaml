@@ -9,8 +9,15 @@
         <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
         <SolidColorBrush x:Key="MouseOverColor" Color="#FF2EF6FF" />
         <SolidColorBrush x:Key="PressedColor" Color="#FF00CDD6" />
-        <SolidColorBrush x:Key="PingoRed" Color="#FFFF2525" />
-        <SolidColorBrush x:Key="PingoGreen" Color="#FF00FD2E" />
+        <SolidColorBrush x:Key="PingoRed" Color="#FFFF3737" />
+        <SolidColorBrush x:Key="PingoMouseOverRed" Color="#FFE20000" />
+        <SolidColorBrush x:Key="PingoPressedRed" Color="#FF910000" />
+        <SolidColorBrush x:Key="PingoGreen" Color="#FF25FD4C" />
+        <SolidColorBrush x:Key="PingoMouseOverGreen" Color="#FF00CD25" />
+        <SolidColorBrush x:Key="PingoPressedGreen" Color="#FF006E14" />
+        <SolidColorBrush x:Key="PingoGray" Color="#FFC9C9C9" />
+        <SolidColorBrush x:Key="PingoMouseOverGray" Color="#FF8F8F8F" />
+        <SolidColorBrush x:Key="PingoPressedGray" Color="#FF646464" />
 
         <!-- GridView colors -->
         <SolidColorBrush x:Key="GridViewColumnHeaderHoverBackground" Color="{Binding Source={StaticResource MouseOverColor}, Path=Color}" />
@@ -170,8 +177,8 @@
                                 <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoRed}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FFD30000"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FFD30000"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoPressedRed}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoPressedRed}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -204,8 +211,8 @@
                                 <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoGreen}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FF00BF23"/>
-                                <Setter Property="Background" TargetName="Bd" Value="#FF00BF23"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoPressedGreen}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoPressedGreen}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -328,7 +335,7 @@
                         </Setter>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="Foreground" Value="{StaticResource MouseOverColor}" />
+                        <Setter Property="Foreground" Value="#FF61F8FF" />
                         <Setter Property="Background" Value="{StaticResource AccentColor}" />
                         <Setter Property="Template">
                             <Setter.Value>
@@ -353,7 +360,7 @@
 
                                     <ControlTemplate.Triggers>
                                         <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
-                                            <Setter Value="#FFD6D6D6" TargetName="Thumb" Property="Background" />
+                                            <Setter Value="{StaticResource MouseOverColor}" TargetName="Thumb" Property="Background" />
                                         </Trigger>
                                         <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
                                             <Setter Value="{StaticResource PressedColor}" TargetName="Thumb" Property="Background" />
@@ -457,6 +464,82 @@
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Item.SelectedActive.Background}" />
                                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Item.SelectedActive.Border}" />
                                         </MultiTrigger>
+                                        
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Online" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoGreen}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Online" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsMouseOver}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoMouseOverGreen}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Online" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedGreen}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Offline" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoRed}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Offline" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsMouseOver}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoMouseOverRed}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Offline" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedRed}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="False"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoGray}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsMouseOver}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoMouseOverGray}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="True"/>
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedGray}" />
+                                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                                        </MultiDataTrigger>
+                                        
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter TargetName="Bd" Property="TextElement.Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                                         </Trigger>
@@ -464,17 +547,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Status}" Value="Online">
-                                <Setter Property="ListView.Background" Value="{StaticResource PingoGreen}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                <Setter Property="ListView.Background" Value="{StaticResource PingoRed}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Status}" Value="Error">
-                                <Setter Property="ListView.Background" Value="#FF8B8989"/>
-                            </DataTrigger>
-                        </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
