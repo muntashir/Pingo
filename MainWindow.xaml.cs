@@ -137,7 +137,6 @@ namespace Pingo
                             }));
 
                             isProcessRunning = true;
-                            int count = hostList.hosts.Count();
 
                             foreach (string line in multiLineHost)
                             {
@@ -154,7 +153,7 @@ namespace Pingo
                                         TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
                                     }));
 
-                                if (i > count || host.ToString()[2] == "12:00 AM 0001-01-01")
+                                if (host.IsNotPinged())
                                 {
                                     i++;
                                     host.Ping();
@@ -465,8 +464,12 @@ namespace Pingo
         {
             if (lsvOutput.SelectedItems.Count > 0)
             {
-                Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
-                MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
+                try
+                {
+                    Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
+                    MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch { }
             }
         }
     }

@@ -27,6 +27,14 @@ namespace Pingo
             pingSend = new Ping();           
         }
 
+        public bool IsNotPinged()
+        {
+            if (pingReply == null)
+                return true;
+            else
+                return false;
+        }
+
         //Gets status of the host with a ping
         public void Ping()
         {
