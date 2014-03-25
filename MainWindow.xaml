@@ -6,10 +6,11 @@
 
     <Window.Resources>
         <!-- Theme colors -->
+        <SolidColorBrush x:Key="DarkAccent" Color="#FF9FF6F9" />
         <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
-        <SolidColorBrush x:Key="MouseOverColor" Color="#FF4DF7FF" />
-        <SolidColorBrush x:Key="PressedColor" Color="#FF04F3FD" />
-        <SolidColorBrush x:Key="PingoRed" Color="#FFFF3737" />
+        <SolidColorBrush x:Key="MouseOverColor" Color="#FF67F8FF" />
+        <SolidColorBrush x:Key="PressedColor" Color="#FF00F5FF" />
+        <SolidColorBrush x:Key="PingoRed" Color="#FFFF4444" />
         <SolidColorBrush x:Key="PingoMouseOverRed" Color="#FFE20000" />
         <SolidColorBrush x:Key="PingoPressedRed" Color="#FF910000" />
         <SolidColorBrush x:Key="PingoGreen" Color="#FF25FD4C" />
@@ -177,8 +178,8 @@
                                 <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoRed}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoPressedRed}"/>
-                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoPressedRed}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoMouseOverRed}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoMouseOverRed}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -211,8 +212,8 @@
                                 <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoGreen}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoPressedGreen}"/>
-                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoPressedGreen}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource PingoMouseOverGreen}"/>
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource PingoMouseOverGreen}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -335,7 +336,7 @@
                         </Setter>
                     </Style>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="Foreground" Value="#FF84F9FF" />
+                        <Setter Property="Foreground" Value="{StaticResource DarkAccent}" />
                         <Setter Property="Background" Value="{StaticResource AccentColor}" />
                         <Setter Property="Template">
                             <Setter.Value>
@@ -366,7 +367,7 @@
                                             <Setter Value="{StaticResource PressedColor}" TargetName="Thumb" Property="Background" />
                                         </Trigger>
                                         <Trigger Property="Name" Value="PART_VerticalScrollBar">
-                                            <Setter Property="Margin" Value="0,26,0,0"/>
+                                            <Setter Property="Margin" Value="0,23,0,0"/>
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="false">
                                             <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
