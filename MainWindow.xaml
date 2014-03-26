@@ -26,16 +26,6 @@
         <SolidColorBrush x:Key="GridViewColumnHeaderBorderBackground" />
         <SolidColorBrush x:Key="GridViewColumnHeaderBackground" />
 
-        <!-- ListBoxItem colors -->
-        <SolidColorBrush x:Key="Item.Static.Background" />
-        <SolidColorBrush x:Key="Item.Static.Border" />
-        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="{Binding Source={StaticResource MouseOverColor}, Path=Color}" />
-        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="{Binding Source={StaticResource MouseOverColor}, Path=Color}" />
-        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="{Binding Source={StaticResource PressedColor}, Path=Color}" />
-        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="{Binding Source={StaticResource PressedColor}, Path=Color}" />
-        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="{Binding Source={StaticResource PressedColor}, Path=Color}" />
-        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="{Binding Source={StaticResource PressedColor}, Path=Color}" />
-
         <Style x:Key="GridViewColumnHeaderGripper"
            TargetType="{x:Type Thumb}">
             <Setter Property="Canvas.Right"
@@ -258,77 +248,57 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                                     <Grid SnapsToDevicePixels="true">
+
                                         <Border Name="HeaderBorder"
                                 BorderThickness="0,1,0,1"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 Background="{TemplateBinding Background}">
+
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition MaxHeight="7"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
+
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col0"/>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col1"/>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col2"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Border Grid.RowSpan="2"
-                                        Padding="{TemplateBinding Padding}">
+
+                                                <Border Grid.RowSpan="2" Padding="{TemplateBinding Padding}">
+
                                                     <ContentPresenter Name="HeaderContent"
                                                       Margin="0,0,0,1"
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                       RecognizesAccessKey="True"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+
                                                 </Border>
                                             </Grid>
                                         </Border>
-                                        <Border Name="HeaderHoverBorder"
-                                BorderThickness="1,0,1,1"
-                                Margin="1,1,0,0"/>
-                                        <Border Name="HeaderPressBorder"
-                                BorderThickness="1,1,1,0"
-                                Margin="1,0,0,1"/>
+                                        <Border Name="HeaderHoverBorder" BorderThickness="1,0,1,1" Margin="1,1,0,0"/>
+                                        <Border Name="HeaderPressBorder" BorderThickness="1,1,1,0" Margin="1,0,0,1"/>
                                         <Canvas>
-                                            <Thumb x:Name="PART_HeaderGripper"
-                                   Style="{StaticResource GridViewColumnHeaderGripper}"/>
+                                            <Thumb x:Name="PART_HeaderGripper" Style="{StaticResource GridViewColumnHeaderGripper}"/>
                                         </Canvas>
                                     </Grid>
                                     <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver"
-                                 Value="true">
-                                            <Setter TargetName="HeaderBorder"
-                                    Property="Background"
-                                    Value="{StaticResource GridViewColumnHeaderHoverBackground}"/>
-                                            <Setter TargetName="HeaderHoverBorder"
-                                    Property="BorderBrush"
-                                    Value="Transparent"/>
-                                            <Setter TargetName="PART_HeaderGripper"
-                                    Property="Background"
-                                    Value="Transparent"/>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource GridViewColumnHeaderHoverBackground}"/>
+                                            <Setter TargetName="HeaderHoverBorder" Property="BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="PART_HeaderGripper" Property="Background" Value="Transparent"/>
                                         </Trigger>
-                                        <Trigger Property="IsPressed"
-                                 Value="true">
-                                            <Setter TargetName="HeaderBorder"
-                                    Property="Background"
-                                    Value="{StaticResource GridViewColumnHeaderPressBackground}"/>
-                                            <Setter TargetName="HeaderHoverBorder"
-                                    Property="BorderBrush"
-                                    Value="Transparent"/>
-                                            <Setter TargetName="HeaderPressBorder"
-                                    Property="BorderBrush"
-                                    Value="Transparent"/>
-                                            <Setter TargetName="PART_HeaderGripper"
-                                    Property="Visibility"
-                                    Value="Hidden"/>
-                                            <Setter TargetName="HeaderContent"
-                                    Property="Margin"
-                                    Value="1,1,0,0"/>
+                                        <Trigger Property="IsPressed" Value="true">
+                                            <Setter TargetName="HeaderBorder" Property="Background" Value="{StaticResource GridViewColumnHeaderPressBackground}"/>
+                                            <Setter TargetName="HeaderHoverBorder" Property="BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="HeaderPressBorder" Property="BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="PART_HeaderGripper" Property="Visibility" Value="Hidden"/>
+                                            <Setter TargetName="HeaderContent" Property="Margin" Value="1,1,0,0"/>
                                         </Trigger>
-                                        <Trigger Property="Height"
-                                 Value="Auto">
-                                            <Setter Property="MinHeight"
-                                    Value="20"/>
+                                        <Trigger Property="Height" Value="Auto">
+                                            <Setter Property="MinHeight" Value="20"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -433,39 +403,12 @@
                         <Setter Property="ListView.Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border x:Name="Bd" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}" 
-                        Background="{TemplateBinding Background}" 
-                        Padding="{TemplateBinding Padding}" 
-                        SnapsToDevicePixels="true">
+                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" >
                                         <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                                     </Border>
                                     <ControlTemplate.Triggers>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsMouseOver" Value="True" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Item.MouseOver.Background}" />
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Item.MouseOver.Border}" />
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="Selector.IsSelectionActive" Value="False" />
-                                                <Condition Property="IsSelected" Value="True" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Item.SelectedInactive.Background}" />
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Item.SelectedInactive.Border}" />
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="Selector.IsSelectionActive" Value="True" />
-                                                <Condition Property="IsSelected" Value="True" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Item.SelectedActive.Background}" />
-                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Item.SelectedActive.Border}" />
-                                        </MultiTrigger>
-                                        
+
+                                        <!-- If host online -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Status}" Value="Online" />
@@ -490,7 +433,8 @@
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedGreen}" />
                                             <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
                                         </MultiDataTrigger>
-                                        
+
+                                        <!-- If host offline -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Status}" Value="Offline" />
@@ -515,7 +459,8 @@
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedRed}" />
                                             <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
                                         </MultiDataTrigger>
-                                        
+
+                                        <!-- If host error -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Status}" Value="Error" />
@@ -540,10 +485,6 @@
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedGray}" />
                                             <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
                                         </MultiDataTrigger>
-                                        
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter TargetName="Bd" Property="TextElement.Foreground" Value="{StaticResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -555,6 +496,7 @@
             <!-- Input TextBox -->
             <TextBox x:Name="txtInput" SelectionBrush="{StaticResource PressedColor}" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="{StaticResource AccentColor}" Foreground="Black" FontFamily="Segoe UI"/>
 
+            <!-- Sidebar buttons -->
             <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="63" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Style="{StaticResource EnterButtonStyle}" Focusable="False" Margin="0,0,0,0">
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Enter"/></TextBlock>
             </Button>
@@ -579,14 +521,15 @@
                 <TextBlock TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
             </Button>
 
+            <!-- Polling info -->
             <Label Content="Polling interval in minutes:" HorizontalAlignment="Left" Margin="10,43,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
             <TextBox x:Name="txtInterval" Focusable="False" HorizontalAlignment="Left" BorderThickness="0" Margin="190,47,0,0" TextWrapping="Wrap" Text="10" Width="30" TextChanged="txtInterval_TextChanged" IsReadOnly="True" FontSize="14" Height="26" VerticalAlignment="Top" Background="Transparent" Foreground="Black" Cursor="Arrow"/>
-            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{StaticResource FlatButtonStyle}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Transparent" Foreground="Black" Focusable="False"/>
             <Label x:Name="lblNextUpdate" Content="Next update in" HorizontalAlignment="Left" RenderTransformOrigin="0.864,0.952" Margin="372,43,0,0" FontSize="14" Height="29" VerticalAlignment="Top"/>
 
-            <!-- Interval buttons -->
+            <!-- Polling control buttons -->
             <RepeatButton x:Name="btnMinus" Style="{StaticResource FlatRepeatButtonStyle}" Content="&#xE011;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,52,0,0" Click="btnMinus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="Transparent" Background="Transparent" Focusable="False"/>
             <RepeatButton x:Name="btnPlus" Style="{StaticResource FlatRepeatButtonStyle}" Content="&#xE010;" FontFamily="Segoe UI Symbol" FontSize="10" HorizontalAlignment="Left" Width="15" Margin="209,42,0,0" Click="btnPlus_Click" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="16" VerticalAlignment="Top" BorderBrush="Transparent" Background="Transparent" Focusable="False"/>
+            <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{StaticResource FlatButtonStyle}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Transparent" Foreground="Black" Focusable="False"/>
 
             <!-- ProgressBar/Titlebar -->
             <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="{StaticResource AccentColor}" Foreground="#FF23FF00" Style="{StaticResource FlatProgressBarStyle}" Margin="0,0,0,0" BorderBrush="{StaticResource AccentColor}" BorderThickness="0" />
