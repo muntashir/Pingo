@@ -238,7 +238,7 @@
             <Rectangle Fill="{StaticResource AccentColor}" HorizontalAlignment="Right" Width="93"/>
 
             <!-- Output ListView -->
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" Grid.IsSharedSizeScope="True" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Single" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0" Focusable="False" >
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" Grid.IsSharedSizeScope="True" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Extended" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0" Focusable="False" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left" />

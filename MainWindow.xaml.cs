@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -325,6 +326,14 @@ namespace Pingo
             //Get index of selected item
             int index = lsvOutput.SelectedIndex;
 
+            while (lsvOutput.SelectedItems.Count > 0)
+            {
+                if (lsvOutput.SelectedIndex >= 0)
+                   // hostList.hosts[lsvOutput.SelectedIndex].Ping();
+
+                lsvOutput.SelectedItems.RemoveAt(lsvOutput.SelectedIndex);
+            }
+
             try
             {
                 Thread backgroundThread = new Thread(
@@ -340,8 +349,10 @@ namespace Pingo
                             TaskbarItemInfo.ProgressValue = 1;
                         }));
 
-                        if (index >= 0)
-                            hostList.hosts[index].Ping();
+                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+
+                            }));
 
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
@@ -374,16 +385,29 @@ namespace Pingo
 
             try
             {
-                while (lsvOutput.SelectedItems.Count > 0)
+                var selected = new List<DataRow>();
+
+                foreach (DataRowView row in lsvOutput.SelectedItems)
                 {
-                    hostList.hosts.RemoveAt(lsvOutput.SelectedIndex);
-                    hostList.UpdateData();
+                    selected.Add(row.Row);
                 }
+
+                foreach (DataRow row in selected)
+                {
+                    hostList.data.Rows.Remove(row);
+                }
+
+                //while (lsvOutput.SelectedItems.Count > 0)
+                //{
+                //    hostList.hosts.RemoveAt(lsvOutput.SelectedIndex);
+                //}
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            hostList.UpdateData();
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
