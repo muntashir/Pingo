@@ -385,22 +385,19 @@ namespace Pingo
 
             try
             {
-                var selected = new List<DataRow>();
+                List<int> selectedIndices = new List<int>();
 
-                foreach (DataRowView row in lsvOutput.SelectedItems)
+                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
                 {
-                    selected.Add(row.Row);
+                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
                 }
 
-                foreach (DataRow row in selected)
-                {
-                    hostList.data.Rows.Remove(row);
-                }
+                selectedIndices.Sort();
 
-                //while (lsvOutput.SelectedItems.Count > 0)
-                //{
-                //    hostList.hosts.RemoveAt(lsvOutput.SelectedIndex);
-                //}
+                for (int i = 0; i < selectedIndices.Count(); i++)
+                {
+                    hostList.hosts.RemoveAt(selectedIndices[i] - i);
+                }
             }
             catch (Exception ex)
             {
