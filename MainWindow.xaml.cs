@@ -216,6 +216,7 @@ namespace Pingo
                     new ThreadStart(() =>
                     {
                         isProcessRunning = true;
+
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Working";
@@ -227,19 +228,17 @@ namespace Pingo
 
                         Parallel.ForEach(hostList.hosts, host =>
                         {
-                            {
-                                progressBar.Dispatcher.BeginInvoke(
-                                    new Action(() =>
-                                    {
-                                        progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
-                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                        TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
-                                    }));
+                            progressBar.Dispatcher.BeginInvoke(
+                                new Action(() =>
+                                {
+                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                }));
 
-                                i++;
+                            i++;
 
-                                host.Ping();
-                            }
+                            host.Ping();
                         });
 
                         progressBar.Dispatcher.BeginInvoke(
@@ -323,19 +322,16 @@ namespace Pingo
                 return;
             }
 
-            //Get index of selected item
-            int index = lsvOutput.SelectedIndex;
-
-            while (lsvOutput.SelectedItems.Count > 0)
-            {
-                if (lsvOutput.SelectedIndex >= 0)
-                   // hostList.hosts[lsvOutput.SelectedIndex].Ping();
-
-                lsvOutput.SelectedItems.RemoveAt(lsvOutput.SelectedIndex);
-            }
-
             try
             {
+
+                List<int> selectedIndices = new List<int>();
+
+                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                {
+                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+                }
+
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
@@ -344,24 +340,31 @@ namespace Pingo
                         this.Dispatcher.BeginInvoke(new Action(() =>
                         {
                             this.Title = "Pingo - Working";
-                            progressBar.Value = 100;
-                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                            TaskbarItemInfo.ProgressValue = 1;
-                        }));
-
-                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
-                            {
-
-                            }));
-
-                        this.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            hostList.UpdateData();
-                            this.Title = "Pingo - Idle";
                             progressBar.Value = 0;
-                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                             TaskbarItemInfo.ProgressValue = 0;
                         }));
+
+                        Parallel.For(0, selectedIndices.Count(), i =>
+                            {
+                                hostList.hosts[selectedIndices[i]].Ping();
+
+                                progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                }));
+                            });
+
+                        progressBar.Dispatcher.BeginInvoke(
+                                                   new Action(() =>
+                                                   {
+                                                       progressBar.Value = 0;
+                                                       TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                                       TaskbarItemInfo.ProgressValue = 0;
+                                                       hostList.UpdateData();
+                                                   }));
 
                         isProcessRunning = false;
                     }));
@@ -387,24 +390,41 @@ namespace Pingo
             {
                 List<int> selectedIndices = new List<int>();
 
-                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
-                {
-                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
-                }
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
+                    {
+                        isProcessRunning = true;
 
-                selectedIndices.Sort();
+                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                                {
+                                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+                                }
+                            }));
 
-                for (int i = 0; i < selectedIndices.Count(); i++)
-                {
-                    hostList.hosts.RemoveAt(selectedIndices[i] - i);
-                }
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            selectedIndices.Sort();
+
+                            for (int i = 0; i < selectedIndices.Count(); i++)
+                            {
+                                hostList.hosts.RemoveAt(selectedIndices[i] - i);
+                            }
+
+                            hostList.UpdateData();
+                        }));
+
+                        isProcessRunning = false;
+                    }));
+
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            hostList.UpdateData();
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
