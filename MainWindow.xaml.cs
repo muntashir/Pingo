@@ -118,8 +118,6 @@ namespace Pingo
                     String[] delim = { "\r\n", " ", "'" };
                     String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
 
-                    //hostList.hosts = new List<Host>(multiLineHost.Count());
-
                     if (isProcessRunning)
                     {
                         return;
@@ -317,13 +315,12 @@ namespace Pingo
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
-            {
-                return;
-            }
-
             try
             {
+                if (isProcessRunning)
+                {
+                    return;
+                }
 
                 List<int> selectedIndices = new List<int>();
 
@@ -345,16 +342,20 @@ namespace Pingo
                             TaskbarItemInfo.ProgressValue = 0;
                         }));
 
+                        double progress = 1.0;
+
                         Parallel.For(0, selectedIndices.Count(), i =>
                             {
-                                hostList.hosts[selectedIndices[i]].Ping();
-
                                 progressBar.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    progressBar.Value = (progress / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                    TaskbarItemInfo.ProgressValue = (progress / double.Parse(hostList.hosts.Count().ToString()));
                                 }));
+
+                                progress++;
+
+                                hostList.hosts[selectedIndices[i]].Ping();
                             });
 
                         progressBar.Dispatcher.BeginInvoke(
