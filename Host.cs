@@ -24,7 +24,7 @@ namespace Pingo
             this.hostname = hostname;
 
             //Initializes pingSend
-            pingSend = new Ping();           
+            pingSend = new Ping();
         }
 
         //Check if host not pinged yet
@@ -39,26 +39,26 @@ namespace Pingo
         //Gets status of the host with a ping
         public void Ping()
         {
-                //Default status offline
-                status = PingStatus.Offline;
+            //Default status offline
+            status = PingStatus.Offline;
 
-                //Set timestamp to current time
-                timestamp = DateTime.Now;
+            //Set timestamp to current time
+            timestamp = DateTime.Now;
 
-                try
-                {
-                    //Send a ping with 3000 ms timeout
-                    pingReply = pingSend.Send(hostname, 3000);
+            try
+            {
+                //Send a ping with 3000 ms timeout
+                pingReply = pingSend.Send(hostname, 3000);
 
-                    //Sets status to sucess if ping is successful
-                    if (pingReply.Status == IPStatus.Success)
-                        status = PingStatus.Online;
-                }
-                catch (Exception)
-                {
-                    //Could be error if DNS could not resolve host
-                    status = PingStatus.Error;
-                }
+                //Sets status to sucess if ping is successful
+                if (pingReply.Status == IPStatus.Success)
+                    status = PingStatus.Online;
+            }
+            catch (Exception)
+            {
+                //Could be error if DNS could not resolve host
+                status = PingStatus.Error;
+            }
         }
 
         //Returns string array of hostname, status, and timestamp

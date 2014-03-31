@@ -22,7 +22,7 @@ namespace Pingo
         {
             //Initialize hosts
             hosts = new List<Host>();
-            
+
             //Initialize DataTable with columns
             data.Columns.Add("Hostname", typeof(string));
             data.Columns.Add("Status", typeof(string));
@@ -76,7 +76,7 @@ namespace Pingo
 
         public void AddHost(String hostname)
         {
-                hosts.Add(new Host(hostname));
+            hosts.Add(new Host(hostname));
         }
     }
 }
