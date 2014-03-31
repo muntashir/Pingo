@@ -53,7 +53,7 @@ namespace Pingo
                     if (pingReply.Status == IPStatus.Success)
                         status = PingStatus.Online;
                 }
-                catch (PingException)
+                catch (Exception)
                 {
                     //Could be error if DNS could not resolve host
                     status = PingStatus.Error;

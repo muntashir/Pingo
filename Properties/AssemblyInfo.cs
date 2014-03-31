@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Pingo")]
-[assembly: AssemblyDescription("A tool that shows the status of computers connected to the network through pings.")]
+[assembly: AssemblyDescription("A tool that shows the status of computers connected to the network through pings")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("github.com/muntashir")]
 [assembly: AssemblyProduct("Pingo")]
