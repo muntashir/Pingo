@@ -27,6 +27,7 @@ namespace Pingo
             pingSend = new Ping();           
         }
 
+        //Check if host not pinged yet
         public bool IsNotPinged()
         {
             if (pingReply == null)
