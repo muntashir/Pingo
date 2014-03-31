@@ -72,7 +72,7 @@ namespace Pingo
                         return;
                     }
 
-                    String host = txtInput.Text;
+                    String line = txtInput.Text;
 
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
@@ -90,7 +90,20 @@ namespace Pingo
                                     timers.DisableTimers();
                                 }));
 
-                                hostList.AddHost(host);
+                                bool duplicate = false; 
+
+                                foreach (Host host in hostList.hosts)
+                                {
+                                    if (host.ToString()[0] == line)
+                                    {
+                                        MessageBox.Show(line + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                        duplicate = true;
+                                    }
+                                }
+
+                                if (!duplicate)
+                                    hostList.AddHost(line);
+
                                 hostList.hosts[hostList.hosts.Count() - 1].Ping();
 
                                 this.Dispatcher.BeginInvoke(new Action(() =>
@@ -139,7 +152,19 @@ namespace Pingo
 
                             foreach (string line in multiLineHost)
                             {
-                                hostList.AddHost(line);
+                                bool duplicate = false; ;
+
+                                foreach (Host host in hostList.hosts)
+                                {
+                                    if (host.ToString()[0] == line)
+                                    {
+                                        MessageBox.Show(line + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                        duplicate = true;
+                                    }
+                                }
+
+                                if (!duplicate)
+                                    hostList.AddHost(line);
                             }
 
                             Parallel.ForEach(hostList.hosts, host =>
