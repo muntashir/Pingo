@@ -373,9 +373,9 @@ namespace Pingo
                             {
                                 progressBar.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    progressBar.Value = (progress / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                    progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = (progress / double.Parse(hostList.hosts.Count().ToString()));
+                                    TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
                                 }));
 
                                 progress++;
