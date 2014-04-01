@@ -494,7 +494,7 @@
             </ListView>
 
             <!-- Input TextBox -->
-            <TextBox x:Name="txtInput" SelectionBrush="{StaticResource PressedColor}" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="{StaticResource AccentColor}" Foreground="Black" FontFamily="Segoe UI"/>
+            <TextBox x:Name="txtInput" SelectionBrush="{StaticResource PressedColor}" BorderThickness="0" TextWrapping="Wrap" Text="Enter a hostname or IP address" VerticalAlignment="Bottom" Margin="10,0,104,10" Height="53" AcceptsReturn="True" FontSize="14" Background="{StaticResource AccentColor}" Foreground="Black" FontFamily="Segoe UI"/>
 
             <!-- Sidebar buttons -->
             <Button x:Name="btnEnter" VerticalAlignment="Bottom" Height="63" Click="btnEnter_Click" IsDefault="True" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Style="{StaticResource EnterButtonStyle}" Focusable="False" Margin="0,0,0,0">
