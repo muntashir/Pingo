@@ -153,7 +153,7 @@ namespace Pingo
 
                             foreach (string line in multiLineHost)
                             {
-                                bool duplicate = false;                
+                                bool duplicate = false;
 
                                 foreach (Host host in hostList.hosts)
                                 {
@@ -168,7 +168,8 @@ namespace Pingo
                                     hostList.AddHost(line);
                             }
 
-                            MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            if (duplicates != "")
+                                MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
 
                             Parallel.ForEach(hostList.hosts, host =>
                             {
