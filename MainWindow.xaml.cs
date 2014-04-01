@@ -502,6 +502,8 @@ namespace Pingo
 
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            lsvOutput.SelectedItems.Clear();
+
             DragMove();
         }
 
@@ -538,6 +540,11 @@ namespace Pingo
                 }
                 catch { }
             }
+        }
+
+        private void progressBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            lsvOutput.SelectedItems.Clear();
         }
     }
 }
