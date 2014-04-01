@@ -544,10 +544,5 @@ namespace Pingo
                 catch { }
             }
         }
-
-        private void progressBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            lsvOutput.SelectedItems.Clear();
-        }
     }
 }

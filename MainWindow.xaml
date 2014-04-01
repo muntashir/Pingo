@@ -532,7 +532,7 @@
             <Button x:Name="btnTogglePolling" Content="Disable Polling" HorizontalAlignment="Left" Width="125" Margin="242,44,0,0" Style="{StaticResource FlatButtonStyle}" Click="btnTogglePolling_Click" FontSize="14" Height="26" VerticalAlignment="Top" Background="Transparent" Foreground="Black" Focusable="False"/>
 
             <!-- ProgressBar/Titlebar -->
-            <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="{StaticResource AccentColor}" Foreground="#FF23FF00" Style="{StaticResource FlatProgressBarStyle}" Margin="0,0,0,0" BorderBrush="{StaticResource AccentColor}" BorderThickness="0" WindowChrome.IsHitTestVisibleInChrome="True" MouseDown="progressBar_MouseDown" />
+            <ProgressBar x:Name="progressBar" FontSize="14" Height="34" VerticalAlignment="Top" Background="{StaticResource AccentColor}" Foreground="#FF23FF00" Style="{StaticResource FlatProgressBarStyle}" Margin="0,0,0,0" BorderBrush="{StaticResource AccentColor}" BorderThickness="0" />
 
             <!-- Title -->
             <Label Content="Pingo" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="18"/>
