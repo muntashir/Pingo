@@ -90,7 +90,7 @@ namespace Pingo
                                     timers.DisableTimers();
                                 }));
 
-                                bool duplicate = false; 
+                                bool duplicate = false;
 
                                 foreach (Host host in hostList.hosts)
                                 {
@@ -149,16 +149,17 @@ namespace Pingo
                             }));
 
                             isProcessRunning = true;
+                            String duplicates = "";
 
                             foreach (string line in multiLineHost)
                             {
-                                bool duplicate = false; ;
+                                bool duplicate = false;                
 
                                 foreach (Host host in hostList.hosts)
                                 {
                                     if (host.ToString()[0] == line)
                                     {
-                                        MessageBox.Show(line + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                        duplicates += line + " ";
                                         duplicate = true;
                                     }
                                 }
@@ -166,6 +167,8 @@ namespace Pingo
                                 if (!duplicate)
                                     hostList.AddHost(line);
                             }
+
+                            MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
 
                             Parallel.ForEach(hostList.hosts, host =>
                             {
