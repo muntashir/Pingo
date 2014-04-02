@@ -21,6 +21,7 @@ namespace Pingo
         //Objects
         protected HostList hostList = new HostList();
         protected Timers timers = new Timers();
+        protected IO io;
 
         public MainWindow()
         {
@@ -32,6 +33,7 @@ namespace Pingo
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            io = new IO(hostList);
             timers = new Timers(this);
 
             txtInput.Focus();
@@ -48,84 +50,10 @@ namespace Pingo
             if (timers.updateTimer.IsEnabled == true)
                 wasTimerEnabled = true;
 
-            //Flag to store if multiple lines are entered
-            bool multiline = false;
-
             try
             {
-                //Checks if for multiple lines with multiple hosts
-                foreach (char c in txtInput.Text)
-                {
-                    if (char.IsWhiteSpace(c))
-                    {
-                        multiline = true;
-                        break;
-                    }
-                }
-
                 if (txtInput.Text == "" || txtInput.Text == "Enter a hostname or IP")
                     throw new Exception("Invalid Input");
-                else if (multiline == false)
-                {
-                    if (isProcessRunning)
-                    {
-                        return;
-                    }
-
-                    String line = txtInput.Text;
-
-                    Thread backgroundThread = new Thread(
-                        new ThreadStart(() =>
-                            {
-                                isProcessRunning = true;
-
-                                //Updates progress bars and sets window title
-                                this.Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    this.Title = "Pingo - Working";
-                                    progressBar.Value = 100;
-                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = 1;
-
-                                    timers.DisableTimers();
-                                }));
-
-                                bool duplicate = false;
-
-                                foreach (Host host in hostList.hosts)
-                                {
-                                    if (host.ToString()[0] == line)
-                                    {
-                                        MessageBox.Show(line + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
-                                        duplicate = true;
-                                    }
-                                }
-
-                                if (!duplicate)
-                                    hostList.AddHost(line);
-
-                                hostList.hosts[hostList.hosts.Count() - 1].Ping();
-
-                                this.Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    hostList.UpdateData();
-                                    this.Title = "Pingo - Idle";
-                                    progressBar.Value = 0;
-                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                    TaskbarItemInfo.ProgressValue = 0;
-
-                                    if (wasTimerEnabled)
-                                        timers.EnableTimers();
-                                    else
-                                        lblNextUpdate.Content = "Polling disabled";
-                                }));
-
-                                isProcessRunning = false;
-                            }));
-
-                    backgroundThread.IsBackground = true;
-                    backgroundThread.Start();
-                }
                 else
                 {
                     String[] delim = { "\r\n", " ", "'" };
@@ -153,18 +81,9 @@ namespace Pingo
 
                             foreach (string line in multiLineHost)
                             {
-                                bool duplicate = false;
-
-                                foreach (Host host in hostList.hosts)
-                                {
-                                    if (host.ToString()[0] == line)
-                                    {
-                                        duplicates += line + " ";
-                                        duplicate = true;
-                                    }
-                                }
-
-                                if (!duplicate)
+                                if (hostList.IsDuplicate(line))
+                                    duplicates += line + " ";
+                                else
                                     hostList.AddHost(line);
                             }
 
@@ -496,7 +415,7 @@ namespace Pingo
                 return;
             }
 
-            hostList.Export();
+            io.Export();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
 
 namespace Pingo
 {
@@ -29,35 +26,6 @@ namespace Pingo
             data.Columns.Add("Timestamp", typeof(string));
         }
 
-        //Exports hosts to CSV file
-        public void Export()
-        {
-            try
-            {
-                //Creates file
-                StreamWriter writer = new StreamWriter("export.csv");
-
-                //Writes the column names
-                writer.WriteLine("Hostname,Status,Last updated");
-
-                //Writes each host as a seperate line
-                foreach (Host host in hosts)
-                {
-                    writer.WriteLine(host.ToString()[0] + "," + host.ToString()[1] + "," + host.ToString()[2]);
-                }
-
-                //Closes file
-                writer.Close();
-
-                //Opens exported file
-                Process.Start("export.csv");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         //Updates DataTable with contents of hosts
         public void UpdateData()
         {
@@ -77,6 +45,19 @@ namespace Pingo
         public void AddHost(String hostname)
         {
             hosts.Add(new Host(hostname));
+        }
+
+        public bool IsDuplicate(string line)
+        {
+            foreach (Host host in hosts)
+            {
+                if (host.ToString()[0] == line)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
