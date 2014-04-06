@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Pingo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             StartupUri="\MainWindow/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFC1C1C1"/>
