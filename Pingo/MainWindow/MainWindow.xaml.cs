@@ -20,9 +20,11 @@ namespace Pingo
         protected Timers timers = new Timers();
         protected IO io;
 
+        //Locks
         object globalLock = new object();
         object threadLock = new object();
 
+        //Constructor
         public MainWindow()
         {
             InitializeComponent();
@@ -33,14 +35,16 @@ namespace Pingo
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Initialize objects
             io = new IO(hostList);
             timers = new Timers(this);
 
+            //Focus and highlight textbox
             txtInput.Focus();
             txtInput.SelectAll();
 
             //Set ListView source
-            lsvOutput.ItemsSource = hostList.data.DefaultView;
+            lsvOutput.ItemsSource = hostList.GetHostsAsDataTable().DefaultView;
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -77,8 +81,10 @@ namespace Pingo
                                             timers.DisableTimers();
                                         }));
 
+                                        //Stores all duplicates
                                         String duplicates = "";
 
+                                        //Checks if each host is a duplicate, then adds it to hostList if it is not
                                         foreach (string line in multiLineHost)
                                         {
                                             if (hostList.IsDuplicate(line))
@@ -90,7 +96,8 @@ namespace Pingo
                                         if (duplicates != "")
                                             MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
 
-                                        Parallel.ForEach(hostList.hosts, host =>
+                                        //Pings hosts in parallel
+                                        Parallel.ForEach(hostList.GetHostsAsList(), host =>
                                         {
                                             progressBar.Dispatcher.BeginInvoke(
                                                 new Action(() =>
@@ -178,14 +185,14 @@ namespace Pingo
 
                                     double i = 1.0;
 
-                                    Parallel.ForEach(hostList.hosts, host =>
+                                    Parallel.ForEach(hostList.GetHostsAsList(), host =>
                                     {
                                         progressBar.Dispatcher.BeginInvoke(
                                             new Action(() =>
                                             {
-                                                progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                                progressBar.Value = (i / double.Parse(hostList.GetHostsAsList().Count().ToString())) * 100.0;
                                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                                TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                                TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.GetHostsAsList().Count().ToString()));
                                             }));
 
                                         i++;
@@ -353,7 +360,7 @@ namespace Pingo
 
                                             progress++;
 
-                                            hostList.hosts[selectedIndices[i]].Ping();
+                                            hostList.GetHostsAsList()[selectedIndices[i]].Ping();
                                         });
 
                                     progressBar.Dispatcher.BeginInvoke(
@@ -411,7 +418,7 @@ namespace Pingo
 
                                         for (int i = 0; i < selectedIndices.Count(); i++)
                                         {
-                                            hostList.hosts.RemoveAt(selectedIndices[i] - i);
+                                            hostList.GetHostsAsList().RemoveAt(selectedIndices[i] - i);
                                         }
 
                                         hostList.UpdateData();
@@ -445,7 +452,7 @@ namespace Pingo
                         {
                             try
                             {
-                                hostList.hosts.Clear();
+                                hostList.GetHostsAsList().Clear();
 
                                 this.Dispatcher.BeginInvoke(
                                     new Action(() =>
@@ -559,7 +566,7 @@ namespace Pingo
             {
                 try
                 {
-                    Clipboard.SetText(hostList.hosts[lsvOutput.SelectedIndex].ToString()[0]);
+                    Clipboard.SetText(hostList.GetHostsAsList()[lsvOutput.SelectedIndex].ToString()[0]);
                     MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch { }

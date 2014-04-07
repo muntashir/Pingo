@@ -4,15 +4,17 @@ using System.Data;
 
 namespace Pingo
 {
+    //Stores a List of all hosts and a ToString of each host as a DataTable
     public class HostList
     {
-        private Object updateLock = new Object();
+        //Lock so data is not updated by multiple threads at once
+        protected Object updateLock = new Object();
 
         //DataTable source for ListView
-        public DataTable data = new DataTable();
+        protected DataTable data = new DataTable();
 
         //List to store all hosts
-        public List<Host> hosts;
+        protected List<Host> hosts;
 
         //Constructor
         public HostList()
@@ -42,11 +44,23 @@ namespace Pingo
             }
         }
 
+        public List<Host> GetHostsAsList()
+        {
+            return hosts;
+        }
+
+        public DataTable GetHostsAsDataTable()
+        {
+            return data;
+        }
+
+        //Adds host
         public void AddHost(String hostname)
         {
             hosts.Add(new Host(hostname));
         }
 
+        //Checks for duplicate host
         public bool IsDuplicate(string line)
         {
             foreach (Host host in hosts)

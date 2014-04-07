@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 
 namespace Pingo
 {
+    //Stores data about a host
     public class Host
     {
         //Stores status of the ping

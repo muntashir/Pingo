@@ -3,6 +3,7 @@ using System.Windows.Threading;
 
 namespace Pingo
 {
+    //Handles all time related things
     public class Timers
     {
         //Timer for automatic refreshes
