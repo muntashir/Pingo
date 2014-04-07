@@ -271,9 +271,12 @@ namespace Pingo
                                     return;
                                 }
 
-                                //Add 5 minutes to the polling interval
-                                if (int.Parse(txtInterval.Text) + 5 < 60)
-                                    txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    //Add 5 minutes to the polling interval
+                                    if (int.Parse(txtInterval.Text) + 5 < 60)
+                                        txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
+                                }));
                             }
                             catch (Exception ex)
                             {
@@ -303,9 +306,12 @@ namespace Pingo
                                     return;
                                 }
 
-                                //Subtract 5 minutes from the polling interval
-                                if (int.Parse(txtInterval.Text) - 5 > 0)
-                                    txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    //Subtract 5 minutes from the polling interval
+                                    if (int.Parse(txtInterval.Text) - 5 > 0)
+                                        txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
+                                }));
                             }
                             catch (Exception ex)
                             {
@@ -486,14 +492,20 @@ namespace Pingo
                                 //Turns polling on/off
                                 if (timers.updateTimer.IsEnabled)
                                 {
-                                    timers.DisableTimers();
-                                    btnTogglePolling.Content = "Enable Polling";
-                                    lblNextUpdate.Content = "Polling disabled";
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        timers.DisableTimers();
+                                        btnTogglePolling.Content = "Enable Polling";
+                                        lblNextUpdate.Content = "Polling disabled";
+                                    }));
                                 }
                                 else
                                 {
-                                    timers.EnableTimers();
-                                    btnTogglePolling.Content = "Disable Polling";
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                        {
+                                            timers.EnableTimers();
+                                            btnTogglePolling.Content = "Disable Polling";
+                                        }));
                                 }
                             }
                             catch (Exception ex)
