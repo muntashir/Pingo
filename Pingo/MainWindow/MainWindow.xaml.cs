@@ -15,13 +15,12 @@ namespace Pingo
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Flag for background thread
-        protected bool isProcessRunning = false;
-
         //Objects
         protected HostList hostList = new HostList();
         protected Timers timers = new Timers();
         protected IO io;
+
+        object globalLock = new object();
 
         public MainWindow()
         {
@@ -45,176 +44,181 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
-            bool wasTimerEnabled = false;
-
-            if (timers.updateTimer.IsEnabled == true)
-                wasTimerEnabled = true;
-
-            try
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                if (txtInput.Text == "" || txtInput.Text == "Enter a hostname or IP")
-                    throw new Exception("Invalid Input");
-                else
-                {
-                    String[] delim = { "\r\n", " ", "'" };
-                    String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+                bool wasTimerEnabled = false;
 
-                    if (isProcessRunning)
+                if (timers.updateTimer.IsEnabled == true)
+                    wasTimerEnabled = true;
+
+                try
+                {
+                    if (txtInput.Text == "" || txtInput.Text == "Enter a hostname or IP address")
+                        throw new Exception("Invalid Input");
+                    else
                     {
-                        return;
+                        String[] delim = { "\r\n", " ", "'" };
+                        String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+
+                        Thread backgroundThread = new Thread(
+                            new ThreadStart(() =>
+                            {
+                                try
+                                {
+                                    double i = 0.0;
+
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        this.Title = "Pingo - Working";
+
+                                        timers.DisableTimers();
+                                    }));
+
+                                    String duplicates = "";
+
+                                    foreach (string line in multiLineHost)
+                                    {
+                                        if (hostList.IsDuplicate(line))
+                                            duplicates += line + " ";
+                                        else
+                                            hostList.AddHost(line);
+                                    }
+
+                                    if (duplicates != "")
+                                        MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+
+                                    Parallel.ForEach(hostList.hosts, host =>
+                                    {
+                                        progressBar.Dispatcher.BeginInvoke(
+                                            new Action(() =>
+                                            {
+                                                progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                                TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
+                                            }));
+
+                                        if (host.IsNotPinged())
+                                        {
+                                            i++;
+                                            host.Ping();
+                                        }
+                                    });
+
+                                    progressBar.Dispatcher.BeginInvoke(
+                                    new Action(() =>
+                                    {
+                                        progressBar.Value = 0;
+                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                        TaskbarItemInfo.ProgressValue = 0;
+
+                                        hostList.UpdateData();
+                                    }));
+
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        this.Title = "Pingo - Idle";
+
+                                        if (wasTimerEnabled)
+                                            timers.EnableTimers();
+                                        else
+                                            lblNextUpdate.Content = "Polling disabled";
+                                    }));
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }));
+
+                        backgroundThread.IsBackground = true;
+                        backgroundThread.Start();
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                txtInput.Focus();
+                txtInput.SelectAll();
+            }
+        }
+
+        public void RefreshAll()
+        {
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
+            {
+                bool wasTimerEnabled = false;
+
+                if (timers.updateTimer.IsEnabled == true)
+                    wasTimerEnabled = true;
+
+                try
+                {
+
+                    timers.ResetTimeElapsed();
 
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
                         {
-                            double i = 0.0;
-
-                            this.Dispatcher.BeginInvoke(new Action(() =>
+                            try
                             {
-                                this.Title = "Pingo - Working";
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    this.Title = "Pingo - Working";
 
-                                timers.DisableTimers();
-                            }));
+                                    timers.DisableTimers();
+                                }));
 
-                            isProcessRunning = true;
-                            String duplicates = "";
+                                double i = 1.0;
 
-                            foreach (string line in multiLineHost)
-                            {
-                                if (hostList.IsDuplicate(line))
-                                    duplicates += line + " ";
-                                else
-                                    hostList.AddHost(line);
-                            }
+                                Parallel.ForEach(hostList.hosts, host =>
+                                {
+                                    progressBar.Dispatcher.BeginInvoke(
+                                        new Action(() =>
+                                        {
+                                            progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                            TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                        }));
 
-                            if (duplicates != "")
-                                MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                    i++;
 
-                            Parallel.ForEach(hostList.hosts, host =>
-                            {
+                                    host.Ping();
+                                });
+
                                 progressBar.Dispatcher.BeginInvoke(
                                     new Action(() =>
                                     {
-                                        progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
-                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                        TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
+                                        progressBar.Value = 0;
+                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                        TaskbarItemInfo.ProgressValue = 0;
+                                        hostList.UpdateData();
                                     }));
 
-                                if (host.IsNotPinged())
+                                this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    i++;
-                                    host.Ping();
-                                }
-                            });
+                                    this.Title = "Pingo - Idle";
 
-                            progressBar.Dispatcher.BeginInvoke(
-                            new Action(() =>
+                                    if (wasTimerEnabled)
+                                        timers.EnableTimers();
+                                    else
+                                        lblNextUpdate.Content = "Polling disabled";
+                                }));
+                            }
+                            catch (Exception ex)
                             {
-                                progressBar.Value = 0;
-                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                TaskbarItemInfo.ProgressValue = 0;
-
-                                hostList.UpdateData();
-                            }));
-
-                            isProcessRunning = false;
-                            this.Dispatcher.BeginInvoke(new Action(() =>
-                            {
-                                this.Title = "Pingo - Idle";
-
-                                if (wasTimerEnabled)
-                                    timers.EnableTimers();
-                                else
-                                    lblNextUpdate.Content = "Polling disabled";
-                            }));
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }));
 
                     backgroundThread.IsBackground = true;
                     backgroundThread.Start();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            txtInput.Focus();
-            txtInput.SelectAll();
-        }
-
-        public void RefreshAll()
-        {
-            bool wasTimerEnabled = false;
-
-            if (timers.updateTimer.IsEnabled == true)
-                wasTimerEnabled = true;
-
-            try
-            {
-                if (isProcessRunning)
+                catch (Exception ex)
                 {
-                    return;
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-                timers.ResetTimeElapsed();
-
-                Thread backgroundThread = new Thread(
-                    new ThreadStart(() =>
-                    {
-                        isProcessRunning = true;
-
-                        this.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            this.Title = "Pingo - Working";
-
-                            timers.DisableTimers();
-                        }));
-
-                        double i = 1.0;
-
-                        Parallel.ForEach(hostList.hosts, host =>
-                        {
-                            progressBar.Dispatcher.BeginInvoke(
-                                new Action(() =>
-                                {
-                                    progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
-                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
-                                }));
-
-                            i++;
-
-                            host.Ping();
-                        });
-
-                        progressBar.Dispatcher.BeginInvoke(
-                                                   new Action(() =>
-                                                   {
-                                                       progressBar.Value = 0;
-                                                       TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                                       TaskbarItemInfo.ProgressValue = 0;
-                                                       hostList.UpdateData();
-                                                   }));
-
-                        this.Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            this.Title = "Pingo - Idle";
-
-                            if (wasTimerEnabled)
-                                timers.EnableTimers();
-                            else
-                                lblNextUpdate.Content = "Polling disabled";
-                        }));
-
-                        isProcessRunning = false;
-                    }));
-
-                backgroundThread.IsBackground = true;
-                backgroundThread.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -239,183 +243,212 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning || timers.updateTimer.IsEnabled == false)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
-            }
+                try
+                {
+                    if (timers.updateTimer.IsEnabled == false)
+                    {
+                        return;
+                    }
 
-            //Add 5 minutes to the polling interval
-            if (int.Parse(txtInterval.Text) + 5 < 60)
-                txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
+                    //Add 5 minutes to the polling interval
+                    if (int.Parse(txtInterval.Text) + 5 < 60)
+                        txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning || timers.updateTimer.IsEnabled == false)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
-            }
+                try
+                {
+                    if (timers.updateTimer.IsEnabled == false)
+                    {
+                        return;
+                    }
 
-            //Subtract 5 minutes from the polling interval
-            if (int.Parse(txtInterval.Text) - 5 > 0)
-                txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
+                    //Subtract 5 minutes from the polling interval
+                    if (int.Parse(txtInterval.Text) - 5 > 0)
+                        txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                if (isProcessRunning)
+                try
                 {
-                    return;
-                }
+                    List<int> selectedIndices = new List<int>();
 
-                List<int> selectedIndices = new List<int>();
-
-                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
-                {
-                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
-                }
-
-                Thread backgroundThread = new Thread(
-                    new ThreadStart(() =>
+                    for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
                     {
-                        isProcessRunning = true;
+                        selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+                    }
 
-                        this.Dispatcher.BeginInvoke(new Action(() =>
+                    Thread backgroundThread = new Thread(
+                        new ThreadStart(() =>
                         {
-                            this.Title = "Pingo - Working";
-                            progressBar.Value = 0;
-                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                            TaskbarItemInfo.ProgressValue = 0;
-                        }));
-
-                        double progress = 1.0;
-
-                        Parallel.For(0, selectedIndices.Count(), i =>
+                            try
                             {
-                                progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                this.Dispatcher.BeginInvoke(new Action(() =>
                                 {
-                                    progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
+                                    this.Title = "Pingo - Working";
+                                    progressBar.Value = 0;
                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
+                                    TaskbarItemInfo.ProgressValue = 0;
                                 }));
 
-                                progress++;
+                                double progress = 1.0;
 
-                                hostList.hosts[selectedIndices[i]].Ping();
-                            });
+                                Parallel.For(0, selectedIndices.Count(), i =>
+                                    {
+                                        progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                        {
+                                            progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
+                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                            TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
+                                        }));
 
-                        progressBar.Dispatcher.BeginInvoke(
-                                                   new Action(() =>
-                                                   {
-                                                       progressBar.Value = 0;
-                                                       TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                                       TaskbarItemInfo.ProgressValue = 0;
-                                                       hostList.UpdateData();
-                                                   }));
+                                        progress++;
 
-                        isProcessRunning = false;
-                    }));
+                                        hostList.hosts[selectedIndices[i]].Ping();
+                                    });
 
-                backgroundThread.IsBackground = true;
-                backgroundThread.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                progressBar.Dispatcher.BeginInvoke(
+                                    new Action(() =>
+                                        {
+                                            progressBar.Value = 0;
+                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                            TaskbarItemInfo.ProgressValue = 0;
+                                            hostList.UpdateData();
+                                        }));
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }));
+
+                    backgroundThread.IsBackground = true;
+                    backgroundThread.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
-            //Prevent multiple threads accessing data
-            if (isProcessRunning)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
-            }
+                try
+                {
+                    List<int> selectedIndices = new List<int>();
 
-            try
-            {
-                List<int> selectedIndices = new List<int>();
-
-                Thread backgroundThread = new Thread(
-                    new ThreadStart(() =>
-                    {
-                        isProcessRunning = true;
-
-                        lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
-                            {
-                                for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
-                                {
-                                    selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
-                                }
-                            }));
-
-                        this.Dispatcher.BeginInvoke(new Action(() =>
+                    Thread backgroundThread = new Thread(
+                        new ThreadStart(() =>
                         {
-                            selectedIndices.Sort();
-
-                            for (int i = 0; i < selectedIndices.Count(); i++)
+                            try
                             {
-                                hostList.hosts.RemoveAt(selectedIndices[i] - i);
-                            }
+                                lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                                    {
+                                        selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+                                    }
+                                }));
 
-                            hostList.UpdateData();
+                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                {
+                                    selectedIndices.Sort();
+
+                                    for (int i = 0; i < selectedIndices.Count(); i++)
+                                    {
+                                        hostList.hosts.RemoveAt(selectedIndices[i] - i);
+                                    }
+
+                                    hostList.UpdateData();
+                                }));
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }));
 
-                        isProcessRunning = false;
-                    }));
-
-                backgroundThread.IsBackground = true;
-                backgroundThread.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                    backgroundThread.IsBackground = true;
+                    backgroundThread.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
+                try
+                {
+                    hostList.hosts.Clear();
+                    hostList.data.Rows.Clear();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-
-            hostList.hosts.Clear();
-            hostList.data.Rows.Clear();
         }
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
-            }
-
-            //Turns polling on/off
-            if (timers.updateTimer.IsEnabled)
-            {
-                timers.DisableTimers();
-                btnTogglePolling.Content = "Enable Polling";
-                lblNextUpdate.Content = "Polling disabled";
-            }
-            else
-            {
-                timers.EnableTimers();
-                btnTogglePolling.Content = "Disable Polling";
+                try
+                {
+                    //Turns polling on/off
+                    if (timers.updateTimer.IsEnabled)
+                    {
+                        timers.DisableTimers();
+                        btnTogglePolling.Content = "Enable Polling";
+                        lblNextUpdate.Content = "Polling disabled";
+                    }
+                    else
+                    {
+                        timers.EnableTimers();
+                        btnTogglePolling.Content = "Disable Polling";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            if (isProcessRunning)
+            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
             {
-                return;
+                io.Export();
             }
-
-            io.Export();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
