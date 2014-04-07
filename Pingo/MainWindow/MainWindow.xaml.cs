@@ -21,6 +21,7 @@ namespace Pingo
         protected IO io;
 
         object globalLock = new object();
+        object threadLock = new object();
 
         public MainWindow()
         {
@@ -44,7 +45,7 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
+            lock (globalLock)
             {
                 bool wasTimerEnabled = false;
 
@@ -65,64 +66,67 @@ namespace Pingo
                             {
                                 try
                                 {
-                                    double i = 0.0;
-
-                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                    lock (threadLock)
                                     {
-                                        this.Title = "Pingo - Working";
+                                        double i = 0.0;
 
-                                        timers.DisableTimers();
-                                    }));
-
-                                    String duplicates = "";
-
-                                    foreach (string line in multiLineHost)
-                                    {
-                                        if (hostList.IsDuplicate(line))
-                                            duplicates += line + " ";
-                                        else
-                                            hostList.AddHost(line);
-                                    }
-
-                                    if (duplicates != "")
-                                        MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
-
-                                    Parallel.ForEach(hostList.hosts, host =>
-                                    {
-                                        progressBar.Dispatcher.BeginInvoke(
-                                            new Action(() =>
-                                            {
-                                                progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
-                                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                                TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
-                                            }));
-
-                                        if (host.IsNotPinged())
+                                        this.Dispatcher.BeginInvoke(new Action(() =>
                                         {
-                                            i++;
-                                            host.Ping();
+                                            this.Title = "Pingo - Working";
+
+                                            timers.DisableTimers();
+                                        }));
+
+                                        String duplicates = "";
+
+                                        foreach (string line in multiLineHost)
+                                        {
+                                            if (hostList.IsDuplicate(line))
+                                                duplicates += line + " ";
+                                            else
+                                                hostList.AddHost(line);
                                         }
-                                    });
 
-                                    progressBar.Dispatcher.BeginInvoke(
-                                    new Action(() =>
-                                    {
-                                        progressBar.Value = 0;
-                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                        TaskbarItemInfo.ProgressValue = 0;
+                                        if (duplicates != "")
+                                            MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
 
-                                        hostList.UpdateData();
-                                    }));
+                                        Parallel.ForEach(hostList.hosts, host =>
+                                        {
+                                            progressBar.Dispatcher.BeginInvoke(
+                                                new Action(() =>
+                                                {
+                                                    progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                                    TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
+                                                }));
 
-                                    this.Dispatcher.BeginInvoke(new Action(() =>
-                                    {
-                                        this.Title = "Pingo - Idle";
+                                            if (host.IsNotPinged())
+                                            {
+                                                i++;
+                                                host.Ping();
+                                            }
+                                        });
 
-                                        if (wasTimerEnabled)
-                                            timers.EnableTimers();
-                                        else
-                                            lblNextUpdate.Content = "Polling disabled";
-                                    }));
+                                        progressBar.Dispatcher.BeginInvoke(
+                                        new Action(() =>
+                                        {
+                                            progressBar.Value = 0;
+                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                            TaskbarItemInfo.ProgressValue = 0;
+
+                                            hostList.UpdateData();
+                                        }));
+
+                                        this.Dispatcher.BeginInvoke(new Action(() =>
+                                        {
+                                            this.Title = "Pingo - Idle";
+
+                                            if (wasTimerEnabled)
+                                                timers.EnableTimers();
+                                            else
+                                                lblNextUpdate.Content = "Polling disabled";
+                                        }));
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -146,7 +150,7 @@ namespace Pingo
 
         public void RefreshAll()
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
+            lock (globalLock)
             {
                 bool wasTimerEnabled = false;
 
@@ -163,48 +167,51 @@ namespace Pingo
                         {
                             try
                             {
-                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                lock (threadLock)
                                 {
-                                    this.Title = "Pingo - Working";
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
+                                    {
+                                        this.Title = "Pingo - Working";
 
-                                    timers.DisableTimers();
-                                }));
+                                        timers.DisableTimers();
+                                    }));
 
-                                double i = 1.0;
+                                    double i = 1.0;
 
-                                Parallel.ForEach(hostList.hosts, host =>
-                                {
+                                    Parallel.ForEach(hostList.hosts, host =>
+                                    {
+                                        progressBar.Dispatcher.BeginInvoke(
+                                            new Action(() =>
+                                            {
+                                                progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
+                                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                                TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                            }));
+
+                                        i++;
+
+                                        host.Ping();
+                                    });
+
                                     progressBar.Dispatcher.BeginInvoke(
                                         new Action(() =>
                                         {
-                                            progressBar.Value = (i / double.Parse(hostList.hosts.Count().ToString())) * 100.0;
-                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                            TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.hosts.Count().ToString()));
+                                            progressBar.Value = 0;
+                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                            TaskbarItemInfo.ProgressValue = 0;
+                                            hostList.UpdateData();
                                         }));
 
-                                    i++;
-
-                                    host.Ping();
-                                });
-
-                                progressBar.Dispatcher.BeginInvoke(
-                                    new Action(() =>
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        progressBar.Value = 0;
-                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                        TaskbarItemInfo.ProgressValue = 0;
-                                        hostList.UpdateData();
+                                        this.Title = "Pingo - Idle";
+
+                                        if (wasTimerEnabled)
+                                            timers.EnableTimers();
+                                        else
+                                            lblNextUpdate.Content = "Polling disabled";
                                     }));
-
-                                this.Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    this.Title = "Pingo - Idle";
-
-                                    if (wasTimerEnabled)
-                                        timers.EnableTimers();
-                                    else
-                                        lblNextUpdate.Content = "Polling disabled";
-                                }));
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -243,51 +250,71 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
-            {
-                try
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
                 {
-                    if (timers.updateTimer.IsEnabled == false)
+                    lock (globalLock)
                     {
-                        return;
-                    }
+                        lock (threadLock)
+                        {
+                            try
+                            {
+                                if (timers.updateTimer.IsEnabled == false)
+                                {
+                                    return;
+                                }
 
-                    //Add 5 minutes to the polling interval
-                    if (int.Parse(txtInterval.Text) + 5 < 60)
-                        txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+                                //Add 5 minutes to the polling interval
+                                if (int.Parse(txtInterval.Text) + 5 < 60)
+                                    txtInterval.Text = (timers.updateTimer.Interval.Minutes + 5).ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }));
+
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
-            {
-                try
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
                 {
-                    if (timers.updateTimer.IsEnabled == false)
+                    lock (globalLock)
                     {
-                        return;
-                    }
+                        lock (threadLock)
+                        {
+                            try
+                            {
+                                if (timers.updateTimer.IsEnabled == false)
+                                {
+                                    return;
+                                }
 
-                    //Subtract 5 minutes from the polling interval
-                    if (int.Parse(txtInterval.Text) - 5 > 0)
-                        txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+                                //Subtract 5 minutes from the polling interval
+                                if (int.Parse(txtInterval.Text) - 5 > 0)
+                                    txtInterval.Text = (timers.updateTimer.Interval.Minutes - 5).ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }));
+
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
         }
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
+            lock (globalLock)
             {
                 try
                 {
@@ -303,38 +330,41 @@ namespace Pingo
                         {
                             try
                             {
-                                this.Dispatcher.BeginInvoke(new Action(() =>
+                                lock (threadLock)
                                 {
-                                    this.Title = "Pingo - Working";
-                                    progressBar.Value = 0;
-                                    TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                    TaskbarItemInfo.ProgressValue = 0;
-                                }));
-
-                                double progress = 1.0;
-
-                                Parallel.For(0, selectedIndices.Count(), i =>
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                        this.Title = "Pingo - Working";
+                                        progressBar.Value = 0;
+                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                        TaskbarItemInfo.ProgressValue = 0;
+                                    }));
+
+                                    double progress = 1.0;
+
+                                    Parallel.For(0, selectedIndices.Count(), i =>
                                         {
-                                            progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
-                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                            TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
-                                        }));
+                                            progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                            {
+                                                progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
+                                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                                                TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
+                                            }));
 
-                                        progress++;
+                                            progress++;
 
-                                        hostList.hosts[selectedIndices[i]].Ping();
-                                    });
+                                            hostList.hosts[selectedIndices[i]].Ping();
+                                        });
 
-                                progressBar.Dispatcher.BeginInvoke(
-                                    new Action(() =>
-                                        {
-                                            progressBar.Value = 0;
-                                            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
-                                            TaskbarItemInfo.ProgressValue = 0;
-                                            hostList.UpdateData();
-                                        }));
+                                    progressBar.Dispatcher.BeginInvoke(
+                                        new Action(() =>
+                                            {
+                                                progressBar.Value = 0;
+                                                TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+                                                TaskbarItemInfo.ProgressValue = 0;
+                                                hostList.UpdateData();
+                                            }));
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -354,7 +384,7 @@ namespace Pingo
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
+            lock (globalLock)
             {
                 try
                 {
@@ -365,25 +395,28 @@ namespace Pingo
                         {
                             try
                             {
-                                lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
+                                lock (threadLock)
                                 {
-                                    for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                                    lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
-                                    }
-                                }));
+                                        for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                                        {
+                                            selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+                                        }
+                                    }));
 
-                                this.Dispatcher.BeginInvoke(new Action(() =>
-                                {
-                                    selectedIndices.Sort();
-
-                                    for (int i = 0; i < selectedIndices.Count(); i++)
+                                    this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        hostList.hosts.RemoveAt(selectedIndices[i] - i);
-                                    }
+                                        selectedIndices.Sort();
 
-                                    hostList.UpdateData();
-                                }));
+                                        for (int i = 0; i < selectedIndices.Count(); i++)
+                                        {
+                                            hostList.hosts.RemoveAt(selectedIndices[i] - i);
+                                        }
+
+                                        hostList.UpdateData();
+                                    }));
+                                }
                             }
                             catch (Exception ex)
                             {
@@ -403,52 +436,87 @@ namespace Pingo
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
-            {
-                try
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
                 {
-                    hostList.hosts.Clear();
-                    hostList.data.Rows.Clear();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+                    lock (globalLock)
+                    {
+                        lock (threadLock)
+                        {
+                            try
+                            {
+                                hostList.hosts.Clear();
+
+                                this.Dispatcher.BeginInvoke(
+                                    new Action(() =>
+                                    {
+                                        hostList.UpdateData();
+                                    }));
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
+                }));
+
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
         }
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
-            {
-                try
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
                 {
-                    //Turns polling on/off
-                    if (timers.updateTimer.IsEnabled)
+                    lock (globalLock)
                     {
-                        timers.DisableTimers();
-                        btnTogglePolling.Content = "Enable Polling";
-                        lblNextUpdate.Content = "Polling disabled";
+                        lock (threadLock)
+                        {
+                            try
+                            {
+                                //Turns polling on/off
+                                if (timers.updateTimer.IsEnabled)
+                                {
+                                    timers.DisableTimers();
+                                    btnTogglePolling.Content = "Enable Polling";
+                                    lblNextUpdate.Content = "Polling disabled";
+                                }
+                                else
+                                {
+                                    timers.EnableTimers();
+                                    btnTogglePolling.Content = "Disable Polling";
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
                     }
-                    else
-                    {
-                        timers.EnableTimers();
-                        btnTogglePolling.Content = "Disable Polling";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+                }));
+
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            if (Monitor.TryEnter(globalLock, new TimeSpan(0, 0, 1)))
-            {
-                io.Export();
-            }
+            Thread backgroundThread = new Thread(
+                new ThreadStart(() =>
+                {
+                    lock (globalLock)
+                    {
+                        lock (threadLock)
+                        {
+                            io.Export();
+                        }
+                    }
+                }));
+
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
