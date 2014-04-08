@@ -7,7 +7,7 @@ namespace Pingo
     public class Host
     {
         //Stores status of the ping
-        protected enum PingStatus { Online, Offline, Error }
+        protected enum PingStatus { Online, Offline, Unreachable }
         protected PingStatus status;
 
         //Used to ping
@@ -58,7 +58,7 @@ namespace Pingo
             catch (Exception)
             {
                 //Could be error if DNS could not resolve host
-                status = PingStatus.Error;
+                status = PingStatus.Unreachable;
             }
         }
 
@@ -77,8 +77,8 @@ namespace Pingo
                 case PingStatus.Offline:
                     strStatus = "Offline";
                     break;
-                case PingStatus.Error:
-                    strStatus = "Error";
+                case PingStatus.Unreachable:
+                    strStatus = "Unreachable";
                     break;
             }
 

@@ -460,10 +460,10 @@
                                             <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
                                         </MultiDataTrigger>
 
-                                        <!-- If host error -->
+                                        <!-- If host unreachable -->
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding Status}" Value="Unreachable" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="False"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoGray}" />
@@ -471,7 +471,7 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding Status}" Value="Unreachable" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsMouseOver}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoMouseOverGray}" />
@@ -479,7 +479,7 @@
                                         </MultiDataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Status}" Value="Error" />
+                                                <Condition Binding="{Binding Status}" Value="Unreachable" />
                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self},  Path=IsSelected}" Value="True"/>
                                             </MultiDataTrigger.Conditions>
                                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource PingoPressedGray}" />
