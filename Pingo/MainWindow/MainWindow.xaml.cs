@@ -257,10 +257,10 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    lock (globalLock)
+            lock (globalLock)
+            {
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
                     {
                         lock (threadLock)
                         {
@@ -283,19 +283,19 @@ namespace Pingo
                                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                    }
-                }));
+                    }));
 
-            backgroundThread.IsBackground = true;
-            backgroundThread.Start();
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
+            }
         }
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    lock (globalLock)
+            lock (globalLock)
+            {
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
                     {
                         lock (threadLock)
                         {
@@ -318,11 +318,11 @@ namespace Pingo
                                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                    }
-                }));
+                    }));
 
-            backgroundThread.IsBackground = true;
-            backgroundThread.Start();
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
+            }
         }
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
@@ -449,10 +449,10 @@ namespace Pingo
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    lock (globalLock)
+            lock (globalLock)
+            {
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
                     {
                         lock (threadLock)
                         {
@@ -471,19 +471,19 @@ namespace Pingo
                                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                    }
-                }));
+                    }));
 
-            backgroundThread.IsBackground = true;
-            backgroundThread.Start();
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
+            }
         }
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    lock (globalLock)
+            lock (globalLock)
+            {
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
                     {
                         lock (threadLock)
                         {
@@ -513,29 +513,30 @@ namespace Pingo
                                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
-                    }
-                }));
 
-            backgroundThread.IsBackground = true;
-            backgroundThread.Start();
+                    }));
+
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
+            }
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            Thread backgroundThread = new Thread(
-                new ThreadStart(() =>
-                {
-                    lock (globalLock)
+            lock (globalLock)
+            {
+                Thread backgroundThread = new Thread(
+                    new ThreadStart(() =>
                     {
                         lock (threadLock)
                         {
                             io.Export();
                         }
-                    }
-                }));
+                    }));
 
-            backgroundThread.IsBackground = true;
-            backgroundThread.Start();
+                backgroundThread.IsBackground = true;
+                backgroundThread.Start();
+            }
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -581,7 +582,10 @@ namespace Pingo
                     Clipboard.SetText(hostList.GetHostsAsList()[lsvOutput.SelectedIndex].ToString()[0]);
                     MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
