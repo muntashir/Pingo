@@ -31,7 +31,7 @@ namespace Pingo
         //Check if host not pinged yet
         public bool IsNotPinged()
         {
-            if (pingReply == null)
+            if (pingReply == null && status != PingStatus.Unreachable)
                 return true;
             else
                 return false;
