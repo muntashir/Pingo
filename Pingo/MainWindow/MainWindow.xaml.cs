@@ -58,7 +58,7 @@ namespace Pingo
 
                 try
                 {
-                    if (txtInput.Text == "" || txtInput.Text == "Enter a hostname or IP address")
+                    if (txtInput.Text.Trim() == "" || txtInput.Text == "Enter a hostname or IP address")
                         throw new Exception("Invalid Input");
                     else
                     {
@@ -166,7 +166,6 @@ namespace Pingo
 
                 try
                 {
-
                     timers.ResetTimeElapsed();
 
                     Thread backgroundThread = new Thread(
@@ -598,7 +597,7 @@ namespace Pingo
                 btnEnter.IsEnabled = false;
                 btnExport.IsEnabled = false;
                 btnRefreshAll.IsEnabled = false;
-                btnRefreshSelected.IsEnabled = false; 
+                btnRefreshSelected.IsEnabled = false;
                 btnPlus.IsEnabled = false;
                 btnMinus.IsEnabled = false;
                 btnTogglePolling.IsEnabled = false;
