@@ -588,5 +588,33 @@ namespace Pingo
                 }
             }
         }
+
+        private void progressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (progressBar.Value != 0)
+            {
+                btnDeleteAll.IsEnabled = false;
+                btnDeleteSelected.IsEnabled = false;
+                btnEnter.IsEnabled = false;
+                btnExport.IsEnabled = false;
+                btnRefreshAll.IsEnabled = false;
+                btnRefreshSelected.IsEnabled = false; 
+                btnPlus.IsEnabled = false;
+                btnMinus.IsEnabled = false;
+                btnTogglePolling.IsEnabled = false;
+            }
+            else
+            {
+                btnDeleteAll.IsEnabled = true;
+                btnDeleteSelected.IsEnabled = true;
+                btnEnter.IsEnabled = true;
+                btnExport.IsEnabled = true;
+                btnRefreshAll.IsEnabled = true;
+                btnRefreshSelected.IsEnabled = true;
+                btnPlus.IsEnabled = true;
+                btnMinus.IsEnabled = true;
+                btnTogglePolling.IsEnabled = true;
+            }
+        }
     }
 }
