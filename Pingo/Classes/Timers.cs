@@ -44,7 +44,7 @@ namespace Pingo
         //Updates time to next update textbox
         private void timeToNextUpdateTimer_Tick(object sender, object e)
         {
-            mainWindow.lblNextUpdate.Content = "Next update in " + (updateTimer.Interval - timeElapsed);
+            mainWindow.lblNextUpdate.Content = String.Format("Next update in {0:00}:{1:00} minutes", (updateTimer.Interval - timeElapsed).Minutes, (updateTimer.Interval - timeElapsed).Seconds);
             timeElapsed = timeElapsed.Add(new TimeSpan(0, 0, 1));
         }
 
