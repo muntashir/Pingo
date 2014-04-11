@@ -65,7 +65,7 @@ namespace Pingo
         {
             foreach (Host host in hosts)
             {
-                if (host.ToString()[0] == line)
+                if (host.ToString()[0].ToUpper() == line.ToUpper())
                 {
                     return true;
                 }
