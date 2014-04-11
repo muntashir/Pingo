@@ -40,9 +40,6 @@ namespace Pingo
         //Gets status of the host with a ping
         public void Ping()
         {
-            //Default status offline
-            status = PingStatus.Offline;
-
             //Set timestamp to current time
             timestamp = DateTime.Now;
 
@@ -54,10 +51,13 @@ namespace Pingo
                 //Sets status to sucess if ping is successful
                 if (pingReply.Status == IPStatus.Success)
                     status = PingStatus.Online;
+                else if (pingReply.Status == IPStatus.TimedOut)
+                    status = PingStatus.Offline;
+                else
+                    status = PingStatus.Unreachable;
             }
             catch (Exception)
             {
-                //Could be error if DNS could not resolve host
                 status = PingStatus.Unreachable;
             }
         }
