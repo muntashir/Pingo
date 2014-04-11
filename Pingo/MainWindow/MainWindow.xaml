@@ -520,7 +520,7 @@
                 <TextBlock SnapsToDevicePixels="True" TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete Selection"/></TextBlock>
             </Button>
 
-            <Button x:Name="btnDeleteAll" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,130" Height="54" Click="btnClear_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
+            <Button x:Name="btnDeleteAll" Style="{StaticResource FlatButtonStyle}" VerticalAlignment="Bottom" Margin="0,0,0,130" Height="54" Click="btnDeleteAll_Click" FontSize="14" HorizontalAlignment="Right" Width="93" Background="{StaticResource AccentColor}" Foreground="Black" Focusable="False">
                 <TextBlock SnapsToDevicePixels="True" TextWrapping="Wrap" TextAlignment="Center"><Run Text="Delete All"/></TextBlock>
             </Button>
 
