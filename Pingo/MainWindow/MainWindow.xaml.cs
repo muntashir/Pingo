@@ -297,7 +297,8 @@ namespace Pingo
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         //Remove sort arrow
-                                        lastHeaderClicked.Column.HeaderTemplate = null;
+                                        if (lastHeaderClicked != null)
+                                            lastHeaderClicked.Column.HeaderTemplate = null;
 
                                         this.Title = "Pingo - Idle";
 
