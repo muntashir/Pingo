@@ -83,7 +83,7 @@ namespace Pingo
             }
 
             //Returns string array of hostname, status, and timestamp of ping
-            String[] output = { hostname, strStatus, timestamp.ToLongTimeString() + " " + timestamp.ToShortDateString() };
+            String[] output = { hostname, strStatus, timestamp.ToLongTimeString() + "  " + timestamp.ToShortDateString() };
             return output;
         }
     }
