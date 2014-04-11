@@ -27,6 +27,7 @@ namespace Pingo
 
         GridViewColumnHeader lastHeaderClicked = null;
         ListSortDirection lastDirection = ListSortDirection.Ascending;
+        SortDescription sd;
 
         //Constructor
         public MainWindow()
@@ -124,7 +125,7 @@ namespace Pingo
                 sortBy = "Timestamp";
 
             dataView.SortDescriptions.Clear();
-            SortDescription sd = new SortDescription(sortBy, direction);
+            sd = new SortDescription(sortBy, direction);
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
         }
@@ -437,6 +438,8 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
+                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         this.Title = "Pingo - Working";
@@ -468,6 +471,8 @@ namespace Pingo
                                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                                 TaskbarItemInfo.ProgressValue = 0;
                                                 hostList.UpdateData();
+                                                dataView.SortDescriptions.Add(sd);
+                                                dataView.Refresh();
                                             }));
                                 }
                             }
