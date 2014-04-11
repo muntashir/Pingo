@@ -57,6 +57,7 @@ namespace Pingo
         {
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
+            lsvOutput.SelectedItems.Clear();
 
             if (headerClicked != null)
             {
@@ -548,7 +549,7 @@ namespace Pingo
             }
         }
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        private void btnDeleteAll_Click(object sender, RoutedEventArgs e)
         {
             lock (globalLock)
             {
@@ -565,6 +566,13 @@ namespace Pingo
                                     new Action(() =>
                                     {
                                         hostList.UpdateData();
+
+                                        //Remove sort arrow
+                                        if (lastHeaderClicked != null)
+                                            lastHeaderClicked.Column.HeaderTemplate = null;
+
+                                        lastHeaderClicked = null;
+                                        lastDirection = ListSortDirection.Ascending;
                                     }));
                             }
                             catch (Exception ex)
