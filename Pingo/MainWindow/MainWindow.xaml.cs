@@ -300,6 +300,9 @@ namespace Pingo
                                         if (lastHeaderClicked != null)
                                             lastHeaderClicked.Column.HeaderTemplate = null;
 
+                                        lastHeaderClicked = null;
+                                        lastDirection = ListSortDirection.Ascending;
+
                                         this.Title = "Pingo - Idle";
 
                                         if (wasTimerEnabled)
