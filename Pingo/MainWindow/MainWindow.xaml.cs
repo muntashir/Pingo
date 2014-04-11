@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Shell;
 
 namespace Pingo
@@ -23,6 +26,9 @@ namespace Pingo
         //Locks
         object globalLock = new object();
         object threadLock = new object();
+
+        GridViewColumnHeader lastHeaderClicked = null;
+        ListSortDirection lastDirection = ListSortDirection.Ascending;
 
         //Constructor
         public MainWindow()
@@ -45,6 +51,84 @@ namespace Pingo
 
             //Set ListView source
             lsvOutput.ItemsSource = hostList.GetHostsAsDataTable().DefaultView;
+        }
+
+        // Header click event
+        void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+            ListSortDirection direction;
+
+            if (headerClicked != null)
+            {
+                string header = headerClicked.Column.Header as string;
+
+                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                {
+                    if (headerClicked != this.lastHeaderClicked)
+                    {
+                        direction = ListSortDirection.Ascending;
+                        Sort(header, direction);
+                    }
+                    else
+                    {
+                        if (this.lastDirection == ListSortDirection.Ascending)
+                        {
+                            direction = ListSortDirection.Descending;
+                            Sort(header, direction);
+                        }
+                        else
+                        {
+                            headerClicked.Column.HeaderTemplate = null;
+                            direction = ListSortDirection.Ascending;
+                            headerClicked = null;
+                            lastHeaderClicked = null;
+
+                            ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                            dataView.SortDescriptions.Clear();
+                        }
+                    }
+
+                    if (headerClicked != null)
+                    {
+                        if (direction == ListSortDirection.Ascending)
+                        {
+                            headerClicked.Column.HeaderTemplate =
+                              Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                        }
+                        else if (direction == ListSortDirection.Descending)
+                        {
+                            headerClicked.Column.HeaderTemplate =
+                              Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                        }
+                    }
+
+                    //Remove arrow from previously sorted header 
+                    if (this.lastHeaderClicked != null && this.lastHeaderClicked != headerClicked)
+                    {
+                        this.lastHeaderClicked.Column.HeaderTemplate = null;
+                    }
+
+                    this.lastHeaderClicked = headerClicked;
+                    this.lastDirection = direction;
+                }
+            }
+        }
+
+        // Sort code
+        private void Sort(string sortBy, ListSortDirection direction)
+        {
+            ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+
+            sortBy = sortBy.TrimStart();
+
+            if (sortBy == "Last Updated")
+                sortBy = "Timestamp";
+
+            dataView.SortDescriptions.Clear();
+            SortDescription sd = new SortDescription(sortBy, direction);
+            dataView.SortDescriptions.Add(sd);
+            dataView.Refresh();
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -175,6 +259,10 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
+                                    //Remove Sort
+                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                                    dataView.SortDescriptions.Clear();
+
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         this.Title = "Pingo - Working";
@@ -210,6 +298,9 @@ namespace Pingo
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
+                                        //Remove sort arrow
+                                        lastHeaderClicked.Column.HeaderTemplate = null;
+
                                         this.Title = "Pingo - Idle";
 
                                         if (wasTimerEnabled)

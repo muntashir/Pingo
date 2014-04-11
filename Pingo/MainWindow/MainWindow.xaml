@@ -5,6 +5,20 @@
         Title="Pingo - Idle" MinHeight="429" MinWidth="670" Height="429" Width="670" Icon="/Resources\icon.ico" Loaded="MainWindow_Loaded" WindowStyle="None" ResizeMode="CanResizeWithGrip" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown" BorderThickness="2" >
 
     <Window.Resources>
+        <DataTemplate x:Key="HeaderTemplateArrowUp">
+            <DockPanel LastChildFill="True" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GridViewColumnHeader}}}">
+                <Path x:Name="arrowUp" StrokeThickness="1" Fill="Gray" Data="M 5,10 L 15,10 L 10,5 L 5,10" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="5,0,5,0" SnapsToDevicePixels="True"/>
+                <TextBlock Text="{Binding }" />
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HeaderTemplateArrowDown">
+            <DockPanel LastChildFill="True" Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GridViewColumnHeader}}}">
+                <Path x:Name="arrowDown" StrokeThickness="1" Fill="Gray"  Data="M 5,5 L 10,10 L 15,5 L 5,5" DockPanel.Dock="Right" Width="20" HorizontalAlignment="Right" Margin="5,0,5,0" SnapsToDevicePixels="True"/>
+                <TextBlock Text="{Binding }" />
+            </DockPanel>
+        </DataTemplate>
+        
         <!-- Theme colors -->
         <SolidColorBrush x:Key="DarkAccent" Color="#FF9FF6F9" />
         <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
@@ -238,7 +252,7 @@
             <Rectangle Fill="{StaticResource AccentColor}" HorizontalAlignment="Right" Width="93"/>
 
             <!-- Output ListView -->
-            <ListView x:Name="lsvOutput" Margin="10,79,104,77" Grid.IsSharedSizeScope="True" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Extended" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0" Focusable="False" >
+            <ListView x:Name="lsvOutput" Margin="10,79,104,77" Grid.IsSharedSizeScope="True" FontSize="14" MouseDoubleClick="lsvOutput_MouseDoubleClick" SelectionMode="Extended" Background="{StaticResource AccentColor}" Foreground="Black" BorderThickness="0" Focusable="False" GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type GridViewColumnHeader}">
                         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -248,33 +262,24 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
                                     <Grid SnapsToDevicePixels="true">
-
-                                        <Border Name="HeaderBorder"
-                                BorderThickness="0,1,0,1"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                Background="{TemplateBinding Background}">
-
+                                        <Border Name="HeaderBorder" BorderThickness="0,1,0,1" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition MaxHeight="7"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col0"/>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col1"/>
                                                     <ColumnDefinition Width="5*" SharedSizeGroup="col2"/>
                                                 </Grid.ColumnDefinitions>
-
                                                 <Border Grid.RowSpan="2" Padding="{TemplateBinding Padding}">
-
                                                     <ContentPresenter Name="HeaderContent"
                                                       Margin="0,0,0,1"
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                       RecognizesAccessKey="True"
                                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-
                                                 </Border>
                                             </Grid>
                                         </Border>
@@ -315,7 +320,6 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="0.00001*" />
                                         </Grid.RowDefinitions>
-
                                         <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="false">
                                             <Track.Thumb>
                                                 <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" Style="{DynamicResource ScrollThumbs}" />
@@ -328,7 +332,6 @@
                                             </Track.DecreaseRepeatButton>
                                         </Track>
                                     </Grid>
-
                                     <ControlTemplate.Triggers>
                                         <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
                                             <Setter Value="{StaticResource MouseOverColor}" TargetName="Thumb" Property="Background" />
