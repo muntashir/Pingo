@@ -507,6 +507,8 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
+                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
@@ -525,6 +527,8 @@ namespace Pingo
                                         }
 
                                         hostList.UpdateData();
+                                        dataView.SortDescriptions.Add(sd);
+                                        dataView.Refresh();
                                     }));
                                 }
                             }
