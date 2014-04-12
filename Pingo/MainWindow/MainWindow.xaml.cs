@@ -55,8 +55,11 @@ namespace Pingo
         }
 
         // Header click event
-        void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
+        void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
+            if (progressBar.Value > 0)
+                return;
+
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
 
@@ -128,6 +131,7 @@ namespace Pingo
             sd = new SortDescription(sortBy, direction);
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
+            CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView).Refresh();
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -437,11 +441,6 @@ namespace Pingo
                 {
                     List<int> selectedIndices = new List<int>();
 
-                    IList prevItems = lsvOutput.SelectedItems;
-
-                    for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
-                        prevItems.Add(lsvOutput.SelectedItems[i]);
-
                     for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
                     {
                         selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
@@ -493,12 +492,15 @@ namespace Pingo
                                                 hostList.UpdateData();
 
                                                 if (sd.PropertyName != null)
+                                                {
+                                                    dataView.SortDescriptions.Clear();
                                                     dataView.SortDescriptions.Add(sd);
+                                                    dataView.Refresh();
+                                                    sd = new SortDescription();
+                                                }
 
-                                                dataView.Refresh();
-
-                                                for(int i = 0; i < prevItems.Count; i++)
-                                                    lsvOutput.SelectedItems.Add(prevItems[i]);
+                                                for(int i = 0; i < selectedIndices.Count; i++)
+                                                    lsvOutput.SelectedItems.Add(lsvOutput.Items[selectedIndices[i]]);
                                             }));
                                 }
                             }
@@ -713,7 +715,7 @@ namespace Pingo
             {
                 try
                 {
-                    Clipboard.SetText(hostList.GetHostsAsList()[lsvOutput.SelectedIndex].ToString()[0]);
+                    Clipboard.SetText(hostList.GetHostsAsList()[hostList.GetHostsAsDataTable().DefaultView.Find(lsvOutput.SelectedItems[0])].ToString()[0]);
                     MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
