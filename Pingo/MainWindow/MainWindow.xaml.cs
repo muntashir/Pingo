@@ -62,6 +62,8 @@ namespace Pingo
 
         private void UpdateSelectedIndices()
         {
+            selectedIndices.Clear();
+
             for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
             {
                 selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
@@ -446,8 +448,6 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
-                                    //dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         this.Title = "Pingo - Working";
@@ -482,11 +482,7 @@ namespace Pingo
                                                     dataView.SortDescriptions.Clear();
                                                     dataView.SortDescriptions.Add(sd);
                                                     dataView.Refresh();
-                                                    sd = new SortDescription();
                                                 }
-
-                                                //for(int i = 0; i < selectedIndices.Count; i++)
-                                                //    lsvOutput.SelectedItems.Add(lsvOutput.Items[selectedIndices[i]]);
                                             }));
                                 }
                             }
