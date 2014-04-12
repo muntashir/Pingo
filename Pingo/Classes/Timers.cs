@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace Pingo
+namespace Pingo.Classes
 {
     //Handles all time related things
     public class Timers

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 
-namespace Pingo
+namespace Pingo.Classes
 {
     //Stores data about a host
     public class Host

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace Pingo
+namespace Pingo.Classes
 {
     //Stores a List of all hosts and a ToString of each host as a DataTable
     public class HostList

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
-namespace Pingo
+namespace Pingo.Classes
 {
     //Handles IO
     public class IO
