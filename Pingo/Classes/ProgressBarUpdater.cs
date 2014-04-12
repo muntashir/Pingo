@@ -9,7 +9,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Shell;
 
 namespace Pingo.Classes
-{    public class ProgressBarUpdater
+{
+    public class ProgressBarUpdater
     {
         ProgressBar progressBar;
         MainWindow mainWindow;
@@ -23,8 +24,11 @@ namespace Pingo.Classes
         public void UpdateProgressBar(double numerator, double denominator)
         {
             Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
-            DoubleAnimation doubleanimation = new DoubleAnimation((numerator / denominator) * 100.0, duration);
-            progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+            if (numerator != 0 && denominator != 0)
+            {
+                DoubleAnimation doubleanimation = new DoubleAnimation((numerator / denominator) * 100.0, duration);
+                progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+            }
 
             mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             mainWindow.TaskbarItemInfo.ProgressValue = numerator / denominator;
@@ -35,7 +39,7 @@ namespace Pingo.Classes
             progressBar.BeginAnimation(ProgressBar.ValueProperty, null);
             progressBar.Value = 0;
 
-            mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;;
+            mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None; 
             mainWindow.TaskbarItemInfo.ProgressValue = 0;
         }
     }
