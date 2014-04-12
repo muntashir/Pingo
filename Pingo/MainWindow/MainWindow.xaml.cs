@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
 using System.Windows.Shell;
 
 namespace Pingo
@@ -27,7 +29,7 @@ namespace Pingo
 
         GridViewColumnHeader lastHeaderClicked = null;
         ListSortDirection lastDirection = ListSortDirection.Ascending;
-        SortDescription sd;
+        SortDescription sd = new SortDescription();
 
         //Constructor
         public MainWindow()
@@ -57,7 +59,6 @@ namespace Pingo
         {
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
             ListSortDirection direction;
-            lsvOutput.SelectedItems.Clear();
 
             if (headerClicked != null && headerClicked.Role != GridViewColumnHeaderRole.Padding)
             {
@@ -84,6 +85,7 @@ namespace Pingo
 
                         ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
                         dataView.SortDescriptions.Clear();
+                        dataView.Refresh();
                     }
                 }
 
@@ -112,7 +114,7 @@ namespace Pingo
             }
         }
 
-        // Sort code
+        //Sort code
         private void Sort(string sortBy, ListSortDirection direction)
         {
             ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
@@ -169,13 +171,16 @@ namespace Pingo
                                         foreach (string line in multiLineHost)
                                         {
                                             if (hostList.IsDuplicate(line))
-                                                duplicates += line + " ";
+                                                duplicates += line + ", ";
                                             else
                                                 hostList.AddHost(line);
                                         }
 
                                         if (duplicates != "")
-                                            MessageBox.Show(duplicates + "already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                        {
+                                            duplicates = duplicates.Remove(duplicates.Length - 2);
+                                            MessageBox.Show("Hosts " + duplicates + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                        }
 
                                         //Pings hosts in parallel
                                         Parallel.ForEach(hostList.GetHostsAsList(), host =>
@@ -183,7 +188,10 @@ namespace Pingo
                                             progressBar.Dispatcher.BeginInvoke(
                                                 new Action(() =>
                                                 {
-                                                    progressBar.Value = (i / double.Parse(multiLineHost.Count().ToString())) * 100.0;
+                                                    Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
+                                                    DoubleAnimation doubleanimation = new DoubleAnimation((i / double.Parse(multiLineHost.Count().ToString())) * 100.0, duration);
+                                                    progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+
                                                     TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                                     TaskbarItemInfo.ProgressValue = (i / double.Parse(multiLineHost.Count().ToString()));
                                                 }));
@@ -198,6 +206,7 @@ namespace Pingo
                                         progressBar.Dispatcher.BeginInvoke(
                                         new Action(() =>
                                         {
+                                            progressBar.BeginAnimation(ProgressBar.ValueProperty, null);
                                             progressBar.Value = 0;
                                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                             TaskbarItemInfo.ProgressValue = 0;
@@ -274,7 +283,10 @@ namespace Pingo
                                         progressBar.Dispatcher.BeginInvoke(
                                             new Action(() =>
                                             {
-                                                progressBar.Value = (i / double.Parse(hostList.GetHostsAsList().Count().ToString())) * 100.0;
+                                                Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
+                                                DoubleAnimation doubleanimation = new DoubleAnimation((i / double.Parse(hostList.GetHostsAsList().Count().ToString())) * 100.0, duration);
+                                                progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+
                                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                                 TaskbarItemInfo.ProgressValue = (i / double.Parse(hostList.GetHostsAsList().Count().ToString()));
                                             }));
@@ -287,6 +299,7 @@ namespace Pingo
                                     progressBar.Dispatcher.BeginInvoke(
                                         new Action(() =>
                                         {
+                                            progressBar.BeginAnimation(ProgressBar.ValueProperty, null);
                                             progressBar.Value = 0;
                                             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                             TaskbarItemInfo.ProgressValue = 0;
@@ -424,6 +437,11 @@ namespace Pingo
                 {
                     List<int> selectedIndices = new List<int>();
 
+                    IList prevItems = lsvOutput.SelectedItems;
+
+                    for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
+                        prevItems.Add(lsvOutput.SelectedItems[i]);
+
                     for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
                     {
                         selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
@@ -452,7 +470,10 @@ namespace Pingo
                                         {
                                             progressBar.Dispatcher.BeginInvoke(new Action(() =>
                                             {
-                                                progressBar.Value = (progress / double.Parse(selectedIndices.Count().ToString())) * 100.0;
+                                                Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
+                                                DoubleAnimation doubleanimation = new DoubleAnimation((progress / double.Parse(selectedIndices.Count().ToString())) * 100.0, duration);
+                                                progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
+
                                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
                                                 TaskbarItemInfo.ProgressValue = (progress / double.Parse(selectedIndices.Count().ToString()));
                                             }));
@@ -465,12 +486,19 @@ namespace Pingo
                                     progressBar.Dispatcher.BeginInvoke(
                                         new Action(() =>
                                             {
+                                                progressBar.BeginAnimation(ProgressBar.ValueProperty, null);
                                                 progressBar.Value = 0;
                                                 TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
                                                 TaskbarItemInfo.ProgressValue = 0;
                                                 hostList.UpdateData();
-                                                dataView.SortDescriptions.Add(sd);
+
+                                                if (sd.PropertyName != null)
+                                                    dataView.SortDescriptions.Add(sd);
+
                                                 dataView.Refresh();
+
+                                                for(int i = 0; i < prevItems.Count; i++)
+                                                    lsvOutput.SelectedItems.Add(prevItems[i]);
                                             }));
                                 }
                             }
