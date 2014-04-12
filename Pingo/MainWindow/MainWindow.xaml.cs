@@ -59,59 +59,56 @@ namespace Pingo
             ListSortDirection direction;
             lsvOutput.SelectedItems.Clear();
 
-            if (headerClicked != null)
+            if (headerClicked != null && headerClicked.Role != GridViewColumnHeaderRole.Padding)
             {
                 string header = headerClicked.Column.Header as string;
 
-                if (headerClicked.Role != GridViewColumnHeaderRole.Padding)
+                if (headerClicked != this.lastHeaderClicked)
                 {
-                    if (headerClicked != this.lastHeaderClicked)
+                    direction = ListSortDirection.Ascending;
+                    Sort(header, direction);
+                }
+                else
+                {
+                    if (this.lastDirection == ListSortDirection.Ascending)
                     {
-                        direction = ListSortDirection.Ascending;
+                        direction = ListSortDirection.Descending;
                         Sort(header, direction);
                     }
                     else
                     {
-                        if (this.lastDirection == ListSortDirection.Ascending)
-                        {
-                            direction = ListSortDirection.Descending;
-                            Sort(header, direction);
-                        }
-                        else
-                        {
-                            headerClicked.Column.HeaderTemplate = null;
-                            direction = ListSortDirection.Ascending;
-                            headerClicked = null;
-                            lastHeaderClicked = null;
+                        headerClicked.Column.HeaderTemplate = null;
+                        direction = ListSortDirection.Ascending;
+                        headerClicked = null;
+                        lastHeaderClicked = null;
 
-                            ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-                            dataView.SortDescriptions.Clear();
-                        }
+                        ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                        dataView.SortDescriptions.Clear();
                     }
-
-                    if (headerClicked != null)
-                    {
-                        if (direction == ListSortDirection.Ascending)
-                        {
-                            headerClicked.Column.HeaderTemplate =
-                              Resources["HeaderTemplateArrowUp"] as DataTemplate;
-                        }
-                        else if (direction == ListSortDirection.Descending)
-                        {
-                            headerClicked.Column.HeaderTemplate =
-                              Resources["HeaderTemplateArrowDown"] as DataTemplate;
-                        }
-                    }
-
-                    //Remove arrow from previously sorted header 
-                    if (this.lastHeaderClicked != null && this.lastHeaderClicked != headerClicked)
-                    {
-                        this.lastHeaderClicked.Column.HeaderTemplate = null;
-                    }
-
-                    this.lastHeaderClicked = headerClicked;
-                    this.lastDirection = direction;
                 }
+
+                if (headerClicked != null)
+                {
+                    if (direction == ListSortDirection.Ascending)
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowUp"] as DataTemplate;
+                    }
+                    else if (direction == ListSortDirection.Descending)
+                    {
+                        headerClicked.Column.HeaderTemplate =
+                          Resources["HeaderTemplateArrowDown"] as DataTemplate;
+                    }
+                }
+
+                //Remove arrow from previously sorted header 
+                if (this.lastHeaderClicked != null && this.lastHeaderClicked != headerClicked)
+                {
+                    this.lastHeaderClicked.Column.HeaderTemplate = null;
+                }
+
+                this.lastHeaderClicked = headerClicked;
+                this.lastDirection = direction;
             }
         }
 
