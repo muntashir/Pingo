@@ -1,6 +1,5 @@
 ﻿using Pingo.Classes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media.Animation;
 using System.Windows.Shell;
 
 namespace Pingo
@@ -34,6 +32,8 @@ namespace Pingo
         SortDescription sd = new SortDescription();
 
         List<int> selectedIndices = new List<int>();
+
+        ICollectionView dataView;
 
         //Constructor
         public MainWindow()
@@ -100,7 +100,7 @@ namespace Pingo
                         headerClicked = null;
                         lastHeaderClicked = null;
 
-                        ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                        dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
                         dataView.SortDescriptions.Clear();
                         dataView.Refresh();
                     }
@@ -134,7 +134,7 @@ namespace Pingo
         //Sort code
         private void Sort(string sortBy, ListSortDirection direction)
         {
-            ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+            dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
 
             sortBy = sortBy.TrimStart();
 
@@ -275,7 +275,7 @@ namespace Pingo
                                 lock (threadLock)
                                 {
                                     //Remove Sort
-                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                                    dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
                                     dataView.SortDescriptions.Clear();
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
@@ -446,7 +446,7 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
-                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                                    //dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -520,7 +520,7 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
-                                    ICollectionView dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                                    dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
 
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
