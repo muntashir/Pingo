@@ -269,9 +269,9 @@
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col0"/>
-                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col1"/>
-                                                    <ColumnDefinition Width="5*" SharedSizeGroup="col2"/>
+                                                    <ColumnDefinition Width="10*" SharedSizeGroup="col0"/>
+                                                    <ColumnDefinition Width="10*" SharedSizeGroup="col1"/>
+                                                    <ColumnDefinition Width="10*" SharedSizeGroup="col2"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Border Grid.RowSpan="2" Padding="{TemplateBinding Padding}">
                                                     <ContentPresenter Name="HeaderContent"
@@ -388,9 +388,9 @@
                 </ListView.Resources>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Hostname}" Header="   Hostname" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="   Status" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Timestamp}" Header="   Last Updated" />
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Hostname}" Header="   Hostname" />
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Status}" Header="   Status" />
+                        <GridViewColumn Width="150" DisplayMemberBinding="{Binding Timestamp}" Header="   Last Updated" />
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
