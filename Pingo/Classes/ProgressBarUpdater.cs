@@ -35,7 +35,7 @@ namespace Pingo.Classes
             progressBar.BeginAnimation(ProgressBar.ValueProperty, null);
             progressBar.Value = 0;
 
-            mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None; 
+            mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
             mainWindow.TaskbarItemInfo.ProgressValue = 0;
         }
     }
