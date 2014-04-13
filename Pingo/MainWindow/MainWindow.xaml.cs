@@ -1,6 +1,5 @@
 ﻿using Pingo.Classes;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -22,18 +21,11 @@ namespace Pingo
         protected Timers timers = new Timers();
         protected IO io;
         protected ProgressBarUpdater progressBarUpdater;
+        protected ListViewHelper listViewHelper;
 
         //Locks
         object globalLock = new object();
         object threadLock = new object();
-
-        GridViewColumnHeader lastHeaderClicked = null;
-        ListSortDirection lastDirection = ListSortDirection.Ascending;
-        SortDescription sd = new SortDescription();
-
-        List<int> selectedIndices = new List<int>();
-
-        ICollectionView dataView;
 
         //Constructor
         public MainWindow()
@@ -49,6 +41,8 @@ namespace Pingo
             //Initialize objects
             io = new IO(hostList);
             timers = new Timers(this);
+            listViewHelper = new ListViewHelper(this, hostList);
+            progressBarUpdater = new ProgressBarUpdater(progressBar, this);
 
             //Focus and highlight textbox
             txtInput.Focus();
@@ -56,22 +50,6 @@ namespace Pingo
 
             //Set ListView source
             lsvOutput.ItemsSource = hostList.GetHostsAsDataTable().DefaultView;
-
-            progressBarUpdater = new ProgressBarUpdater(progressBar, this);
-        }
-
-        private void UpdateSelectedIndices()
-        {
-            selectedIndices.Clear();
-
-            for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
-            {
-                dataView.SortDescriptions.Clear();
-                selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
-
-                if (sd.PropertyName != null)
-                    dataView.SortDescriptions.Add(sd);
-            }
         }
 
         //Header click event
@@ -87,30 +65,30 @@ namespace Pingo
             {
                 string header = headerClicked.Column.Header as string;
 
-                if (headerClicked != this.lastHeaderClicked)
+                if (headerClicked != listViewHelper.LastHeaderClicked)
                 {
                     direction = ListSortDirection.Ascending;
-                    Sort(header, direction);
+                    listViewHelper.Sort(header, direction);
                 }
                 else
                 {
-                    if (this.lastDirection == ListSortDirection.Ascending)
+                    if (listViewHelper.LastSortDirection == ListSortDirection.Ascending)
                     {
                         direction = ListSortDirection.Descending;
-                        Sort(header, direction);
+                        listViewHelper.Sort(header, direction);
                     }
                     else
                     {
                         headerClicked.Column.HeaderTemplate = null;
                         direction = ListSortDirection.Ascending;
                         headerClicked = null;
-                        lastHeaderClicked = null;
+                        listViewHelper.LastHeaderClicked = null;
 
-                        dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-                        dataView.SortDescriptions.Clear();
-                        dataView.Refresh();
+                        listViewHelper.View = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                        listViewHelper.View.SortDescriptions.Clear();
+                        listViewHelper.View.Refresh();
 
-                        sd = new SortDescription();
+                        listViewHelper.CurrentSort = new SortDescription();
                     }
                 }
 
@@ -129,30 +107,14 @@ namespace Pingo
                 }
 
                 //Remove arrow from previously sorted header 
-                if (this.lastHeaderClicked != null && this.lastHeaderClicked != headerClicked)
+                if (listViewHelper.LastHeaderClicked != null && listViewHelper.LastHeaderClicked != headerClicked)
                 {
-                    this.lastHeaderClicked.Column.HeaderTemplate = null;
+                    listViewHelper.LastHeaderClicked.Column.HeaderTemplate = null;
                 }
 
-                this.lastHeaderClicked = headerClicked;
-                this.lastDirection = direction;
+                listViewHelper.LastHeaderClicked = headerClicked;
+                listViewHelper.LastSortDirection = direction;
             }
-        }
-
-        //Sort code
-        private void Sort(string sortBy, ListSortDirection direction)
-        {
-            dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-
-            sortBy = sortBy.TrimStart();
-
-            if (sortBy == "Last Updated")
-                sortBy = "Timestamp";
-
-            dataView.SortDescriptions.Clear();
-            sd = new SortDescription(sortBy, direction);
-            dataView.SortDescriptions.Add(sd);
-            dataView.Refresh();
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -283,8 +245,8 @@ namespace Pingo
                                 lock (threadLock)
                                 {
                                     //Remove Sort
-                                    dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-                                    dataView.SortDescriptions.Clear();
+                                    listViewHelper.View = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
+                                    listViewHelper.View.SortDescriptions.Clear();
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -319,11 +281,11 @@ namespace Pingo
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         //Remove sort arrow
-                                        if (lastHeaderClicked != null)
-                                            lastHeaderClicked.Column.HeaderTemplate = null;
+                                        if (listViewHelper.LastHeaderClicked != null)
+                                            listViewHelper.LastHeaderClicked.Column.HeaderTemplate = null;
 
-                                        lastHeaderClicked = null;
-                                        lastDirection = ListSortDirection.Ascending;
+                                        listViewHelper.LastHeaderClicked = null;
+                                        listViewHelper.LastSortDirection = ListSortDirection.Ascending;
 
                                         this.Title = "Pingo - Idle";
 
@@ -454,7 +416,7 @@ namespace Pingo
                                 {
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        UpdateSelectedIndices();
+                                        listViewHelper.UpdateSelectedIndices();
 
                                         this.Title = "Pingo - Working";
                                         progressBar.Value = 0;
@@ -464,16 +426,16 @@ namespace Pingo
 
                                     double progress = 1.0;
 
-                                    Parallel.For(0, selectedIndices.Count(), i =>
+                                    Parallel.For(0, listViewHelper.GetSelectedIndices().Count(), i =>
                                         {
                                             progressBar.Dispatcher.BeginInvoke(new Action(() =>
                                             {
-                                                progressBarUpdater.UpdateProgressBar(progress, double.Parse(selectedIndices.Count().ToString()));
+                                                progressBarUpdater.UpdateProgressBar(progress, double.Parse(listViewHelper.GetSelectedIndices().Count().ToString()));
                                             }));
 
                                             progress++;
 
-                                            hostList.GetHostsAsList()[selectedIndices[i]].Ping();
+                                            hostList.GetHostsAsList()[listViewHelper.GetSelectedIndices()[i]].Ping();
                                         });
 
                                     progressBar.Dispatcher.BeginInvoke(
@@ -483,11 +445,11 @@ namespace Pingo
 
                                                 hostList.UpdateData();
 
-                                                if (sd.PropertyName != null)
+                                                if (listViewHelper.CurrentSort.PropertyName != null)
                                                 {
-                                                    dataView.SortDescriptions.Clear();
-                                                    dataView.SortDescriptions.Add(sd);
-                                                    dataView.Refresh();
+                                                    listViewHelper.View.SortDescriptions.Clear();
+                                                    listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
+                                                    listViewHelper.View.Refresh();
                                                 }
                                             }));
                                 }
@@ -523,23 +485,23 @@ namespace Pingo
                                 {
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        UpdateSelectedIndices();
-                                        dataView.SortDescriptions.Clear();
+                                        listViewHelper.UpdateSelectedIndices();
+                                        listViewHelper.View.SortDescriptions.Clear();
                                     }));
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        selectedIndices.Sort();
+                                        listViewHelper.GetSelectedIndices().Sort();
 
-                                        for (int i = 0; i < selectedIndices.Count(); i++)
+                                        for (int i = 0; i < listViewHelper.GetSelectedIndices().Count(); i++)
                                         {
-                                            hostList.GetHostsAsList().RemoveAt(selectedIndices[i] - i);
+                                            hostList.GetHostsAsList().RemoveAt(listViewHelper.GetSelectedIndices()[i] - i);
                                         }
 
                                         hostList.UpdateData();
-                                        if (sd.PropertyName != null)
-                                            dataView.SortDescriptions.Add(sd);
-                                        dataView.Refresh();
+                                        if (listViewHelper.CurrentSort.PropertyName != null)
+                                            listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
+                                        listViewHelper.View.Refresh();
                                     }));
                                 }
                             }
@@ -578,11 +540,11 @@ namespace Pingo
                                         hostList.UpdateData();
 
                                         //Remove sort arrow
-                                        if (lastHeaderClicked != null)
-                                            lastHeaderClicked.Column.HeaderTemplate = null;
+                                        if (listViewHelper.LastHeaderClicked != null)
+                                            listViewHelper.LastHeaderClicked.Column.HeaderTemplate = null;
 
-                                        lastHeaderClicked = null;
-                                        lastDirection = ListSortDirection.Ascending;
+                                        listViewHelper.LastHeaderClicked = null;
+                                        listViewHelper.LastSortDirection = ListSortDirection.Ascending;
                                     }));
                             }
                             catch (Exception ex)
@@ -698,11 +660,11 @@ namespace Pingo
             {
                 try
                 {
-                    dataView.SortDescriptions.Clear();
+                    listViewHelper.View.SortDescriptions.Clear();
                     string copy = hostList.GetHostsAsList()[lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[0])].ToString()[0];
                     Clipboard.SetText(copy);
-                    if (sd.PropertyName != null)
-                        dataView.SortDescriptions.Add(sd);
+                    if (listViewHelper.CurrentSort.PropertyName != null)
+                        listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
                     MessageBox.Show("Hostname " + copy + " copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
