@@ -94,8 +94,6 @@ namespace Pingo.Classes
 
             lastHeaderClicked = null;
             lastDirection = ListSortDirection.Ascending;
-
-            dataView.SortDescriptions.Clear();
         }
     }
 }
