@@ -195,6 +195,8 @@ namespace Pingo
 
                                         this.Dispatcher.BeginInvoke(new Action(() =>
                                         {
+                                            listViewHelper.ClearSort();
+
                                             this.Title = "Pingo - Idle";
 
                                             if (wasTimerEnabled)
@@ -244,10 +246,6 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
-                                    //Remove Sort
-                                    listViewHelper.View = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-                                    listViewHelper.View.SortDescriptions.Clear();
-
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         this.Title = "Pingo - Working";
@@ -281,11 +279,7 @@ namespace Pingo
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         //Remove sort arrow
-                                        if (listViewHelper.LastHeaderClicked != null)
-                                            listViewHelper.LastHeaderClicked.Column.HeaderTemplate = null;
-
-                                        listViewHelper.LastHeaderClicked = null;
-                                        listViewHelper.LastSortDirection = ListSortDirection.Ascending;
+                                        listViewHelper.ClearSort();
 
                                         this.Title = "Pingo - Idle";
 

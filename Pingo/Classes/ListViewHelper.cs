@@ -86,5 +86,16 @@ namespace Pingo.Classes
             get { return sd; }
             set { sd = value; }
         }
+
+        public void ClearSort()
+        {
+            if (lastHeaderClicked != null)
+                lastHeaderClicked.Column.HeaderTemplate = null;
+
+            lastHeaderClicked = null;
+            lastDirection = ListSortDirection.Ascending;
+
+            dataView.SortDescriptions.Clear();
+        }
     }
 }
