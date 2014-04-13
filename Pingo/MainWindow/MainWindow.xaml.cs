@@ -66,7 +66,11 @@ namespace Pingo
 
             for (int i = 0; i < lsvOutput.SelectedItems.Count; i++)
             {
+                dataView.SortDescriptions.Clear();
                 selectedIndices.Add(lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[i]));
+
+                if (sd.PropertyName != null)
+                    dataView.SortDescriptions.Add(sd);
             }
         }
 
@@ -105,6 +109,8 @@ namespace Pingo
                         dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
                         dataView.SortDescriptions.Clear();
                         dataView.Refresh();
+
+                        sd = new SortDescription();
                     }
                 }
 
@@ -508,7 +514,6 @@ namespace Pingo
             {
                 try
                 {
-
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
                         {
@@ -533,7 +538,8 @@ namespace Pingo
                                         }
 
                                         hostList.UpdateData();
-                                        dataView.SortDescriptions.Add(sd);
+                                        if (sd.PropertyName != null)
+                                            dataView.SortDescriptions.Add(sd);
                                         dataView.Refresh();
                                     }));
                                 }
@@ -693,8 +699,12 @@ namespace Pingo
             {
                 try
                 {
-                    Clipboard.SetText(hostList.GetHostsAsList()[hostList.GetHostsAsDataTable().DefaultView.Find(lsvOutput.SelectedItems[0])].ToString()[0]);
-                    MessageBox.Show("Hostname copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
+                    dataView.SortDescriptions.Clear();
+                    string copy = hostList.GetHostsAsList()[lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[0])].ToString()[0];
+                    Clipboard.SetText(copy);
+                    if (sd.PropertyName != null)
+                        dataView.SortDescriptions.Add(sd);
+                    MessageBox.Show("Hostname " + copy + " copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
