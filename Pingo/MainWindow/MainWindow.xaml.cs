@@ -278,7 +278,6 @@ namespace Pingo
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        //Remove sort arrow
                                         listViewHelper.ClearSort();
 
                                         this.Title = "Pingo - Idle";
