@@ -445,8 +445,6 @@ namespace Pingo
             {
                 try
                 {
-                    UpdateSelectedIndices();
-
                     Thread backgroundThread = new Thread(
                         new ThreadStart(() =>
                         {
@@ -456,6 +454,8 @@ namespace Pingo
                                 {
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
+                                        UpdateSelectedIndices();
+
                                         this.Title = "Pingo - Working";
                                         progressBar.Value = 0;
                                         TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
@@ -521,11 +521,10 @@ namespace Pingo
                             {
                                 lock (threadLock)
                                 {
-                                    dataView = CollectionViewSource.GetDefaultView(hostList.GetHostsAsDataTable().DefaultView);
-
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         UpdateSelectedIndices();
+                                        dataView.SortDescriptions.Clear();
                                     }));
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
