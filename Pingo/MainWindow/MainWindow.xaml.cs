@@ -399,6 +399,8 @@ namespace Pingo
         {
             lock (globalLock)
             {
+                listViewHelper.UpdateSelectedIndices();
+
                 try
                 {
                     Thread backgroundThread = new Thread(
@@ -410,8 +412,6 @@ namespace Pingo
                                 {
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        listViewHelper.UpdateSelectedIndices();
-
                                         this.Title = "Pingo - Working";
                                         progressBar.Value = 0;
                                         TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
@@ -422,14 +422,21 @@ namespace Pingo
 
                                     Parallel.For(0, listViewHelper.GetSelectedIndices().Count(), i =>
                                         {
-                                            progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                            try
                                             {
-                                                progressBarUpdater.UpdateProgressBar(progress, double.Parse(listViewHelper.GetSelectedIndices().Count().ToString()));
-                                            }));
+                                                progressBar.Dispatcher.BeginInvoke(new Action(() =>
+                                                {
+                                                    progressBarUpdater.UpdateProgressBar(progress, double.Parse(listViewHelper.GetSelectedIndices().Count().ToString()));
+                                                }));
 
-                                            progress++;
+                                                progress++;
 
-                                            hostList.GetHostsAsList()[listViewHelper.GetSelectedIndices()[i]].Ping();
+                                                hostList.GetHostsAsList()[listViewHelper.GetSelectedIndices()[i]].Ping();
+                                            }
+                                            catch(Exception ex)
+                                            {
+                                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
+                                            }
                                         });
 
                                     progressBar.Dispatcher.BeginInvoke(
