@@ -31,7 +31,9 @@ namespace Pingo.Classes
 
             for (int i = 0; i < mainWindow.lsvOutput.SelectedItems.Count; i++)
             {
-                dataView.SortDescriptions.Clear();
+                if (sd.PropertyName != null)
+                    dataView.SortDescriptions.Clear();
+
                 selectedIndices.Add(mainWindow.lsvOutput.Items.IndexOf(mainWindow.lsvOutput.SelectedItems[i]));
 
                 if (sd.PropertyName != null)

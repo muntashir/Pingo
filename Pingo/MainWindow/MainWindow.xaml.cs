@@ -88,7 +88,7 @@ namespace Pingo
                         listViewHelper.View.SortDescriptions.Clear();
                         listViewHelper.View.Refresh();
 
-                        listViewHelper.CurrentSort = new SortDescription();
+                        listViewHelper.CurrentSort = new SortDescription(null, ListSortDirection.Ascending);
                     }
                 }
 
@@ -433,7 +433,7 @@ namespace Pingo
 
                                                 hostList.GetHostsAsList()[listViewHelper.GetSelectedIndices()[i]].Ping();
                                             }
-                                            catch(Exception ex)
+                                            catch (Exception ex)
                                             {
                                                 MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
                                             }
@@ -475,6 +475,8 @@ namespace Pingo
         {
             lock (globalLock)
             {
+                listViewHelper.UpdateSelectedIndices();
+
                 try
                 {
                     Thread backgroundThread = new Thread(
@@ -486,8 +488,8 @@ namespace Pingo
                                 {
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
-                                        listViewHelper.UpdateSelectedIndices();
-                                        listViewHelper.View.SortDescriptions.Clear();
+                                        if (listViewHelper.CurrentSort.PropertyName != null)
+                                            listViewHelper.View.SortDescriptions.Clear();
                                     }));
 
                                     this.Dispatcher.BeginInvoke(new Action(() =>
@@ -500,9 +502,12 @@ namespace Pingo
                                         }
 
                                         hostList.UpdateData();
+
                                         if (listViewHelper.CurrentSort.PropertyName != null)
+                                        {
                                             listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
-                                        listViewHelper.View.Refresh();
+                                            listViewHelper.View.Refresh();
+                                        }
                                     }));
                                 }
                             }
