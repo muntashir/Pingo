@@ -35,12 +35,13 @@ namespace Pingo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //Initialize objects
-            hostList = new HostList(locks, this, timers, listViewHelper, progressBarUpdater);
+            hostList = new HostList(locks, this);
             io = new IO(hostList);
             progressBarUpdater = new ProgressBarUpdater(progressBar, this);
-            timers = new Timers(this, hostList);
             listViewHelper = new ListViewHelper(this, hostList);
-            hostList = new HostList(locks, this, timers, listViewHelper, progressBarUpdater);
+            timers = new Timers(this, hostList);
+            hostList.InitializeTimers(timers);
+            hostList.InitializeListViewHelper(listViewHelper);
 
             //Focus and highlight textbox
             txtInput.Focus();

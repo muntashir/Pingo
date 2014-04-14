@@ -24,7 +24,7 @@ namespace Pingo.Classes
         protected List<Host> hosts;
 
         //Constructor
-        public HostList(Locks locks, MainWindow mainWindow, Timers timers, ListViewHelper listViewHelper, ProgressBarUpdater progressBarUpdater)
+        public HostList(Locks locks, MainWindow mainWindow)
         {
             //Initialize hosts
             hosts = new List<Host>();
@@ -35,10 +35,19 @@ namespace Pingo.Classes
             data.Columns.Add("Timestamp", typeof(string));
 
             this.locks = locks;
-            this.timers = timers;
             this.mainWindow = mainWindow;
+            
+            progressBarUpdater = new ProgressBarUpdater(mainWindow.progressBar, mainWindow);
+        }
+
+        public void InitializeTimers(Timers timers)
+        {
+            this.timers = timers;
+        }
+
+        public void InitializeListViewHelper(ListViewHelper listViewHelper)
+        {
             this.listViewHelper = listViewHelper;
-            this.progressBarUpdater = progressBarUpdater;
         }
 
         //Updates DataTable with contents of hosts
