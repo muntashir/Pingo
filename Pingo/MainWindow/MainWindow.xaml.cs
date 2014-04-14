@@ -35,10 +35,11 @@ namespace Pingo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //Initialize objects
+            hostList = new HostList(locks, this, timers, listViewHelper, progressBarUpdater);
             io = new IO(hostList);
+            progressBarUpdater = new ProgressBarUpdater(progressBar, this);
             timers = new Timers(this, hostList);
             listViewHelper = new ListViewHelper(this, hostList);
-            progressBarUpdater = new ProgressBarUpdater(progressBar, this);
             hostList = new HostList(locks, this, timers, listViewHelper, progressBarUpdater);
 
             //Focus and highlight textbox
