@@ -93,6 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\IO.cs" />
     <Compile Include="Classes\ListViewHelper.cs" />
+    <Compile Include="Classes\Locks.cs" />
     <Compile Include="Classes\ProgressBarUpdater.cs" />
     <Compile Include="Classes\Timers.cs" />
     <Page Include="MainWindow\MainWindow.xaml">

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Shell;
 
 namespace Pingo
 {
@@ -17,15 +16,12 @@ namespace Pingo
     public partial class MainWindow : Window
     {
         //Objects
-        protected HostList hostList = new HostList();
+        protected HostList hostList;
         protected Timers timers = new Timers();
         protected IO io;
         protected ProgressBarUpdater progressBarUpdater;
         protected ListViewHelper listViewHelper;
-
-        //Locks
-        object globalLock = new object();
-        object threadLock = new object();
+        protected Locks locks = new Locks();
 
         //Constructor
         public MainWindow()
@@ -40,9 +36,10 @@ namespace Pingo
         {
             //Initialize objects
             io = new IO(hostList);
-            timers = new Timers(this);
+            timers = new Timers(this, hostList);
             listViewHelper = new ListViewHelper(this, hostList);
             progressBarUpdater = new ProgressBarUpdater(progressBar, this);
+            hostList = new HostList(locks, this, timers, listViewHelper, progressBarUpdater);
 
             //Focus and highlight textbox
             txtInput.Focus();
@@ -119,13 +116,8 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
-                bool wasTimerEnabled = false;
-
-                if (timers.updateTimer.IsEnabled == true)
-                    wasTimerEnabled = true;
-
                 try
                 {
                     if (txtInput.Text.Trim() == "" || txtInput.Text == "Enter a hostname or IP address")
@@ -134,86 +126,30 @@ namespace Pingo
                     {
                         String[] delim = { "\r\n", " ", "'" };
                         String[] multiLineHost = txtInput.Text.Split(delim, StringSplitOptions.RemoveEmptyEntries);
+                        double numHostsEntered = 0;
 
-                        Thread backgroundThread = new Thread(
-                            new ThreadStart(() =>
+                        //Stores all duplicates
+                        String duplicates = "";
+
+                        //Checks if each host is a duplicate, then adds it to hostList if it is not
+                        foreach (string line in multiLineHost)
+                        {
+                            if (hostList.IsDuplicate(line))
+                                duplicates += line + ", ";
+                            else
                             {
-                                try
-                                {
-                                    lock (threadLock)
-                                    {
-                                        double i = 0.0;
+                                hostList.AddHost(line);
+                                numHostsEntered++;
+                            }
+                        }
 
-                                        this.Dispatcher.BeginInvoke(new Action(() =>
-                                        {
-                                            this.Title = "Pingo - Working";
+                        if (duplicates != "")
+                        {
+                            duplicates = duplicates.Remove(duplicates.Length - 2);
+                            MessageBox.Show("Hosts " + duplicates + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
 
-                                            timers.DisableTimers();
-                                        }));
-
-                                        //Stores all duplicates
-                                        String duplicates = "";
-
-                                        //Checks if each host is a duplicate, then adds it to hostList if it is not
-                                        foreach (string line in multiLineHost)
-                                        {
-                                            if (hostList.IsDuplicate(line))
-                                                duplicates += line + ", ";
-                                            else
-                                                hostList.AddHost(line);
-                                        }
-
-                                        if (duplicates != "")
-                                        {
-                                            duplicates = duplicates.Remove(duplicates.Length - 2);
-                                            MessageBox.Show("Hosts " + duplicates + " already added", null, MessageBoxButton.OK, MessageBoxImage.Error);
-                                        }
-
-                                        //Pings hosts in parallel
-                                        Parallel.ForEach(hostList.GetHostsAsList(), host =>
-                                        {
-                                            progressBar.Dispatcher.BeginInvoke(
-                                                new Action(() =>
-                                                {
-                                                    progressBarUpdater.UpdateProgressBar(i, i / double.Parse(multiLineHost.Count().ToString()));
-                                                }));
-
-                                            if (host.IsNotPinged())
-                                            {
-                                                i++;
-                                                host.Ping();
-                                            }
-                                        });
-
-                                        progressBar.Dispatcher.BeginInvoke(
-                                        new Action(() =>
-                                        {
-                                            progressBarUpdater.ResetProgressBar();
-
-                                            hostList.UpdateData();
-                                        }));
-
-                                        this.Dispatcher.BeginInvoke(new Action(() =>
-                                        {
-                                            listViewHelper.ClearSort();
-
-                                            this.Title = "Pingo - Idle";
-
-                                            if (wasTimerEnabled)
-                                                timers.EnableTimers();
-                                            else
-                                                lblNextUpdate.Content = "Polling disabled";
-                                        }));
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                                }
-                            }));
-
-                        backgroundThread.IsBackground = true;
-                        backgroundThread.Start();
+                        hostList.PingHosts(true, numHostsEntered);
                     }
                 }
                 catch (Exception ex)
@@ -226,88 +162,9 @@ namespace Pingo
             }
         }
 
-        public void RefreshAll()
-        {
-            lock (globalLock)
-            {
-                bool wasTimerEnabled = false;
-
-                if (timers.updateTimer.IsEnabled == true)
-                    wasTimerEnabled = true;
-
-                try
-                {
-                    timers.ResetTimeElapsed();
-
-                    Thread backgroundThread = new Thread(
-                        new ThreadStart(() =>
-                        {
-                            try
-                            {
-                                lock (threadLock)
-                                {
-                                    this.Dispatcher.BeginInvoke(new Action(() =>
-                                    {
-                                        this.Title = "Pingo - Working";
-
-                                        timers.DisableTimers();
-                                    }));
-
-                                    double i = 1.0;
-
-                                    Parallel.ForEach(hostList.GetHostsAsList(), host =>
-                                    {
-                                        progressBar.Dispatcher.BeginInvoke(
-                                            new Action(() =>
-                                            {
-                                                progressBarUpdater.UpdateProgressBar(i, double.Parse(hostList.GetHostsAsList().Count().ToString()));
-                                            }));
-
-                                        i++;
-
-                                        host.Ping();
-                                    });
-
-                                    progressBar.Dispatcher.BeginInvoke(
-                                        new Action(() =>
-                                        {
-                                            progressBarUpdater.ResetProgressBar();
-
-                                            hostList.UpdateData();
-                                        }));
-
-                                    this.Dispatcher.BeginInvoke(new Action(() =>
-                                    {
-                                        listViewHelper.ClearSort();
-
-                                        this.Title = "Pingo - Idle";
-
-                                        if (wasTimerEnabled)
-                                            timers.EnableTimers();
-                                        else
-                                            lblNextUpdate.Content = "Polling disabled";
-                                    }));
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                            }
-                        }));
-
-                    backgroundThread.IsBackground = true;
-                    backgroundThread.Start();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, null, MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
         private void btnRefreshAll_Click(object sender, RoutedEventArgs e)
         {
-            RefreshAll();
+            hostList.PingHosts(false, 0);
         }
 
         private void txtInterval_TextChanged(object sender, TextChangedEventArgs e)
@@ -326,12 +183,12 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (threadLock)
+                        lock (locks.threadLock)
                         {
                             try
                             {
@@ -361,12 +218,12 @@ namespace Pingo
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (threadLock)
+                        lock (locks.threadLock)
                         {
                             try
                             {
@@ -396,7 +253,7 @@ namespace Pingo
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 listViewHelper.UpdateSelectedIndices();
 
@@ -407,14 +264,11 @@ namespace Pingo
                         {
                             try
                             {
-                                lock (threadLock)
+                                lock (locks.threadLock)
                                 {
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
                                         this.Title = "Pingo - Working";
-                                        progressBar.Value = 0;
-                                        TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-                                        TaskbarItemInfo.ProgressValue = 0;
                                     }));
 
                                     double progress = 1.0;
@@ -472,7 +326,7 @@ namespace Pingo
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 listViewHelper.UpdateSelectedIndices();
 
@@ -483,7 +337,7 @@ namespace Pingo
                         {
                             try
                             {
-                                lock (threadLock)
+                                lock (locks.threadLock)
                                 {
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -528,12 +382,12 @@ namespace Pingo
 
         private void btnDeleteAll_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (threadLock)
+                        lock (locks.threadLock)
                         {
                             try
                             {
@@ -566,12 +420,12 @@ namespace Pingo
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (threadLock)
+                        lock (locks.threadLock)
                         {
                             try
                             {
@@ -609,12 +463,12 @@ namespace Pingo
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            lock (globalLock)
+            lock (locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (threadLock)
+                        lock (locks.threadLock)
                         {
                             io.Export();
                         }

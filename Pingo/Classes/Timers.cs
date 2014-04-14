@@ -18,16 +18,20 @@ namespace Pingo.Classes
         //MainWindow object for access to controls
         protected MainWindow mainWindow;
 
+        HostList hostList;
+
         //Empty contructor to avoid null error
         public Timers()
         {
         }
 
         //Main constructor
-        public Timers(MainWindow mainWindow)
+        public Timers(MainWindow mainWindow, HostList hostList)
         {
             //Stores mainWindow object for access to window controls
             this.mainWindow = mainWindow;
+
+            this.hostList = hostList;
 
             //Initialize updateTimer and start it
             updateTimer.Tick += new EventHandler(updateTimer_Tick);
@@ -51,7 +55,7 @@ namespace Pingo.Classes
         //Automatically update data and reset timeElapsed
         private void updateTimer_Tick(object sender, object e)
         {
-            mainWindow.RefreshAll();
+            hostList.PingHosts(false, 0);
             ResetTimeElapsed();
         }
 
