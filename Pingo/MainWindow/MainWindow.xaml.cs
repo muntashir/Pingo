@@ -521,11 +521,15 @@ namespace Pingo
             {
                 try
                 {
-                    listViewHelper.View.SortDescriptions.Clear();
+                    if (listViewHelper.CurrentSort.PropertyName != null)
+                        listViewHelper.View.SortDescriptions.Clear();
+
                     string copy = hostList.GetHostsAsList()[lsvOutput.Items.IndexOf(lsvOutput.SelectedItems[0])].ToString()[0];
                     Clipboard.SetText(copy);
+
                     if (listViewHelper.CurrentSort.PropertyName != null)
                         listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
+
                     MessageBox.Show("Hostname " + copy + " copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
