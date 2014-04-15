@@ -11,7 +11,6 @@ namespace Pingo.Classes
     public class HostList
     {
         //Objects
-        Locks locks = new Locks();
         Timers timers;
         MainWindow mainWindow;
         ProgressBarUpdater progressBarUpdater;
@@ -24,7 +23,7 @@ namespace Pingo.Classes
         protected List<Host> hosts;
 
         //Constructor
-        public HostList(Locks locks, MainWindow mainWindow)
+        public HostList(MainWindow mainWindow)
         {
             //Initialize hosts
             hosts = new List<Host>();
@@ -34,7 +33,6 @@ namespace Pingo.Classes
             data.Columns.Add("Status", typeof(string));
             data.Columns.Add("Timestamp", typeof(string));
 
-            this.locks = locks;
             this.mainWindow = mainWindow;
             
             progressBarUpdater = new ProgressBarUpdater(mainWindow.progressBar, mainWindow);
@@ -53,7 +51,7 @@ namespace Pingo.Classes
         //Updates DataTable with contents of hosts
         public void UpdateData()
         {
-            lock (locks.updateLock)
+            lock (Locks.updateLock)
             {
                 //Clear old rows of DataTable
                 data.Rows.Clear();
@@ -99,7 +97,7 @@ namespace Pingo.Classes
         //Pings all hosts or only hosts that have not been pinged if pingOnlyHosts is true. If pingOnlyHosts is true, numHostsEntered must specify how many hosts have not been pinged.
         public void PingHosts(bool pingOnlyNewHosts, double numHostsEntered)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 bool wasTimerEnabled = false;
 
@@ -115,7 +113,7 @@ namespace Pingo.Classes
                         {
                             try
                             {
-                                lock (locks.threadLock)
+                                lock (Locks.threadLock)
                                 {
                                     mainWindow.Dispatcher.BeginInvoke(new Action(() =>
                                     {

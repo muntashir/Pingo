@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Pingo.Classes
 {
-    public class Locks
+    public static class Locks
     {
-        public object globalLock = new object();
-        public object threadLock = new object();
-        public object updateLock = new object();
-
-        public Locks()
-        { }
+        public static object globalLock = new object();
+        public static object threadLock = new object();
+        public static object updateLock = new object();
     }
 }

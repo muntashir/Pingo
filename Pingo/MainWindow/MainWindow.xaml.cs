@@ -21,7 +21,6 @@ namespace Pingo
         protected IO io;
         protected ProgressBarUpdater progressBarUpdater;
         protected ListViewHelper listViewHelper;
-        protected Locks locks = new Locks();
 
         //Constructor
         public MainWindow()
@@ -35,7 +34,7 @@ namespace Pingo
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //Initialize objects
-            hostList = new HostList(locks, this);
+            hostList = new HostList(this);
             io = new IO(hostList);
             progressBarUpdater = new ProgressBarUpdater(progressBar, this);
             listViewHelper = new ListViewHelper(this, hostList);
@@ -118,7 +117,7 @@ namespace Pingo
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 try
                 {
@@ -185,12 +184,12 @@ namespace Pingo
 
         private void btnPlus_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (locks.threadLock)
+                        lock (Locks.threadLock)
                         {
                             try
                             {
@@ -220,12 +219,12 @@ namespace Pingo
 
         private void btnMinus_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (locks.threadLock)
+                        lock (Locks.threadLock)
                         {
                             try
                             {
@@ -255,7 +254,7 @@ namespace Pingo
 
         private void btnRefreshSelection_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 listViewHelper.UpdateSelectedIndices();
 
@@ -266,7 +265,7 @@ namespace Pingo
                         {
                             try
                             {
-                                lock (locks.threadLock)
+                                lock (Locks.threadLock)
                                 {
                                     this.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -328,7 +327,7 @@ namespace Pingo
 
         private void btnDeleteSelection_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 listViewHelper.UpdateSelectedIndices();
 
@@ -339,7 +338,7 @@ namespace Pingo
                         {
                             try
                             {
-                                lock (locks.threadLock)
+                                lock (Locks.threadLock)
                                 {
                                     lsvOutput.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -384,12 +383,12 @@ namespace Pingo
 
         private void btnDeleteAll_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (locks.threadLock)
+                        lock (Locks.threadLock)
                         {
                             try
                             {
@@ -422,12 +421,12 @@ namespace Pingo
 
         private void btnTogglePolling_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (locks.threadLock)
+                        lock (Locks.threadLock)
                         {
                             try
                             {
@@ -465,12 +464,12 @@ namespace Pingo
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            lock (locks.globalLock)
+            lock (Locks.globalLock)
             {
                 Thread backgroundThread = new Thread(
                     new ThreadStart(() =>
                     {
-                        lock (locks.threadLock)
+                        lock (Locks.threadLock)
                         {
                             io.Export();
                         }
