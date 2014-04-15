@@ -20,14 +20,16 @@ namespace Pingo.Classes
         public void UpdateProgressBar(double numerator, double denominator)
         {
             Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
+
             if (numerator != 0 && denominator != 0)
             {
                 DoubleAnimation doubleanimation = new DoubleAnimation((numerator / denominator) * 100.0, duration);
                 progressBar.BeginAnimation(ProgressBar.ValueProperty, doubleanimation);
-            }
 
-            mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-            mainWindow.TaskbarItemInfo.ProgressValue = numerator / denominator;
+
+                mainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+                mainWindow.TaskbarItemInfo.ProgressValue = numerator / denominator;
+            }
         }
 
         public void ResetProgressBar()
