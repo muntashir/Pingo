@@ -7,6 +7,7 @@ Features:
   -Export to CSV option to make it easy to share statuses of multiple hosts  
   -Ability to enter multiple hosts at once separated by spaces or in multiple lines (supports copy and pasting from Excel)  
   -Double click on a hostname to copy it to clipboard  
+  -Sort columns
 
 Requirements:  
   -Segoe UI Symbols font. Comes included with Windows 8/7.  
