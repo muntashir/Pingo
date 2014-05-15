@@ -20,19 +20,19 @@
         </DataTemplate>
         
         <!-- Theme colors -->
-        <SolidColorBrush x:Key="DarkAccent" Color="#FF9FF6F9" />
-        <SolidColorBrush x:Key="AccentColor" Color="#FFD3FDFF" />
-        <SolidColorBrush x:Key="MouseOverColor" Color="#FF67F8FF" />
-        <SolidColorBrush x:Key="PressedColor" Color="#FF00F5FF" />
-        <SolidColorBrush x:Key="PingoRed" Color="#FFFF4444" />
-        <SolidColorBrush x:Key="PingoMouseOverRed" Color="#FFE20000" />
-        <SolidColorBrush x:Key="PingoPressedRed" Color="#FF910000" />
-        <SolidColorBrush x:Key="PingoGreen" Color="#FF25FD4C" />
-        <SolidColorBrush x:Key="PingoMouseOverGreen" Color="#FF00CD25" />
-        <SolidColorBrush x:Key="PingoPressedGreen" Color="#FF006E14" />
-        <SolidColorBrush x:Key="PingoGray" Color="#FFC9C9C9" />
-        <SolidColorBrush x:Key="PingoMouseOverGray" Color="#FF8F8F8F" />
-        <SolidColorBrush x:Key="PingoPressedGray" Color="#FF646464" />
+        <SolidColorBrush x:Key="DarkAccent" Color="#3CA6AB" />
+        <SolidColorBrush x:Key="AccentColor" Color="#0BD5DE" />
+        <SolidColorBrush x:Key="MouseOverColor" Color="#0BC6CF" />
+        <SolidColorBrush x:Key="PressedColor" Color="#078C91" />
+        <SolidColorBrush x:Key="PingoRed" Color="#FF1400" />
+        <SolidColorBrush x:Key="PingoMouseOverRed" Color="#DB1100" />
+        <SolidColorBrush x:Key="PingoPressedRed" Color="#990C00" />
+        <SolidColorBrush x:Key="PingoGreen" Color="#2CD100" />
+        <SolidColorBrush x:Key="PingoMouseOverGreen" Color="#28BF00" />
+        <SolidColorBrush x:Key="PingoPressedGreen" Color="#1E8F00" />
+        <SolidColorBrush x:Key="PingoGray" Color="#B6BCBF" />
+        <SolidColorBrush x:Key="PingoMouseOverGray" Color="#97A2A8" />
+        <SolidColorBrush x:Key="PingoPressedGray" Color="#888C8F" />
 
         <!-- GridView colors -->
         <SolidColorBrush x:Key="GridViewColumnHeaderHoverBackground" Color="{Binding Source={StaticResource MouseOverColor}, Path=Color}" />
