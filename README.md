@@ -13,4 +13,4 @@ Requirements:
   -Segoe UI Symbols font. Comes included with Windows 8/7.  
   -Minimum .NET 4.5. Recommended .NET 4.5.1  
 
-![Screenshot](http://i.imgur.com/KNwHW3a.png)
+![Screenshot](http://i.imgur.com/jr0cTU.png)
