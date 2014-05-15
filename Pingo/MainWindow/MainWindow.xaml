@@ -20,16 +20,16 @@
         </DataTemplate>
         
         <!-- Theme colors -->
-        <SolidColorBrush x:Key="DarkAccent" Color="#3CA6AB" />
-        <SolidColorBrush x:Key="AccentColor" Color="#0BD5DE" />
-        <SolidColorBrush x:Key="MouseOverColor" Color="#0BC6CF" />
-        <SolidColorBrush x:Key="PressedColor" Color="#078C91" />
+        <SolidColorBrush x:Key="AccentColor" Color="#BAB6A8" />
+        <SolidColorBrush x:Key="DarkAccent" Color="#9C988D" />
+        <SolidColorBrush x:Key="MouseOverColor" Color="#8F8B81" />
+        <SolidColorBrush x:Key="PressedColor" Color="#75736A" />
         <SolidColorBrush x:Key="PingoRed" Color="#FF1400" />
-        <SolidColorBrush x:Key="PingoMouseOverRed" Color="#DB1100" />
-        <SolidColorBrush x:Key="PingoPressedRed" Color="#990C00" />
-        <SolidColorBrush x:Key="PingoGreen" Color="#2CD100" />
-        <SolidColorBrush x:Key="PingoMouseOverGreen" Color="#28BF00" />
-        <SolidColorBrush x:Key="PingoPressedGreen" Color="#1E8F00" />
+        <SolidColorBrush x:Key="PingoMouseOverRed" Color="#D61100" />
+        <SolidColorBrush x:Key="PingoPressedRed" Color="#BF0F00" />
+        <SolidColorBrush x:Key="PingoGreen" Color="#33F200" />
+        <SolidColorBrush x:Key="PingoMouseOverGreen" Color="#2DD400" />
+        <SolidColorBrush x:Key="PingoPressedGreen" Color="#28BF00" />
         <SolidColorBrush x:Key="PingoGray" Color="#B6BCBF" />
         <SolidColorBrush x:Key="PingoMouseOverGray" Color="#97A2A8" />
         <SolidColorBrush x:Key="PingoPressedGray" Color="#888C8F" />
