@@ -530,6 +530,8 @@ namespace Pingo
                         listViewHelper.View.SortDescriptions.Add(listViewHelper.CurrentSort);
 
                     MessageBox.Show("Hostname " + copy + " copied to clipboard", null, MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    lsvOutput.SelectedItems.Clear();
                 }
                 catch (Exception ex)
                 {
@@ -544,7 +546,6 @@ namespace Pingo
             {
                 btnDeleteAll.IsEnabled = false;
                 btnDeleteSelected.IsEnabled = false;
-                btnEnter.IsEnabled = false;
                 btnExport.IsEnabled = false;
                 btnRefreshAll.IsEnabled = false;
                 btnRefreshSelected.IsEnabled = false;
@@ -556,7 +557,6 @@ namespace Pingo
             {
                 btnDeleteAll.IsEnabled = true;
                 btnDeleteSelected.IsEnabled = true;
-                btnEnter.IsEnabled = true;
                 btnExport.IsEnabled = true;
                 btnRefreshAll.IsEnabled = true;
                 btnRefreshSelected.IsEnabled = true;
